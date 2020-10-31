@@ -7,7 +7,7 @@ val jdaVersion = "4.2.0_214"
 
 plugins {
     kotlin("jvm") version "1.4.10"
-    id("com.github.johnrengelman.shadow") version("5.2.0")
+    id("com.github.johnrengelman.shadow") version ("6.1.0")
 }
 
 tasks.withType<KotlinCompile> {
@@ -29,7 +29,7 @@ tasks.register("run") {
         exec {
             println(workingDir)
             executable("java -jar /build/libs/DNS-1.0-all.jar")
-           // args("")
+            // args("")
             //commandLine("-jar", "DNS-1.0-all.jar")
         }
     }
@@ -48,4 +48,5 @@ dependencies {
     implementation("ch.qos.logback", "logback-classic", "1.2.3")
     implementation("org.jsoup", "jsoup", "1.13.1")
     implementation("org.codehaus.groovy", "groovy-jsr223", "3.0.6")
+    //implementation("com.github.ben-manes.caffeine", "caffeine", "2.8.6")
 }
