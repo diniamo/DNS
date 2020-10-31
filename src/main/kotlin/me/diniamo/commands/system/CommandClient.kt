@@ -8,10 +8,6 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter
 class CommandClient(val prefix: String, val ownerId: Long, jda: JDA) : ListenerAdapter() {
     private val commandMap = HashMap<String, MyCommand>()
 
-    val answerCache = AnswerCache<Long, Long>(jda) /*Caffeine.newBuilder()
-        .maximumSize(jda.guildCache.size() * 10)
-        .build<Long, Long>()*/
-
     fun addCommands(vararg toAdd: MyCommand) {
         for (command in toAdd) {
             toAdd.forEach {
@@ -22,7 +18,6 @@ class CommandClient(val prefix: String, val ownerId: Long, jda: JDA) : ListenerA
 
             commandMap[command.name]
             command.aliases.forEach { commandMap[it] }
-
         }
     }
 
@@ -37,8 +32,6 @@ class CommandClient(val prefix: String, val ownerId: Long, jda: JDA) : ListenerA
         }
     }
 
-
-
     override fun onGuildMessageDelete(event: GuildMessageDeleteEvent) {
         val answer = answerCache[event.messageIdLong]
 
@@ -50,6 +43,14 @@ class CommandClient(val prefix: String, val ownerId: Long, jda: JDA) : ListenerA
 
     private fun removeFirst(original: List<String>) = Array(original.size - 1) { i ->
         original[i + 1]
+    }
+
+    init {
+        answerCache = AnswerCache(jda)
+    }
+
+    companion object {
+        lateinit var answerCache: AnswerCache<Long, Long>
     }
 }
 
