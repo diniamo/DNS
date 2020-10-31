@@ -3,7 +3,7 @@ package me.diniamo.commands.system
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 
-class CommandClient(val prefix: String = "$") : ListenerAdapter() {
+class CommandClient(val prefix: String, val ownerId: Long) : ListenerAdapter() {
     private val commandMap = HashMap<String, MyCommand>()
 
     fun addCommands(vararg toAdd: MyCommand) {
@@ -19,7 +19,7 @@ class CommandClient(val prefix: String = "$") : ListenerAdapter() {
 
     override fun onMessageReceived(event: MessageReceivedEvent) {
         val args = event.message.contentRaw.split("\\s+")
-        val expectedCommand = commandMap[args[0].toLowerCase()]
+        val expectedCommand = commandMap[prefix + args[0].toLowerCase()]
 
         expectedCommand?.execute(CommandContext(event, removeFirst(args)))
     }
