@@ -10,8 +10,8 @@ class Ping : MyCommand(
 ) {
     override fun execute(ctx: CommandContext) {
         val time = System.currentTimeMillis()
-        ctx.channel.sendMessage("Calculating ping...").flatMap {
-            msg: Message -> msg.editMessage("My Gateway ping is ${ctx.jda.gatewayPing}ms.\nMy REST ping is ${System.currentTimeMillis() - time}ms.")
+        ctx.channel.sendMessage("Calculating ping...").flatMap { msg: Message ->
+            msg.editMessage("My Gateway ping is ${ctx.jda.gatewayPing}ms.\nMy REST ping is ${System.currentTimeMillis() - time}ms.")
         }.queue() //{ msg: Message -> msg.editMessage("My ping is: " + (System.currentTimeMillis() - time) + "ms").queue() }
     }
 }
