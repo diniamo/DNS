@@ -1,0 +1,42 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+group = "me.diniamo"
+version = "1.0"
+
+val jdaVersion = "4.2.0_214"
+
+plugins {
+    kotlin("jvm") version "1.4.10"
+    id("com.github.johnrengelman.shadow") version("5.2.0")
+}
+
+tasks.withType<KotlinCompile>() {
+    kotlinOptions.jvmTarget = "11"
+}
+
+tasks.register("run") {
+    group = "shadow"
+
+    dependsOn("shadowJar")
+
+    doLast {
+        exec {
+            executable("java")
+            args("-jar", "./build/libs/DNS-1.0-all.jar")
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    implementation("net.dv8tion", "JDA", jdaVersion)
+    implementation("com.jagrosh", "jda-utilities", "3.0.4")
+
+    implementation("ch.qos.logback", "logback-classic", "1.2.3")
+    implementation("org.jsoup", "jsoup", "1.13.1")
+    implementation("org.codehaus.groovy", "groovy-jsr223", "3.0.6")
+}
