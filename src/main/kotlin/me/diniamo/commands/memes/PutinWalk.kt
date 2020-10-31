@@ -25,9 +25,9 @@ class PutinWalk : Command() {
                     .redirectOutput(ProcessBuilder.Redirect.DISCARD)
                     .redirectError(ProcessBuilder.Redirect.DISCARD)
                     .redirectInput(ProcessBuilder.Redirect.PIPE)
-                    .command(Values.ffmpeg, "-y", "-i", "./templates/PutinWalk.mp4", "-i", "picture.jpg",
-                            "-filter_complex", "\"[1]scale=240:80[b];[0][b] overlay=(W-w)/2:(H-h)/2-50:enable='between(t,0,20)'\"", "-pix_fmt", "yuv420p",
-                            "-c:a", "copy", "output.mp4")
+                    .command(Values.ffmpeg, "-y", "-i", "./templates/PutinWalk.mp4", "-ignore_loop", "0", "-i", "picture.jpg", "-filter_complex",
+                        "\"[1]scale=240:80[b];[0][b] overlay=(W-w)/2:(H-h)/2-50:enable='between(t,0,20)':shortest=1\"", "-pix_fmt", "yuv420p",
+                        "-c:a", "copy", "output.mp4")
                     .start().waitFor()
             /*val image = getImageOrProfilePicture(event.message)
             val graphics = image.createGraphics()

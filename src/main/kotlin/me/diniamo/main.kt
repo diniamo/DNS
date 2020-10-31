@@ -1,4 +1,4 @@
-@file:JvmName("Kat")
+@file:JvmName("DNS")
 
 package me.diniamo
 
@@ -22,7 +22,6 @@ val config: SettingsManager = SettingsManagerBuilder
         .create()
 val prefix: String = config.getProperty(Config.BOT_PREFIX)
 
-@Throws(Exception::class)
 fun main() {
     val jda = JDABuilder.createDefault(config.getProperty(Config.BOT_TOKEN)).enableIntents(GatewayIntent.GUILD_MEMBERS)
             //.setMemberCachePolicy(MemberCachePolicy.ALL).setChunkingFilter(ChunkingFilter.ALL)
