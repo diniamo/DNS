@@ -9,36 +9,68 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import java.awt.Color
 import java.time.Instant
+import kotlin.math.exp
 
 class CommandClient(val prefix: String, val ownerId: Long, jda: JDA) : ListenerAdapter() {
     private val commandMap = HashMap<String, MyCommand>()
 
     fun addCommands(vararg toAdd: MyCommand) {
         for (command in toAdd) {
-            toAdd.forEach {
-                if (command.aliases.any(it.aliases::contains)) throw IllegalStateException(
-                    "You have the same alias or name in 2 commands."
+            commandMap.keys.forEach {
+                if (command.name == it || command.aliases.any(it::equals)) throw IllegalStateException(
+                    "You have the same alias or name in 2 commands. (${it}-${command.name})"
                 )
             }
 
-            commandMap[command.name]
-            command.aliases.forEach { commandMap[it] }
+            commandMap[command.name] = command
+            command.aliases.forEach { commandMap[it] = command }
         }
+        println(commandMap.keys.forEach { println("$it     -     ${commandMap[it]}") })
     }
 
+    private val spaces = Regex("\\s+")
     override fun onMessageReceived(event: MessageReceivedEvent) {
-        val args = event.message.contentRaw.split("\\s+")
-        val expectedCommand = commandMap[prefix + args[0].toLowerCase()]
+        val args = event.message.contentRaw.split(spaces)
+        val key = args[0].substring(1).toLowerCase()
+        println(key)
+        val expectedCommand = commandMap[key]
 
         if (expectedCommand != null) {
-            if((expectedCommand.guildOnly && event.isFromGuild && hasPermission(event.member, expectedCommand.permission))
+            val errorBuilder = EmbedBuilder().setAuthor("Error", null, event.jda.selfUser.effectiveAvatarUrl).setColor(Color.RED)
+                .setFooter(event.member?.effectiveName ?: event.author.name, event.author.effectiveAvatarUrl)
+                .setTimestamp(Instant.now())
+
+            if (expectedCommand.ownerCommand) {
+                if (ownerId == event.author.idLong) {
+                    expectedCommand.execute(CommandContext(event, removeFirst(args)))
+                } else {
+                    errorBuilder.appendDescription("Missing permission `OWNER`")
+                    event.channel.sendMessage(errorBuilder.build()).queue()
+                }
+                return
+            }
+
+            if(expectedCommand.guildOnly && !event.isFromGuild) {
+                errorBuilder.appendDescription("This command cannot be used here.")
+                event.channel.sendMessage(errorBuilder.build()).queue { msg -> answerCache[event.message.idLong] = msg.idLong }
+            }
+
+            if (hasPermission(event.member, expectedCommand.permission)) {
+                expectedCommand.execute(CommandContext(event, removeFirst(args)))
+            } else {
+                errorBuilder.appendDescription("Missing permission `${expectedCommand.permission?.name}`")
+                event.channel.sendMessage(errorBuilder.build()).queue { msg -> answerCache[event.message.idLong] = msg.idLong }
+                return
+            }
+
+            /*if((expectedCommand.guildOnly && event.isFromGuild && hasPermission(event.member, expectedCommand.permission))
                 && (expectedCommand.ownerCommand && event.author.idLong == ownerId))
                 expectedCommand.execute(CommandContext(event, removeFirst(args)))
             else event.channel.sendMessage(EmbedBuilder()
                 .appendDescription("You can't do that!")
                 .setColor(Color.RED)
                 .setFooter(event.member?.effectiveName ?: event.author.name, event.author.effectiveAvatarUrl)
-                .setTimestamp(Instant.now()).build()).queue { msg -> answerCache[event.messageIdLong] = msg.idLong }
+                .setTimestamp(Instant.now()).build()).queue { msg -> answerCache[event.messageIdLong] = msg.idLong }*/
         }
     }
 
@@ -49,8 +81,8 @@ class CommandClient(val prefix: String, val ownerId: Long, jda: JDA) : ListenerA
     override fun onGuildMessageDelete(event: GuildMessageDeleteEvent) {
         val answer = answerCache[event.messageIdLong]
 
-        if(answer != null) {
-            event.channel.deleteMessageById(answer)
+        if (answer != null) {
+            event.channel.deleteMessageById(answer).queue()
             answerCache.remove(event.messageIdLong)
         }
     }

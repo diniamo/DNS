@@ -9,8 +9,6 @@ class Ping : MyCommand(
     "ping", arrayOf(), Category.INFO, "Shows the ping of the bot."
 ) {
     override fun execute(ctx: CommandContext) {
-        val time = System.currentTimeMillis()
-
         ctx.jda.restPing.queue { restPing ->
             reply(ctx, arrayOf(
                 MessageEmbed.Field("REST ping:", "${restPing}ms", true),

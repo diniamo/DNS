@@ -15,7 +15,7 @@ class Google : MyCommand(
     override fun execute(ctx: CommandContext) {
         Utils.scheduler.execute {
             try {
-                val doc = Jsoup.connect("https://www.google.com/search?q=" + URLEncoder.encode(event.args, Charsets.UTF_8.name())).get()
+                val doc = Jsoup.connect("https://www.google.com/search?q=" + URLEncoder.encode(ctx.args.joinToString(" "), Charsets.UTF_8.name())).get()
 
                 reply(ctx, doc.getElementsByClass("yuRUbf")[0].child(0).attr("abs:href"), "Google")
             } catch (ex: Exception) {

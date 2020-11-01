@@ -30,23 +30,24 @@ class EvalCommand : MyCommand(
             engine.put("bot", ctx.jda.selfUser)
 
             val builder = EmbedBuilder().setTitle("Evaluate")
+            val code = ctx.args.joinToString(" ")
             val startTime = System.currentTimeMillis()
             try {
                 val sb = StringBuilder()
                 DEFAULT_IMPORTS.forEach { imp -> sb.append("import ").append(imp).append(".*; ") }
-                sb.append("\n" + ctx.args)
+                sb.append("\n" + code)
                 val out = engine.eval(sb.toString())
 
                 builder.addField("Status:", "Success", true)
                 builder.addField("Duration:", "${System.currentTimeMillis() - startTime}ms", true)
                 builder.setColor(Color.GREEN)
-                builder.addField("Code:", "```groovy\n${ctx.args}```", false)
+                builder.addField("Code:", "```groovy\n$code```", false)
                 builder.addField("Result:", out?.toString() ?: "Executed without error.", true)
             } catch (ex: Exception) {
                 builder.addField("Status:", "Error", true)
                 builder.addField("Duration:", "${System.currentTimeMillis() - startTime}ms", true)
                 builder.setColor(Color.RED)
-                builder.addField("Code:", "```groovy\n${ctx.args}```", false)
+                builder.addField("Code:", "```groovy\n$code```", false)
                 builder.addField("Error:", "```$ex```", true)
             }
             reply(ctx, builder.build())

@@ -21,13 +21,13 @@ abstract class MyCommand(
 ) {
     protected fun reply(ctx: CommandContext, message: Message) {
         ctx.channel.sendMessage(message).queue {
-                msg -> CommandClient.answerCache[msg.idLong] = ctx.message.idLong
+                msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong
         }
     }
 
     protected fun reply(ctx: CommandContext, embed: MessageEmbed) {
         ctx.channel.sendMessage(embed).queue {
-                msg -> CommandClient.answerCache[msg.idLong] = ctx.message.idLong
+                msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong
         }
     }
 
@@ -39,7 +39,7 @@ abstract class MyCommand(
                 .setFooter(ctx.member?.effectiveName ?: ctx.user.name, ctx.user.effectiveAvatarUrl)
                 .setTimestamp(Instant.now()).build()
         ).queue {
-                msg -> CommandClient.answerCache[msg.idLong] = ctx.message.idLong
+                msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong
         }
     }
     protected fun replySuccess(ctx: CommandContext, text: String, title: String?) {
@@ -50,7 +50,7 @@ abstract class MyCommand(
                 .setFooter(ctx.member?.effectiveName ?: ctx.user.name, ctx.user.effectiveAvatarUrl)
                 .setTimestamp(Instant.now()).build()
         ).queue {
-                msg -> CommandClient.answerCache[msg.idLong] = ctx.message.idLong
+                msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong
         }
     }
     protected fun replyError(ctx: CommandContext, text: String, title: String?) {
@@ -61,7 +61,7 @@ abstract class MyCommand(
                 .setFooter(ctx.member?.effectiveName ?: ctx.user.name, ctx.user.effectiveAvatarUrl)
                 .setTimestamp(Instant.now()).build()
         ).queue {
-                msg -> CommandClient.answerCache[msg.idLong] = ctx.message.idLong
+                msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong
         }
     }
 
@@ -73,7 +73,7 @@ abstract class MyCommand(
                 .setFooter(ctx.member?.effectiveName ?: ctx.user.name, ctx.user.effectiveAvatarUrl)
                 .setTimestamp(Instant.now()).build()
         ).queue {
-                msg -> CommandClient.answerCache[msg.idLong] = ctx.message.idLong
+                msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong
         }
     }
     protected fun replySuccess(ctx: CommandContext, content: Array<MessageEmbed.Field>, title: String?) {
@@ -84,7 +84,7 @@ abstract class MyCommand(
                 .setFooter(ctx.member?.effectiveName ?: ctx.user.name, ctx.user.effectiveAvatarUrl)
                 .setTimestamp(Instant.now()).build()
         ).queue {
-                msg -> CommandClient.answerCache[msg.idLong] = ctx.message.idLong
+                msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong
         }
     }
     protected fun replyError(ctx: CommandContext, content: Array<MessageEmbed.Field>, title: String?) {
@@ -95,7 +95,7 @@ abstract class MyCommand(
                 .setFooter(ctx.member?.effectiveName ?: ctx.user.name, ctx.user.effectiveAvatarUrl)
                 .setTimestamp(Instant.now()).build()
         ).queue {
-                msg -> CommandClient.answerCache[msg.idLong] = ctx.message.idLong
+                msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong
         }
     }
 
