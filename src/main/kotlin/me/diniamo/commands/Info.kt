@@ -4,6 +4,7 @@ import me.diniamo.Utils
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandContext
 import me.diniamo.commands.system.MyCommand
+import net.dv8tion.jda.api.JDAInfo
 import net.dv8tion.jda.api.entities.MessageEmbed
 import java.lang.management.ManagementFactory
 
@@ -17,9 +18,13 @@ class Info : MyCommand(
         reply(
             ctx, arrayOf(
                 MessageEmbed.Field("JVM Version:", System.getProperty("java.version"), true),
+                MessageEmbed.Field("JDA Version:", JDAInfo.VERSION, true),
+                MessageEmbed.Field("\u200E", "\u200E", true),
                 MessageEmbed.Field("Total Guilds:", ctx.jda.guildCache.size().toString(), true),
                 MessageEmbed.Field("Total Users:", Utils.getUserCount(ctx.jda).toString(), true),
-                MessageEmbed.Field(
+                MessageEmbed.Field("\u200E", "\u200E", true),
+
+                    MessageEmbed.Field(
                     "Memory Usage:",
                     (runtime.totalMemory() - runtime.freeMemory() shr 20).toString() + "MB / " + (runtime.maxMemory() shr 20) + "MB",
                     true

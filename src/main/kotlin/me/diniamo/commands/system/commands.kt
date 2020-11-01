@@ -1,5 +1,6 @@
 package me.diniamo.commands.system
 
+import me.diniamo.Values
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.Permission
@@ -35,6 +36,7 @@ abstract class MyCommand(
     protected fun reply(ctx: CommandContext, text: String, title: String?) {
         ctx.channel.sendMessage(
             EmbedBuilder().appendDescription(text)
+                .setColor(Values.avaragePfpColor)
                 .setAuthor(title, null, ctx.jda.selfUser.effectiveAvatarUrl)
                 .setFooter(ctx.member?.effectiveName ?: ctx.user.name, ctx.user.effectiveAvatarUrl)
                 .setTimestamp(Instant.now()).build()
@@ -69,6 +71,7 @@ abstract class MyCommand(
     protected fun reply(ctx: CommandContext, content: Array<MessageEmbed.Field>, title: String?) {
         ctx.channel.sendMessage(
             EmbedBuilder().apply { content.forEach { addField(it) } }
+                .setColor(Values.avaragePfpColor)
                 .setAuthor(title, null, ctx.jda.selfUser.effectiveAvatarUrl)
                 .setFooter(ctx.member?.effectiveName ?: ctx.user.name, ctx.user.effectiveAvatarUrl)
                 .setTimestamp(Instant.now()).build()

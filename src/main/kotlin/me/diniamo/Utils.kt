@@ -3,6 +3,7 @@ package me.diniamo
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.Message
+import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
 import java.net.URL
@@ -18,6 +19,7 @@ import javax.imageio.ImageIO
 class Values {
     companion object {
         lateinit var ffmpeg: String
+        val avaragePfpColor = Color.decode("#2591cc")
     }
 }
 
