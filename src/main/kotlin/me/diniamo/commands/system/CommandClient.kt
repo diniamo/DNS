@@ -9,6 +9,8 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import java.awt.Color
 import java.time.Instant
+import java.util.*
+import kotlin.collections.HashMap
 import kotlin.math.exp
 
 class CommandClient(val prefix: String, val ownerId: Long, jda: JDA) : ListenerAdapter() {
@@ -25,15 +27,14 @@ class CommandClient(val prefix: String, val ownerId: Long, jda: JDA) : ListenerA
             commandMap[command.name] = command
             command.aliases.forEach { commandMap[it] = command }
         }
-        println(commandMap.keys.forEach { println("$it     -     ${commandMap[it]}") })
+        //println(commandMap.keys.forEach { println("$it     -     ${commandMap[it]}") })
     }
 
     private val spaces = Regex("\\s+")
     override fun onMessageReceived(event: MessageReceivedEvent) {
         val args = event.message.contentRaw.split(spaces)
-        val key = args[0].substring(1).toLowerCase()
-        println(key)
-        val expectedCommand = commandMap[key]
+        //println(key)
+        val expectedCommand = commandMap[args[0].substringAfter(prefix).toLowerCase(Locale.ROOT)]
 
         if (expectedCommand != null) {
             val errorBuilder = EmbedBuilder().setAuthor("Error", null, event.jda.selfUser.effectiveAvatarUrl).setColor(Color.RED)

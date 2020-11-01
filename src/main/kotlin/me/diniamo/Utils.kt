@@ -1,5 +1,6 @@
 package me.diniamo
 
+import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.Message
 import java.awt.image.BufferedImage
@@ -27,6 +28,8 @@ class Utils {
         val scheduler: ScheduledExecutorService = Executors.newScheduledThreadPool(
             Runtime.getRuntime().availableProcessors()
         )
+
+        fun getUserCount(jda: JDA): Int = jda.guildCache.sumOf { it.memberCount }
 
         fun formatDurationDHMS(millis: Long): String {
             val duration = Duration.ofMillis(millis)
