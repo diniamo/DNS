@@ -1,56 +1,31 @@
 package me.diniamo.commands
 
-import com.jagrosh.jdautilities.command.Command
-import com.jagrosh.jdautilities.command.CommandEvent
-import net.dv8tion.jda.api.entities.Emote
-import net.dv8tion.jda.api.entities.Message
-import java.util.regex.Matcher
-import java.util.regex.Pattern
+import me.diniamo.commands.system.Category
+import me.diniamo.commands.system.CommandContext
+import me.diniamo.commands.system.MyCommand
 
-class Emote : Command() {
+class Emote : MyCommand(
+    "emote", arrayOf("emoji", "characterinfo", "charinfo", "ci"), Category.UTILITY,
+    "Shows information about characters.", "<character(s)/emote(s)>"
+) {
     //private val apiKey = "5ee190e903314b6f329dd8b61d55db75cd2705c7";
 
-    //private val checkPattern = Pattern.compile("<a:.*:\\d+>")
-    //private val replacePattern = Pattern.compile("<a:.*:(\\d+)>")
-    //private val matcher = Matcher()
+    override fun execute(ctx: CommandContext) {
+        val str = ctx.args.joinToString(" ")
 
-    init {
-        name = "emote"
-        aliases = arrayOf("emoji", "characterinfo", "ci")
-        help = "Shows information about characters."
-    }
-
-    override fun execute(event: CommandEvent) {
-        val str = event.args
-
-        if(event.message.emotes.size > 0) {
-            for(emote in event.message.emotes) {
-                event.reply("Emote **" + emote.name + "**:\n"
+        if(ctx.message.emotes.size > 0) {
+            for(emote in ctx.message.emotes) {
+                reply(ctx, "Emote **" + emote.name + "**:\n"
                         + "ID: **" + emote.id + "**\n"
                         + "Guild: " + (if (emote.guild == null) "Unknown" else "**" + emote.guild!!.name + "**") + "\n"
-                        + "URL: " + emote.imageUrl)
+                        + "URL: " + emote.imageUrl, "Character Info")
             }
 
             return
         }
-        /*if (matcher.find()) {
-            val id = matcher.group(2)
-            val emote: Emote? = event.jda.emoteőopeő
-            if (emote == null) {
-                event.reply("Unknown emote:\n"
-                        + "ID: **" + id + "**\n"
-                        + "Guild: Unknown\n"
-                        + "URL: https://discordcdn.com/emojis/" + id + ".png")
-                return
-            }
-            event.reply("Emote **" + emote.name + "**:\n"
-                    + "ID: **" + emote.id + "**\n"
-                    + "Guild: " + (if (emote.guild == null) "Unknown" else "**" + emote.guild!!.name + "**") + "\n"
-                    + "URL: " + emote.imageUrl)
-            return
-        }*/
+
         if (str.codePoints().count() > 15) {
-            event.reply("Invalid emote, or input is too long")
+            replyError(ctx, "Invalid emote, or input is too long", "Character Info")
             return
         }
         val builder: StringBuilder = StringBuilder("Emoji/Character info:")
@@ -68,7 +43,7 @@ class Emote : Command() {
             }
             builder.append(String(chars)).append("   _").append(Character.getName(code)).append("_")
         }
-        event.reply(builder.toString())
+        reply(ctx, builder.toString(), "Character Info")
         return
     }
 }

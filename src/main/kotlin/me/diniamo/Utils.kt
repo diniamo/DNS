@@ -8,6 +8,7 @@ import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
+import java.time.Duration
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
@@ -23,11 +24,18 @@ class Utils {
     companion object {
         val videoExecutor: ExecutorService = Executors.newSingleThreadExecutor()
         val imageExecutor: ExecutorService = Executors.newSingleThreadExecutor()
-        val scheduler: ScheduledExecutorService = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors())
+        val scheduler: ScheduledExecutorService = Executors.newScheduledThreadPool(
+            Runtime.getRuntime().availableProcessors()
+        )
 
-        fun splitStringAt(string: String, atCharCount: Int) = Array(string.length / atCharCount + 1) { i ->
-            string.substring(atCharCount * i, atCharCount * (i + 1))
+        fun formatDurationDHMS(millis: Long): String {
+            val duration = Duration.ofMillis(millis)
+            return String.format(
+                "%sd %s:%s:%s", duration.toDays(),fTime(duration.toHoursPart()), fTime(duration.toMinutesPart()), fTime(duration.toSecondsPart())
+            )
         }
+
+        fun fTime(time: Int): String = if (time > 9) time.toString() else "0$time"
 
         fun getMentionedUserOrAuthor(msg: Message): Member {
             return if (msg.mentionedMembers.size > 0) return msg.mentionedMembers[0]
@@ -35,7 +43,11 @@ class Utils {
         }
 
         fun downloadImageOrProfilePicture(msg: Message): File {
-            Files.copy(URL(parseImageOrProfilePictureUrl(msg)).openStream(), Paths.get("picture.jpg"), StandardCopyOption.REPLACE_EXISTING)
+            Files.copy(
+                URL(parseImageOrProfilePictureUrl(msg)).openStream(),
+                Paths.get("picture.jpg"),
+                StandardCopyOption.REPLACE_EXISTING
+            )
             return File("picture.jpg")
         }
 
@@ -60,7 +72,11 @@ class Utils {
         }
 
         fun getProfilePicture(msg: Message): BufferedImage {
-            return if (msg.mentionedUsers.size > 0) ImageIO.read(URL(msg.mentionedUsers[0].effectiveAvatarUrl)) else ImageIO.read(URL(msg.author.effectiveAvatarUrl))
+            return if (msg.mentionedUsers.size > 0) ImageIO.read(URL(msg.mentionedUsers[0].effectiveAvatarUrl)) else ImageIO.read(
+                URL(
+                    msg.author.effectiveAvatarUrl
+                )
+            )
         }
 
         fun parseImageOrProfilePictureUrl(msg: Message): String {

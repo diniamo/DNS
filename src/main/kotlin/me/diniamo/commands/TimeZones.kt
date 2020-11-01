@@ -1,17 +1,16 @@
 package me.diniamo.commands
 
-import com.jagrosh.jdautilities.command.Command
-import com.jagrosh.jdautilities.command.CommandEvent
+import me.diniamo.commands.system.Category
+import me.diniamo.commands.system.CommandContext
+import me.diniamo.commands.system.MyCommand
+import net.dv8tion.jda.api.entities.MessageEmbed
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TimeZones : Command() {
-    init {
-        name = "timezones"
-        aliases = arrayOf("times", "tz")
-    }
-
-    override fun execute(event: CommandEvent) {
+class TimeZones : MyCommand(
+    "timezones", arrayOf("times", "tz"), Category.UTILITY,
+) {
+    override fun execute(ctx: CommandContext) {
         /*val current = Clock.System.now()
 
         event.channel.sendMessage(
@@ -22,10 +21,24 @@ class TimeZones : Command() {
         val date = Date()
         val formatter = SimpleDateFormat("HH:mm")
 
-        event.reply(
-                "Craig, Booby, jj (UTC+1): " + formatter.formatForDalv(TimeZone.getTimeZone("GMT+1"), date) +
-                "\ndiniamo, Vajdani (UTC+2): " + formatter.formatForDalv(TimeZone.getTimeZone("GMT+2"), date) +
-                "\nDalv (UTC+3): " + formatter.formatForDalv(TimeZone.getTimeZone("GMT+3"), date)
+        reply(
+            ctx, arrayOf(
+                MessageEmbed.Field(
+                    "Craig, Booby, jj (UTC+1):",
+                    formatter.formatForDalv(TimeZone.getTimeZone("GMT+1"), date),
+                    false
+                ),
+                MessageEmbed.Field(
+                    "\ndiniamo, Vajdani (UTC+2):",
+                    formatter.formatForDalv(TimeZone.getTimeZone("GMT+2"), date),
+                    false
+                ),
+                MessageEmbed.Field(
+                    "\nDalv (UTC+3):",
+                    formatter.formatForDalv(TimeZone.getTimeZone("GMT+3"), date),
+                    false
+                )
+            ), "Timezones"
         )
     }
 
@@ -35,6 +48,7 @@ class TimeZones : Command() {
         timeZone = zone
         applyPattern("HH:mm")
         return format(date) + " | " + apply { applyPattern("hh:mm") }.format(date) +
-                if(Calendar.getInstance().apply { timeZone = zone }.get(Calendar.HOUR_OF_DAY) in 12..23) " PM" else " AM"
+                if (Calendar.getInstance().apply { timeZone = zone }
+                        .get(Calendar.HOUR_OF_DAY) in 12..23) " PM" else " AM"
     }
 }

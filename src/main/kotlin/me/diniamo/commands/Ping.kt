@@ -3,8 +3,6 @@ package me.diniamo.commands
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandContext
 import me.diniamo.commands.system.MyCommand
-import net.dv8tion.jda.api.EmbedBuilder
-import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.MessageEmbed
 
 class Ping : MyCommand(

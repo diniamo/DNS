@@ -1,31 +1,29 @@
 package me.diniamo.commands.memes
 
-import com.jagrosh.jdautilities.command.Command
-import com.jagrosh.jdautilities.command.CommandEvent
 import me.diniamo.Utils
+import me.diniamo.commands.system.Category
+import me.diniamo.commands.system.CommandClient
+import me.diniamo.commands.system.CommandContext
+import me.diniamo.commands.system.MyCommand
 import java.io.File
 import javax.imageio.ImageIO
 import kotlin.math.roundToInt
 
-class HandWithGun : Command() {
+class HandWithGun : MyCommand(
+    "handwithgun", arrayOf("hwg", "deletethis", "dt"), Category.MEME,
+    "Put a hand with a gun on a picture.", "<ping a user/provide an image> (optional, if not used it selects your profile picture)"
+) {
     var lastUserPic: Long = 0
 
-    init {
-        name = "handwithgun"
-        aliases = arrayOf("hwg", "deletethis", "dt")
-        arguments = "<ping a user>"
-        category = Category("Meme")
-    }
-
-    override fun execute(event: CommandEvent) {
+    override fun execute(ctx: CommandContext) {
         val file = File("dt.png")
 
-        if (Utils.getMentionedUserOrAuthor(event.message).idLong == lastUserPic) {
-            event.channel.sendFile(file).queue()
+        if (Utils.getMentionedUserOrAuthor(ctx.message).idLong == lastUserPic) {
+            ctx.channel.sendFile(file).queue { msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong }
         } else {
             Utils.imageExecutor.execute {
                 try {
-                    val image = Utils.getImageOrProfilePicture(event.message)
+                    val image = Utils.getImageOrProfilePicture(ctx.message)
                     val graphics = image.createGraphics()
 
                     //graphics.drawImage(ImageIO.read(File("templates/gun.png")), 0, 50,
@@ -34,9 +32,10 @@ class HandWithGun : Command() {
                             (image.width.toFloat() / (128f / 45f)).roundToInt(), (image.height.toFloat() / (128f / 75f)).roundToInt(), null)
 
                     ImageIO.write(image, "png", file)
-                    event.channel.sendFile(file).complete()
+                    val msg = ctx.channel.sendFile(file).complete()
+                    CommandClient.answerCache[ctx.message.idLong] = msg.idLong
                 } catch (ex: Exception) {
-                    event.reply("Something went wrong.")
+                    replyError(ctx, "Something went wrong.", "Error")
                 }
             }
         }

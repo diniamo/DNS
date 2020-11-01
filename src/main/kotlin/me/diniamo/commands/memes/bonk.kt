@@ -1,22 +1,20 @@
 package me.diniamo.commands.memes
 
-import com.jagrosh.jdautilities.command.Command
-import com.jagrosh.jdautilities.command.CommandEvent
+import me.diniamo.commands.system.Category
+import me.diniamo.commands.system.CommandContext
+import me.diniamo.commands.system.MyCommand
 import java.awt.image.BufferedImage
 import java.awt.image.Raster
 import kotlin.math.PI
 import kotlin.math.cos
 
 
-class Bonk : Command() {
-    init {
-        name = "bonk"
-        arguments = "<ping user or attach an image>"
-        help = "Create the bonk meme with an image or a profile picture."
-        category = Category("Meme")
-    }
-
-    override fun execute(event: CommandEvent) {
+class Bonk : MyCommand(
+    "bonk", arrayOf(), Category.MEME,
+    "(BROKEN!) Create the bonk meme with an image or a profile picture.",
+    "<ping user or provide an image> (optional: if not used it uses your profile picture)"
+) {
+    override fun execute(ctx: CommandContext) {
         /*val output = File("output.png")
 
         val grid: Warp = WarpGrid(0,

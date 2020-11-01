@@ -1,18 +1,17 @@
 package me.diniamo.commands
 
-import com.jagrosh.jdautilities.command.Command
-import com.jagrosh.jdautilities.command.CommandEvent
+import me.diniamo.Utils
+import me.diniamo.commands.system.Category
+import me.diniamo.commands.system.CommandContext
+import me.diniamo.commands.system.MyCommand
+import net.dv8tion.jda.api.entities.MessageEmbed
+import java.lang.management.ManagementFactory
 
-class Uptime : Command() {
-    val startTime = System.currentTimeMillis()
-
-    init {
-        name = "uptime"
-        aliases = arrayOf("ut")
-        help = "Shows the uptime of the bot."
-    }
-
-    override fun execute(event: CommandEvent) {
-        event.reply(String.format("%1\$tH:%1\$tM:%1\$tS.%1\$tL", System.currentTimeMillis() - startTime))
+class Uptime : MyCommand(
+    "uptime", arrayOf("ut"), Category.INFO, "Shows the uptime of the bot."
+) {
+    override fun execute(ctx: CommandContext) {
+        reply(ctx, arrayOf(MessageEmbed.Field("Uptime:", Utils.formatDurationDHMS(ManagementFactory.getRuntimeMXBean().uptime), true)),
+            "DNS Uptime")
     }
 }

@@ -1,26 +1,25 @@
 package me.diniamo.commands.memes
 
-import com.jagrosh.jdautilities.command.Command
-import com.jagrosh.jdautilities.command.CommandEvent
+import me.diniamo.commands.system.Category
+import me.diniamo.commands.system.CommandContext
+import me.diniamo.commands.system.MyCommand
 import java.io.File
 
-class Distract : Command() {
-    init {
-        name = "distract"
-        arguments = "<the user who you want to distract>"
-        help = "Distract someone."
-        category = Category("Meme")
-    }
-
-    override fun execute(event: CommandEvent) {
+class Distract : MyCommand(
+    "distract", arrayOf(), Category.MEME,
+    "Distract someone.", "<ping the user who you want to distract>"
+) {
+    override fun execute(ctx: CommandContext) {
         try {
-            event.message.delete().queue()
-            event.message.mentionedUsers[0].openPrivateChannel().flatMap { it.sendMessage("You have been distracted by ||Henry the stickman||").addFile(File("./templates/distract.mp4")) }
+            ctx.message.delete().queue(null) {
+                replyError(ctx, "Couldn't delete message. (Permission missing `MANAGE_MESSAGES`)", "Distract")
+            }
+            ctx.message.mentionedUsers[0].openPrivateChannel().flatMap { it.sendMessage("You have been distracted by ||Henry the stickman||").addFile(File("./templates/distract.mp4")) }
                     .queue(null, {
-                        event.reply("That user has DMs closed.")
+                        replyError(ctx, "That user has DMs closed.", "Distract")
                     })
         } catch (ex: IndexOutOfBoundsException) {
-            event.reply("You didn't ping anyone.")
+            replyError(ctx, "You didn't ping anyone.", "Distract")
         }
     }
 }

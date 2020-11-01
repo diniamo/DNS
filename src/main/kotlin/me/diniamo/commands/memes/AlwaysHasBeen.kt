@@ -1,30 +1,29 @@
 package me.diniamo.commands.memes
 
-import com.jagrosh.jdautilities.command.Command
-import com.jagrosh.jdautilities.command.CommandEvent
 import me.diniamo.Utils
+import me.diniamo.commands.system.Category
+import me.diniamo.commands.system.CommandClient
+import me.diniamo.commands.system.CommandContext
+import me.diniamo.commands.system.MyCommand
 import java.awt.Font
 import java.io.File
 import java.net.URL
 import javax.imageio.ImageIO
 
-class AlwaysHasBeen : Command() {
-    init {
-        name = "alwayshasbeen"
-        aliases = arrayOf("ahb")
-        help = "Create the always has been meme with an image and next."
-        arguments = "<the thing> <you have to provide an image as an attachment>"
-        category = Category("Meme")
-    }
-
+class AlwaysHasBeen : MyCommand(
+    "alwayshasbeen", arrayOf("ahb"), Category.MEME,
+    "Create the always has been meme with an image and next.",
+    "<something that always has been> (you have to provide an image as an attachment)"
+) {
     //private var charMap = HashMap<Char, Int>()
 
-    override fun execute(event: CommandEvent) {
+    override fun execute(ctx: CommandContext) {
         Utils.imageExecutor.execute {
             try {
                 val image = ImageIO.read(File("./templates/alwaysHasBeen.png"))
                 val graphics = image.createGraphics()
                 val file = File("output.png")
+                val argsJoined = ctx.args.joinToString(" ") + "?"
 
                 graphics.font = Font("Arial", 0, 30)
                 /*if(charMap == null) {
@@ -34,17 +33,17 @@ class AlwaysHasBeen : Command() {
                     }
                 }*/
 
-                graphics.drawImage(ImageIO.read(URL(event.message.attachments[0].url).openStream()), 7, 9, 400, 400, null)
+                graphics.drawImage(ImageIO.read(URL(ctx.message.attachments[0].url).openStream()), 7, 9, 400, 400, null)
                 graphics.drawString("Wait, it's all", 400, 190)
                 graphics.fontMetrics.let { metrics ->
                     //graphics.drawString(event.args + "?", 440, (200 + graphics.fontMetrics.height))
-                    graphics.drawString(event.args + "?", 475 - metrics.getStringBounds(event.args + "?", graphics).width.toFloat() / 2, (200 + graphics.fontMetrics.height).toFloat())
+                    graphics.drawString(argsJoined, 475 - metrics.getStringBounds(argsJoined, graphics).width.toFloat() / 2, (200 + graphics.fontMetrics.height).toFloat())
                 }
 
                 ImageIO.write(image, "png", file)
-                event.channel.sendFile(file).queue()
+                ctx.channel.sendFile(file).queue { msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong }
             } catch (ex: Exception) {
-                event.reply("Something went wrong.")
+                replyError(ctx, "Something went wrong.", "Error")
             }
         }
     }

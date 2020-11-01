@@ -32,8 +32,8 @@ fun main() {
     System.setProperty("http.agent", "")
     Values.ffmpeg = config.getProperty(Config.FFMPEG)
 
-    val builder = CommandClient(prefix, 388742599483064321L)
-    builder.addCommands(Ping(), RolesOf(), Emote(), EvalCommand(), Translate(), TimeZones(), Google(), Uptime())
+    val builder = CommandClient(prefix, 388742599483064321L, jda)
+    builder.addCommands(Ping(), Emote(), EvalCommand(), Translate(), TimeZones(), Google(), Uptime())
             //Tag(jda, config.getProperty(Config.DB_LINK), config.getProperty(Config.DB_DRIVER)))
     builder.addCommands(PutinWalk(), AlwaysHasBeen(), ThisIsWhyIsHateVideoGames(), EW(), Distract(), HandWithGun(), Bonk(), HeartBeat())
 
