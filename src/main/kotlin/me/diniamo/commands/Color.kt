@@ -27,12 +27,12 @@ class Color : MyCommand(
                     else Color(args[0].toInt(), args[1].toInt(), args[2].toInt())
                 }
 
-                val image = BufferedImage(128, 128, BufferedImage.TYPE_INT_RGB)
+                val image = BufferedImage(128, 128, BufferedImage.TYPE_INT_ARGB)
                 val graphics = image.createGraphics()
 
                 graphics.color = color
-                graphics.drawRect(0, 0, 128, 128)
-                graphics.fillRect(0, 0, 128, 128)
+                graphics.drawRect(-1, -1, 129, 129)
+                graphics.fillRect(-1, -1, 129, 129)
 
                 val file = File("output.png")
                 ImageIO.write(image, "png", file)

@@ -4,13 +4,9 @@ package me.diniamo
 
 import ch.jalu.configme.SettingsManager
 import ch.jalu.configme.SettingsManagerBuilder
-import com.jagrosh.jdautilities.command.CommandClientBuilder
 import me.diniamo.commands.*
 import me.diniamo.commands.memes.*
-import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandClient
-import me.diniamo.commands.system.CommandContext
-import me.diniamo.commands.system.MyCommand
 import me.diniamo.events.AutoRoler
 import me.diniamo.events.BinaryToText
 import me.diniamo.events.Counting
@@ -28,6 +24,10 @@ val config: SettingsManager = SettingsManagerBuilder
 val prefix: String = config.getProperty(Config.BOT_PREFIX)
 
 fun main() {
+    if(!File("templates/").exists()) {
+        {}.javaClass.getResourceAsStream("templates/").copyTo()
+    }
+
     val jda = JDABuilder.createDefault(config.getProperty(Config.BOT_TOKEN)).enableIntents(GatewayIntent.GUILD_MEMBERS).setActivity(Activity.playing("with genetics"))
             //.setMemberCachePolicy(MemberCachePolicy.ALL).setChunkingFilter(ChunkingFilter.ALL)
             .build().awaitReady()
