@@ -29,7 +29,7 @@ fun main() {
 
     System.setProperty("http.agent", "")
     Values.ffmpeg = config.getProperty(Config.FFMPEG)
-    Values.answerCacheSizePerGuild = Config.MAX_CACHE_SIZE_PER_GUILD
+    Values.answerCacheSizePerGuild = config.getProperty(Config.MAX_CACHE_SIZE_PER_GUILD)
 
     val builder = CommandClient(prefix, 388742599483064321L, jda)
     builder.addCommands(Ping(), Emote(), EvalCommand(), Translate(), Google(), Uptime(), Info(), Color(), EchoCommand())
