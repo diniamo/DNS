@@ -25,7 +25,7 @@ class EW : MyCommand(
                     .redirectError(ProcessBuilder.Redirect.to(File("error.txt")))
                     .redirectInput(ProcessBuilder.Redirect.PIPE)
                     .command(Values.ffmpeg, "-y", "-i", "./templates/EW.mp4",
-                            "-vf", "drawtext=\"Impact:text='${ctx.args.joinToString("\\s+")}':fontsize=70:fontcolor=white:x=(w-text_w)/2:y=575\"",
+                            "-vf", "drawtext='Impact:text='${ctx.args.joinToString(" ")}':fontsize=70:fontcolor=white:x=(w-text_w)/2:y=575'",
                             "-c:a", "copy", "output.mp4")
                     .start().waitFor()
 
