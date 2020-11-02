@@ -1,10 +1,8 @@
 FROM openjdk:11-jdk-slim-buster
 
-WORKDIR /home/kittybot
+WORKDIR /home/dns
 
-COPY build/libs/KittyBot-all.jar KittyBot.jar
-
-RUN apt update && apt -y install curl
+COPY build/libs/DNS-all.jar DNS.jar
 
 ENTRYPOINT ["java"]
-CMD ["-jar", "KittyBot.jar"]
+CMD ["-jar", "DNS.jar"]
