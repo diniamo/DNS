@@ -15,6 +15,7 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import javax.imageio.ImageIO
+import kotlin.properties.Delegates
 
 const val GREEN_TICK = ":green_tick:772867601901813800"
 const val RED_TICK = ":red_tick:772867524995186749"
@@ -22,6 +23,7 @@ const val RED_TICK = ":red_tick:772867524995186749"
 class Values {
     companion object {
         lateinit var ffmpeg: String
+        var answerCacheSizePerGuild by Delegates.notNull<Int>()
         val avaragePfpColor = Color.decode("#2591cc")
     }
 }

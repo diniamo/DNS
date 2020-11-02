@@ -11,4 +11,5 @@ public class Config implements SettingsHolder {
     public static Property<String> BOT_TOKEN = newProperty("bot.token", "");
     public static Property<String> BOT_PREFIX = newProperty("bot.prefix", "|");
     public static Property<String> FFMPEG = newProperty("ffmpeg", "ffmpeg");
+    public static Property<Integer> MAX_CACHE_SIZE_PER_GUILD = newProperty("max-cache-size-per-guild", 5);
 }
