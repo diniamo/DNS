@@ -24,10 +24,6 @@ val config: SettingsManager = SettingsManagerBuilder
 val prefix: String = config.getProperty(Config.BOT_PREFIX)
 
 fun main() {
-    if(!File("templates/").exists()) {
-        {}.javaClass.getResourceAsStream("templates/").copyTo()
-    }
-
     val jda = JDABuilder.createDefault(config.getProperty(Config.BOT_TOKEN)).enableIntents(GatewayIntent.GUILD_MEMBERS).setActivity(Activity.playing("with genetics"))
             //.setMemberCachePolicy(MemberCachePolicy.ALL).setChunkingFilter(ChunkingFilter.ALL)
             .build().awaitReady()
