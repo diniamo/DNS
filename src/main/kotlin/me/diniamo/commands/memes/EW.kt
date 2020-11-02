@@ -8,7 +8,6 @@ import me.diniamo.commands.system.CommandContext
 import me.diniamo.commands.system.MyCommand
 import java.io.File
 
-
 class EW : MyCommand(
     "ew", arrayOf(), Category.MEME,
     "EW video with specified text. (no space)", "<text>"
@@ -25,7 +24,7 @@ class EW : MyCommand(
                     .redirectError(ProcessBuilder.Redirect.to(File("error.txt")))
                     .redirectInput(ProcessBuilder.Redirect.PIPE)
                     .command(Values.ffmpeg, "-y", "-i", "./templates/EW.mp4",
-                            "-vf", "drawtext=Impact:text='${ctx.args.joinToString(" ")}':fontsize=70:fontcolor=white:x=(w-text_w)/2:y=575",
+                            "-vf", "drawtext=Impact:text=${ctx.args.joinToString(" ")}:fontsize=70:fontcolor=white:x=(w-text_w)/2:y=575",
                             "-c:a", "copy", "output.mp4")
                     .start().waitFor()
 
