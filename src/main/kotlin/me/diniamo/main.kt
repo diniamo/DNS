@@ -7,7 +7,6 @@ import ch.jalu.configme.SettingsManagerBuilder
 import me.diniamo.commands.*
 import me.diniamo.commands.memes.*
 import me.diniamo.commands.system.CommandClient
-import me.diniamo.events.AutoRoler
 import me.diniamo.events.BinaryToText
 import me.diniamo.events.Counting
 import me.diniamo.events.SimpleStuff
@@ -24,7 +23,7 @@ val config: SettingsManager = SettingsManagerBuilder
 val prefix: String = config.getProperty(Config.BOT_PREFIX)
 
 fun main() {
-    val jda = JDABuilder.createDefault(config.getProperty(Config.BOT_TOKEN)).enableIntents(GatewayIntent.GUILD_MEMBERS).setActivity(Activity.playing("with genetics"))
+    val jda = JDABuilder.createDefault(config.getProperty(Config.BOT_TOKEN)).setActivity(Activity.playing("with genetics"))
             //.setMemberCachePolicy(MemberCachePolicy.ALL).setChunkingFilter(ChunkingFilter.ALL)
             .build().awaitReady()
 
@@ -32,10 +31,10 @@ fun main() {
     Values.ffmpeg = config.getProperty(Config.FFMPEG)
 
     val builder = CommandClient(prefix, 388742599483064321L, jda)
-    builder.addCommands(Ping(), Emote(), EvalCommand(), Translate(), Google(), Uptime(), Info(), Color())
+    builder.addCommands(Ping(), Emote(), EvalCommand(), Translate(), Google(), Uptime(), Info(), Color(), EchoCommand())
             //Tag(jda, config.getProperty(Config.DB_LINK), config.getProperty(Config.DB_DRIVER)))
     builder.addCommands(PutinWalk(), AlwaysHasBeen(), ThisIsWhyIsHateVideoGames(), EW(), Distract(), HandWithGun(), Bonk(), HeartBeat())
 
-    jda.addEventListener(BinaryToText(), AutoRoler(), Counting(), SimpleStuff())
+    jda.addEventListener(BinaryToText(), Counting(), SimpleStuff())
     jda.addEventListener(builder)
 }
