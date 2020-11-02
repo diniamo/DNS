@@ -23,7 +23,7 @@ class ThisIsWhyIsHateVideoGames : MyCommand(
                     .redirectError(ProcessBuilder.Redirect.DISCARD)
                     .redirectInput(ProcessBuilder.Redirect.PIPE)
                     .command(Values.ffmpeg, "-y", "-i", "./templates/maleFantasy.mkv", "-i", video.name, "-filter_complex",
-                        "'[1:v]scale=640:360[vs];[0:v][0:a][vs][1:a]concat=n=2:v=1:a=1[v][a]'", "-map", "'[v]'", "-map", "'[a]'", "-vsync", "0", "output.mp4")
+                        "[1:v]scale=640:360[vs];[0:v][0:a][vs][1:a]concat=n=2:v=1:a=1[v][a]", "-map", "\"[v]\"", "-map", "\"[a]\"", "-vsync", "0", "output.mp4")
                     .start().waitFor()
 
                 ctx.channel.sendFile(File("output.mp4"))

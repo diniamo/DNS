@@ -27,6 +27,8 @@ fun main() {
             //.setMemberCachePolicy(MemberCachePolicy.ALL).setChunkingFilter(ChunkingFilter.ALL)
             .build().awaitReady()
 
+    jda.openPrivateChannelById(388742599483064321L).flatMap { it.sendMessage("The bot has been started") }.queue()
+
     System.setProperty("http.agent", "")
     Values.ffmpeg = config.getProperty(Config.FFMPEG)
     Values.answerCacheSizePerGuild = config.getProperty(Config.MAX_CACHE_SIZE_PER_GUILD)
