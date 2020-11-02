@@ -24,7 +24,7 @@ class EchoCommand : MyCommand(
 
         when(args[0]) {
             "join" -> {
-                if(args.size == 2) {
+                if(args.size == 1) {
                     val voiceState = ctx.member!!.voiceState
                     val channel = voiceState?.channel
 
