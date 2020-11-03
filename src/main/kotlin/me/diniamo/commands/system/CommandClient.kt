@@ -33,8 +33,7 @@ class CommandClient(val prefix: String, val ownerId: Long, jda: JDA) : ListenerA
     private val spaces = Regex("\\s+")
     override fun onMessageReceived(event: MessageReceivedEvent) {
         val args = event.message.contentRaw.split(spaces)
-        //println(key)
-        val expectedCommand = commandMap[args[0].apply { if(startsWith(prefix)) substringAfter(prefix) else return@onMessageReceived }.toLowerCase(Locale.ROOT)]
+        val expectedCommand = commandMap[if(args[0].startsWith(prefix)) args[0].substringAfter(prefix).toLowerCase(Locale.ROOT) else return]
 
         if (expectedCommand != null) {
             val errorBuilder = EmbedBuilder().setAuthor("Error", null, event.jda.selfUser.effectiveAvatarUrl).setColor(Color.RED)
