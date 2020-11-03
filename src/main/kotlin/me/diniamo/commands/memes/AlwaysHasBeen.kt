@@ -1,6 +1,7 @@
 package me.diniamo.commands.memes
 
 import me.diniamo.Utils
+import me.diniamo.Values
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandClient
 import me.diniamo.commands.system.CommandContext
@@ -15,7 +16,6 @@ class AlwaysHasBeen : MyCommand(
     "Create the always has been meme with an image and next.",
     "<something that always has been> (you have to provide an image as an attachment)"
 ) {
-    //private var charMap = HashMap<Char, Int>()
 
     override fun execute(ctx: CommandContext) {
         Utils.imageExecutor.execute {
@@ -25,19 +25,13 @@ class AlwaysHasBeen : MyCommand(
                 val file = File("output.png")
                 val argsJoined = ctx.args.joinToString(" ") + "?"
 
-                graphics.font = Font("Arial", 0, 30)
-                /*if(charMap == null) {
-                    charMap = HashMap()
-                    graphics.fontMetrics.widths.forEachIndexed { i, width ->
-                        charMap!![i.toChar()] = width
-                    }
-                }*/
+                //graphics.font = Font("Arial", 0, 30)
+                graphics.font = Values.arial
 
                 graphics.drawImage(ImageIO.read(URL(ctx.message.attachments[0].url).openStream()), 7, 9, 400, 400, null)
                 graphics.drawString("Wait, it's all", 400, 190)
                 graphics.fontMetrics.let { metrics ->
-                    //graphics.drawString(event.args + "?", 440, (200 + graphics.fontMetrics.height))
-                    graphics.drawString(argsJoined, 475 - metrics.getStringBounds(argsJoined, graphics).width.toFloat() / 2, (200 + graphics.fontMetrics.height).toFloat())
+                    graphics.drawString(argsJoined, Utils.toCenterAlignmentX(graphics, 475, argsJoined), (200 + metrics.height).toFloat())
                 }
 
                 ImageIO.write(image, "png", file)

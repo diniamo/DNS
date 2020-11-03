@@ -4,6 +4,8 @@ import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.Message
 import java.awt.Color
+import java.awt.Font
+import java.awt.Graphics2D
 import java.awt.image.BufferedImage
 import java.io.File
 import java.net.URL
@@ -23,8 +25,11 @@ const val RED_TICK = ":red_tick:772867524995186749"
 class Values {
     companion object {
         lateinit var ffmpeg: String
-        var answerCacheSizePerGuild by Delegates.notNull<Int>()
+        var answerCacheSizePerGuild = 5
         val avaragePfpColor = Color.decode("#2591cc")
+
+        val arial: Font = Font.createFont(Font.TRUETYPE_FONT, File("arial.ttf"))
+        val impact: Font = Font.createFont(Font.TRUETYPE_FONT, File("impact.ttf"))
     }
 }
 
@@ -35,6 +40,8 @@ class Utils {
         val scheduler: ScheduledExecutorService = Executors.newScheduledThreadPool(
             Runtime.getRuntime().availableProcessors()
         )
+
+        fun toCenterAlignmentX(graphics: Graphics2D, center: Int, text: String): Float = center - graphics.fontMetrics.getStringBounds(text, graphics).width.toFloat() / 2
 
         fun getUserCount(jda: JDA): Int = jda.guildCache.sumOf { it.memberCount }
 

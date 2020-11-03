@@ -34,7 +34,7 @@ class CommandClient(val prefix: String, val ownerId: Long, jda: JDA) : ListenerA
     override fun onMessageReceived(event: MessageReceivedEvent) {
         val args = event.message.contentRaw.split(spaces)
         //println(key)
-        val expectedCommand = commandMap[args[0].substringAfter(prefix).toLowerCase(Locale.ROOT)]
+        val expectedCommand = commandMap[args[0].apply { if(startsWith(prefix)) substringAfter(prefix) else return@onMessageReceived }.toLowerCase(Locale.ROOT)]
 
         if (expectedCommand != null) {
             val errorBuilder = EmbedBuilder().setAuthor("Error", null, event.jda.selfUser.effectiveAvatarUrl).setColor(Color.RED)

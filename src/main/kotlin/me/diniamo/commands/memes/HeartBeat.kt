@@ -1,6 +1,7 @@
 package me.diniamo.commands.memes
 
 import me.diniamo.Utils
+import me.diniamo.Values
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandClient
 import me.diniamo.commands.system.CommandContext
@@ -19,11 +20,10 @@ class HeartBeat : MyCommand(
             val image = ImageIO.read(File("./templates/heartbeat.png"))
             val graphics = image.createGraphics()
             val file = File("output.png")
-            //val splittedString = Utils.splitStringAt(event.args, 12)
             val splittedString = ctx.args.joinToString(" ").chunked(15)
-            //splittedString.forEach { println(it) }
 
-            graphics.font = Font("Arial", Font.PLAIN, 15)
+            //graphics.font = Font("Arial", Font.PLAIN, 15)
+            graphics.font = Values.arial
             splittedString.forEachIndexed { i, s ->
                 graphics.drawString(s, 110, 165 + 14 * i)
             }
