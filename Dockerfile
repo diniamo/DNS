@@ -1,4 +1,4 @@
-FROM openjdk:11
+FROM openjdk:13-jdk-alpine
 
 WORKDIR /home/dns
 
