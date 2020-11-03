@@ -27,7 +27,6 @@ class CommandClient(val prefix: String, val ownerId: Long, jda: JDA) : ListenerA
             commandMap[command.name] = command
             command.aliases.forEach { commandMap[it] = command }
         }
-        //println(commandMap.keys.forEach { println("$it     -     ${commandMap[it]}") })
     }
 
     private val spaces = Regex("\\s+")
