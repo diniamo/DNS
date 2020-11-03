@@ -27,7 +27,6 @@ fun main() {
             //.setMemberCachePolicy(MemberCachePolicy.ALL).setChunkingFilter(ChunkingFilter.ALL)
             .build().awaitReady()
 
-    jda.openPrivateChannelById(388742599483064321L).flatMap { it.sendMessage("The bot has been started") }.queue()
 
     System.setProperty("http.agent", "")
     Values.ffmpeg = config.getProperty(Config.FFMPEG)
@@ -40,4 +39,6 @@ fun main() {
 
     jda.addEventListener(BinaryToText(), Counting(), SimpleStuff())
     jda.addEventListener(builder)
+
+    jda.openPrivateChannelById(388742599483064321L).flatMap { it.sendMessage("The bot has been started") }.queue()
 }

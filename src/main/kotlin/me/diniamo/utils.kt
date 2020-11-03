@@ -28,8 +28,8 @@ class Values {
         var answerCacheSizePerGuild = 5
         val avaragePfpColor = Color.decode("#2591cc")
 
-        val arial: Font = Font.createFont(Font.TRUETYPE_FONT, File("arial.ttf"))
-        val impact: Font = Font.createFont(Font.TRUETYPE_FONT, File("impact.ttf"))
+        val arial: Font = Font.createFont(Font.TRUETYPE_FONT, File("./arial.ttf"))
+        val impact: Font = Font.createFont(Font.TRUETYPE_FONT, File("./impact.ttf"))
     }
 }
 
