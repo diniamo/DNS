@@ -12,7 +12,7 @@ class Translate : MyCommand(
     "translate", arrayOf(), Category.UTILITY,
     "Uses the google translate API to translate text.", "<language from (2 letter form)> <language to (2 letter form)> <text>"
 ) {
-    override fun execute(ctx: CommandContext) {
+    override fun run(ctx: CommandContext) {
         Utils.scheduler.execute {
             val args = ctx.args
             val url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=" + args[0] + "&tl=" + args[1] + "&dt=t&q=" +

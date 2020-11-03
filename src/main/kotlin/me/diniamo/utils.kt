@@ -62,15 +62,15 @@ class Utils {
         fun downloadImageOrProfilePicture(msg: Message): File {
             Files.copy(
                 URL(parseImageOrProfilePictureUrl(msg)).openStream(),
-                Paths.get("picture.jpg"),
+                Paths.get("picture.png"),
                 StandardCopyOption.REPLACE_EXISTING
             )
-            return File("picture.jpg")
+            return File("picture.png")
         }
 
         fun downloadImage(att: Message.Attachment): File {
-            Files.copy(URL(att.url).openStream(), Paths.get("picture.jpg"), StandardCopyOption.REPLACE_EXISTING)
-            return File("picture.jpg")
+            Files.copy(URL(att.url).openStream(), Paths.get("picture.png"), StandardCopyOption.REPLACE_EXISTING)
+            return File("picture.png")
         }
 
         fun downloadVideo(att: Message.Attachment): File {

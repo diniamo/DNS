@@ -16,8 +16,7 @@ class AlwaysHasBeen : MyCommand(
     "Create the always has been meme with an image and next.",
     "<something that always has been> (you have to provide an image as an attachment)"
 ) {
-
-    override fun execute(ctx: CommandContext) {
+    override fun run(ctx: CommandContext) {
         Utils.imageExecutor.execute {
             try {
                 val image = ImageIO.read(File("./templates/alwaysHasBeen.png"))
@@ -35,7 +34,8 @@ class AlwaysHasBeen : MyCommand(
                 }
 
                 ImageIO.write(image, "png", file)
-                ctx.channel.sendFile(file).queue { msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong }
+                val msg = ctx.channel.sendFile(file).complete()
+                CommandClient.answerCache[ctx.message.idLong] = msg.idLong
             } catch (ex: Exception) {
                 replyError(ctx, "Something went wrong.", "Error")
             }

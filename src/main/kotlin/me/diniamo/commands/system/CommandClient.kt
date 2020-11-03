@@ -11,7 +11,6 @@ import java.awt.Color
 import java.time.Instant
 import java.util.*
 import kotlin.collections.HashMap
-import kotlin.math.exp
 
 class CommandClient(val prefix: String, val ownerId: Long, jda: JDA) : ListenerAdapter() {
     private val commandMap = HashMap<String, MyCommand>()
@@ -41,7 +40,7 @@ class CommandClient(val prefix: String, val ownerId: Long, jda: JDA) : ListenerA
 
             if (expectedCommand.ownerCommand) {
                 if (ownerId == event.author.idLong) {
-                    expectedCommand.execute(CommandContext(event, removeFirst(args)))
+                    expectedCommand.run(CommandContext(event, removeFirst(args)))
                 } else {
                     errorBuilder.appendDescription("Missing permission `OWNER`")
                     event.channel.sendMessage(errorBuilder.build()).queue()
@@ -55,7 +54,7 @@ class CommandClient(val prefix: String, val ownerId: Long, jda: JDA) : ListenerA
             }
 
             if (hasPermission(event.member, expectedCommand.permission)) {
-                expectedCommand.execute(CommandContext(event, removeFirst(args)))
+                expectedCommand.run(CommandContext(event, removeFirst(args)))
             } else {
                 errorBuilder.appendDescription("Missing permission `${expectedCommand.permission?.name}`")
                 event.channel.sendMessage(errorBuilder.build()).queue { msg -> answerCache[event.message.idLong] = msg.idLong }

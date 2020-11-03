@@ -14,7 +14,7 @@ class Bonk : MyCommand(
     "(BROKEN!) Create the bonk meme with an image or a profile picture.",
     "<ping user or provide an image> (optional: if not used it uses your profile picture)"
 ) {
-    override fun execute(ctx: CommandContext) {
+    override fun run(ctx: CommandContext) {
         /*val output = File("output.png")
 
         val grid: Warp = WarpGrid(0,

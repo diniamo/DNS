@@ -19,7 +19,7 @@ class EchoCommand : MyCommand(
 ) {
     val numberRegex = Regex("\\d+")
 
-    override fun execute(ctx: CommandContext) {
+    override fun run(ctx: CommandContext) {
         val args = ctx.args
 
         when(args[0]) {

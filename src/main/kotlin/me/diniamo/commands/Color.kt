@@ -15,7 +15,7 @@ class Color : MyCommand(
     "color", arrayOf(), Category.UTILITY,
     "Display a color (Hex/RGB)", "<color code Hex(you have to use Hex) or RGB (separated with a space)>"
 ) {
-    override fun execute(ctx: CommandContext) {
+    override fun run(ctx: CommandContext) {
         Utils.imageExecutor.execute {
             try {
                 val args = ctx.args

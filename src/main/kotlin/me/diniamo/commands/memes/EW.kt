@@ -12,8 +12,17 @@ class EW : MyCommand(
     "ew", arrayOf(), Category.MEME,
     "EW video with specified text. (no space)", "<text>"
 ) {
-    override fun execute(ctx: CommandContext) {
+    private var lastText: String? = null
+
+    override fun run(ctx: CommandContext) {
         videoExecutor.execute {
+            val joinedArgs = ctx.args.joinToString(" ")
+            if(lastText == joinedArgs) {
+                ctx.channel.sendFile(File("output.mp4")).queue { msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong }
+
+                return@execute
+            }
+
             //println("drawtext=\"Impact:text='${event.args}':fontsize=70:fontcolor=white:x=(w-text_w)/2:y=575\"")
             //println(event.args.count { it == ' ' })
             ProcessBuilder()
@@ -24,11 +33,12 @@ class EW : MyCommand(
                     .redirectError(ProcessBuilder.Redirect.to(File("error.txt")))
                     .redirectInput(ProcessBuilder.Redirect.PIPE)
                     .command(Values.ffmpeg, "-y", "-i", "./templates/EW.mp4",
-                            "-vf", "drawtext=fontfile=/impact.ttf:text='${ctx.args.joinToString(" ")}':fontsize=70:fontcolor=white:x=(w-text_w)/2:y=575",
+                            "-vf", "drawtext=fontfile=/impact.ttf:text='$joinedArgs':fontsize=70:fontcolor=white:x=(w-text_w)/2:y=575",
                             "-c:a", "copy", "output.mp4")
                     .start().waitFor()
 
-            ctx.channel.sendFile(File("output.mp4")).queue { msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong }
+            val msg = ctx.channel.sendFile(File("output.mp4")).complete()
+            CommandClient.answerCache[ctx.message.idLong] = msg.idLong
         }
     }
 }

@@ -12,7 +12,7 @@ class Info : MyCommand(
     "information", arrayOf("info"), Category.INFO,
     "Shows information about the bot."
 ) {
-    override fun execute(ctx: CommandContext) {
+    override fun run(ctx: CommandContext) {
         val runtime = Runtime.getRuntime()
 
         reply(

@@ -15,12 +15,22 @@ class HeartBeat : MyCommand(
     "Create the \"heart beat \"meme.",
     "<text>"
 ) {
-    override fun execute(ctx: CommandContext) {
+    private var lastText: String? = null
+
+    override fun run(ctx: CommandContext) {
         Utils.imageExecutor.execute {
+            val joinedArgs = ctx.args.joinToString(" ")
+
+            if(lastText == joinedArgs) {
+                ctx.channel.sendFile(File("output.mp4")).queue { msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong }
+
+                return@execute
+            }
+
             val image = ImageIO.read(File("./templates/heartbeat.png"))
             val graphics = image.createGraphics()
             val file = File("output.png")
-            val splittedString = ctx.args.joinToString(" ").chunked(15)
+            val splittedString = joinedArgs.chunked(15)
 
             //graphics.font = Font("Arial", Font.PLAIN, 15)
             graphics.font = Values.arial

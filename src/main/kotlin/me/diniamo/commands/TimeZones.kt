@@ -10,7 +10,7 @@ import java.util.*
 class TimeZones : MyCommand(
     "timezones", arrayOf("times", "tz"), Category.UTILITY,
 ) {
-    override fun execute(ctx: CommandContext) {
+    override fun run(ctx: CommandContext) {
         /*val current = Clock.System.now()
 
         event.channel.sendMessage(

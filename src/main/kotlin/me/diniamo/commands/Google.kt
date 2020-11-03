@@ -12,7 +12,7 @@ class Google : MyCommand(
     "google", arrayOf("g"), Category.UTILITY,
     "Queries the google API with the given query and sends the first result.", "<query>"
 ) {
-    override fun execute(ctx: CommandContext) {
+    override fun run(ctx: CommandContext) {
         Utils.scheduler.execute {
             try {
                 val doc = Jsoup.connect("https://www.google.com/search?q=" + URLEncoder.encode(ctx.args.joinToString(" "), Charsets.UTF_8.name())).get()

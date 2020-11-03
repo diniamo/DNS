@@ -102,7 +102,7 @@ abstract class MyCommand(
         }
     }
 
-    abstract fun execute(ctx: CommandContext)
+    abstract fun run(ctx: CommandContext)
 }
 
 data class CommandContext(

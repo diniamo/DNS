@@ -15,7 +15,7 @@ class HandWithGun : MyCommand(
 ) {
     var lastUserPic: Long = 0
 
-    override fun execute(ctx: CommandContext) {
+    override fun run(ctx: CommandContext) {
         val file = File("dt.png")
 
         if (Utils.getMentionedUserOrAuthor(ctx.message).idLong == lastUserPic) {

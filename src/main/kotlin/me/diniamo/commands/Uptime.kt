@@ -10,7 +10,7 @@ import java.lang.management.ManagementFactory
 class Uptime : MyCommand(
     "uptime", arrayOf("ut"), Category.INFO, "Shows the uptime of the bot."
 ) {
-    override fun execute(ctx: CommandContext) {
+    override fun run(ctx: CommandContext) {
         reply(ctx, arrayOf(MessageEmbed.Field("Uptime:", Utils.formatDurationDHMS(ManagementFactory.getRuntimeMXBean().uptime), true)),
             "DNS Uptime")
     }

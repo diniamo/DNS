@@ -17,7 +17,7 @@ class EvalCommand : MyCommand(
     private val DEFAULT_IMPORTS = arrayOf("net.dv8tion.jda.api.entities.impl", "net.dv8tion.jda.api.managers", "net.dv8tion.jda.api.entities", "net.dv8tion.jda.api", "java.lang",
             "java.io", "java.math", "java.util", "java.util.concurrent", "java.time", "java.util.stream")
 
-    override fun execute(ctx: CommandContext) {
+    override fun run(ctx: CommandContext) {
         if (ctx.user.idLong == 388742599483064321L) {
             engine.put("jda", ctx.jda)
             engine.put("api", ctx.jda)

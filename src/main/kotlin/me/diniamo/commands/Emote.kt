@@ -10,7 +10,7 @@ class Emote : MyCommand(
 ) {
     //private val apiKey = "5ee190e903314b6f329dd8b61d55db75cd2705c7";
 
-    override fun execute(ctx: CommandContext) {
+    override fun run(ctx: CommandContext) {
         val str = ctx.args.joinToString(" ")
 
         if(ctx.message.emotes.size > 0) {
