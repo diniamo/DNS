@@ -1,4 +1,4 @@
-FROM openjdk:11-jdk-slim-buster
+FROM openjdk:11-alpine
 
 WORKDIR /home/dns
 
