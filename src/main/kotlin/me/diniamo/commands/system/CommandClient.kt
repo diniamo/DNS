@@ -12,10 +12,10 @@ import java.time.Instant
 import java.util.*
 import kotlin.collections.HashMap
 
-class CommandClient(val prefix: String, val ownerId: Long, jda: JDA) : ListenerAdapter() {
-    private val commandMap = HashMap<String, MyCommand>()
+class CommandClient(val prefix: String, private val ownerId: Long, jda: JDA) : ListenerAdapter() {
+    val commandMap = HashMap<String, Command>()
 
-    fun addCommands(vararg toAdd: MyCommand) {
+    fun addCommands(vararg toAdd: Command) {
         for (command in toAdd) {
             commandMap.keys.forEach {
                 if (command.name == it || command.aliases.any(it::equals)) throw IllegalStateException(

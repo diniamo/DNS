@@ -3,7 +3,7 @@ package me.diniamo.commands
 import me.diniamo.GREEN_TICK
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandContext
-import me.diniamo.commands.system.MyCommand
+import me.diniamo.commands.system.Command
 import net.dv8tion.jda.api.audio.AudioReceiveHandler
 import net.dv8tion.jda.api.audio.AudioSendHandler
 import net.dv8tion.jda.api.audio.CombinedAudio
@@ -12,9 +12,9 @@ import java.nio.ByteBuffer
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
 
-class EchoCommand : MyCommand(
+class EchoCommand : Command(
     "echo", arrayOf(), Category.FUN,
-    "Voice echo.", "<name or id of the voice channel you want it in (optional it will use the one you are currently in)>",
+    "Voice echo", "<name or id of the voice channel you want it in (optional it will use the one you are currently in)>",
     ownerCommand = true, guildOnly = true
 ) {
     val numberRegex = Regex("\\d+")

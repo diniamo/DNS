@@ -2,16 +2,16 @@ package me.diniamo.commands.memes
 
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandContext
-import me.diniamo.commands.system.MyCommand
+import me.diniamo.commands.system.Command
 import java.awt.image.BufferedImage
 import java.awt.image.Raster
 import kotlin.math.PI
 import kotlin.math.cos
 
 
-class Bonk : MyCommand(
+class Bonk : Command(
     "bonk", arrayOf(), Category.MEME,
-    "(BROKEN!) Create the bonk meme with an image or a profile picture.",
+    "(BROKEN!) Create the bonk meme with an image or a profile picture",
     "<ping user or provide an image> (optional: if not used it uses your profile picture)"
 ) {
     override fun run(ctx: CommandContext) {

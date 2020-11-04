@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.requests.restaction.MessageAction
 import java.awt.Color
 import java.time.Instant
 
-abstract class MyCommand(
+abstract class Command(
     val name: String,
     val aliases: Array<String>,
     val category: Category,

@@ -6,12 +6,12 @@ import me.diniamo.Values
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandClient
 import me.diniamo.commands.system.CommandContext
-import me.diniamo.commands.system.MyCommand
+import me.diniamo.commands.system.Command
 import java.io.File
 
-class PutinWalk : MyCommand(
+class PutinWalk : Command(
     "putinwalk", arrayOf("pw", "putin-walk"), Category.MEME,
-    "Create the putin walk meme with someone's profile picture or an image.",
+    "Create the putin walk meme with someone's profile picture or an image",
     "<ping (optional, it will use your profile picture) or image>"
 ) {
     private var lastUser: Long = 0

@@ -4,14 +4,14 @@ import me.diniamo.Utils
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandClient
 import me.diniamo.commands.system.CommandContext
-import me.diniamo.commands.system.MyCommand
+import me.diniamo.commands.system.Command
 import java.io.File
 import javax.imageio.ImageIO
 import kotlin.math.roundToInt
 
-class HandWithGun : MyCommand(
+class HandWithGun : Command(
     "handwithgun", arrayOf("hwg", "deletethis", "dt"), Category.MEME,
-    "Put a hand with a gun on a picture.", "<ping a user/provide an image> (optional, if not used it selects your profile picture)"
+    "Put a hand with a gun on a picture", "<ping a user/provide an image> (optional, if not used it selects your profile picture)"
 ) {
     var lastUserPic: Long = 0
 

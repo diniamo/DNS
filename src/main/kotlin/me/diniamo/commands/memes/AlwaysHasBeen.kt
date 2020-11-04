@@ -5,15 +5,14 @@ import me.diniamo.Values
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandClient
 import me.diniamo.commands.system.CommandContext
-import me.diniamo.commands.system.MyCommand
-import java.awt.Font
+import me.diniamo.commands.system.Command
 import java.io.File
 import java.net.URL
 import javax.imageio.ImageIO
 
-class AlwaysHasBeen : MyCommand(
+class AlwaysHasBeen : Command(
     "alwayshasbeen", arrayOf("ahb"), Category.MEME,
-    "Create the always has been meme with an image and next.",
+    "Create the always has been meme with an image and next",
     "<something that always has been> (you have to provide an image as an attachment)"
 ) {
     override fun run(ctx: CommandContext) {

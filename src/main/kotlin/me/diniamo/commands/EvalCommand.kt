@@ -2,15 +2,15 @@ package me.diniamo.commands
 
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandContext
-import me.diniamo.commands.system.MyCommand
+import me.diniamo.commands.system.Command
 import net.dv8tion.jda.api.EmbedBuilder
 import java.awt.Color
 import javax.script.ScriptEngine
 import javax.script.ScriptEngineManager
 
 
-class EvalCommand : MyCommand(
-    "eval", arrayOf("e"), Category.ADMIN, "Evaluates Groovy code.", "<code (without Discord formatting)>", ownerCommand = true
+class EvalCommand : Command(
+    "eval", arrayOf("e"), Category.ADMIN, "Evaluates Groovy code", "<code (without Discord formatting)>", ownerCommand = true
 ) {
     private val engine: ScriptEngine = ScriptEngineManager().getEngineByName("groovy")
 

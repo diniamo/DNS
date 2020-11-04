@@ -3,14 +3,14 @@ package me.diniamo.commands
 import me.diniamo.Utils
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandContext
-import me.diniamo.commands.system.MyCommand
+import me.diniamo.commands.system.Command
 import org.jsoup.Jsoup
 import java.net.URLEncoder
 
 
-class Google : MyCommand(
+class Google : Command(
     "google", arrayOf("g"), Category.UTILITY,
-    "Queries the google API with the given query and sends the first result.", "<query>"
+    "Queries the google API with the given query and sends the first result", "<query>"
 ) {
     override fun run(ctx: CommandContext) {
         Utils.scheduler.execute {

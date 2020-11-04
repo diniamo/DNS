@@ -2,12 +2,12 @@ package me.diniamo.commands.memes
 
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandContext
-import me.diniamo.commands.system.MyCommand
+import me.diniamo.commands.system.Command
 import java.io.File
 
-class Distract : MyCommand(
+class Distract : Command(
     "distract", arrayOf(), Category.MEME,
-    "Distract someone.", "<ping the user who you want to distract>"
+    "Distract someone", "<ping the user who you want to distract>"
 ) {
     override fun run(ctx: CommandContext) {
         try {

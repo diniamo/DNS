@@ -5,12 +5,12 @@ import me.diniamo.Values
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandClient
 import me.diniamo.commands.system.CommandContext
-import me.diniamo.commands.system.MyCommand
+import me.diniamo.commands.system.Command
 import java.io.File
 
-class ThisIsWhyIsHateVideoGames : MyCommand(
+class ThisIsWhyIsHateVideoGames : Command(
     "hatevideogames", arrayOf("hatevg"), Category.MEME,
-    "Create the \"This is why I hate video games\" meme.", "(provide a video)"
+    "Create the \"This is why I hate video games\" meme", "(provide a video)"
 ) {
     override fun run(ctx: CommandContext) {
         Utils.videoExecutor.execute {

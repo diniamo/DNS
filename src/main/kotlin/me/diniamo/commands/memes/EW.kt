@@ -5,12 +5,12 @@ import me.diniamo.Values
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandClient
 import me.diniamo.commands.system.CommandContext
-import me.diniamo.commands.system.MyCommand
+import me.diniamo.commands.system.Command
 import java.io.File
 
-class EW : MyCommand(
+class EW : Command(
     "ew", arrayOf(), Category.MEME,
-    "EW video with specified text. (no space)", "<text>"
+    "EW video with specified text", "<text>"
 ) {
     private var lastText: String? = null
 

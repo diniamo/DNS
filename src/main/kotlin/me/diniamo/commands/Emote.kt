@@ -2,11 +2,11 @@ package me.diniamo.commands
 
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandContext
-import me.diniamo.commands.system.MyCommand
+import me.diniamo.commands.system.Command
 
-class Emote : MyCommand(
+class Emote : Command(
     "emote", arrayOf("emoji", "characterinfo", "charinfo", "ci"), Category.UTILITY,
-    "Shows information about characters.", "<character(s)/emote(s)>"
+    "Shows information about characters", "<character(s)/emote(s)>"
 ) {
     //private val apiKey = "5ee190e903314b6f329dd8b61d55db75cd2705c7";
 

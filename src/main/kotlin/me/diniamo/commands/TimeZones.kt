@@ -2,12 +2,12 @@ package me.diniamo.commands
 
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandContext
-import me.diniamo.commands.system.MyCommand
+import me.diniamo.commands.system.Command
 import net.dv8tion.jda.api.entities.MessageEmbed
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TimeZones : MyCommand(
+class TimeZones : Command(
     "timezones", arrayOf("times", "tz"), Category.UTILITY,
 ) {
     override fun run(ctx: CommandContext) {

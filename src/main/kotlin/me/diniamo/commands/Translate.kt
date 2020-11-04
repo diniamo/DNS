@@ -3,14 +3,14 @@ package me.diniamo.commands
 import me.diniamo.Utils
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandContext
-import me.diniamo.commands.system.MyCommand
+import me.diniamo.commands.system.Command
 import org.json.JSONArray
 import java.net.URL
 import java.net.URLEncoder
 
-class Translate : MyCommand(
+class Translate : Command(
     "translate", arrayOf(), Category.UTILITY,
-    "Uses the google translate API to translate text.", "<language from (2 letter form)> <language to (2 letter form)> <text>"
+    "Uses the google translate API to translate text", "<language from (2 letter form)> <language to (2 letter form)> <text>"
 ) {
     override fun run(ctx: CommandContext) {
         Utils.scheduler.execute {

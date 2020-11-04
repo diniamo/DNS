@@ -4,14 +4,13 @@ import me.diniamo.Utils
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandClient
 import me.diniamo.commands.system.CommandContext
-import me.diniamo.commands.system.MyCommand
-import net.dv8tion.jda.api.entities.Message
+import me.diniamo.commands.system.Command
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
 
-class Color : MyCommand(
+class Color : Command(
     "color", arrayOf(), Category.UTILITY,
     "Display a color (Hex/RGB)", "<color code Hex(you have to use Hex) or RGB (separated with a space)>"
 ) {

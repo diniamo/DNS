@@ -10,6 +10,12 @@ plugins {
     id("com.github.johnrengelman.shadow") version ("6.1.0")
 }
 
+sourceSets {
+    sourceSets.main {
+        java.srcDirs("src/main/java", "src/main/kotlin")
+    }
+}
+
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "11"
 }

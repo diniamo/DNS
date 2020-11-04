@@ -2,6 +2,8 @@
 
 package me.diniamo
 
+import ch.jalu.configme.SettingsHolder;
+import ch.jalu.configme.properties.PropertyInitializer.newProperty;
 import ch.jalu.configme.SettingsManager
 import ch.jalu.configme.SettingsManagerBuilder
 import me.diniamo.commands.*
@@ -32,13 +34,13 @@ fun main() {
     Values.ffmpeg = config.getProperty(Config.FFMPEG)
     Values.answerCacheSizePerGuild = config.getProperty(Config.MAX_CACHE_SIZE_PER_GUILD)
 
-    val builder = CommandClient(prefix, 388742599483064321L, jda)
-    builder.addCommands(Ping(), Emote(), EvalCommand(), Translate(), Google(), Uptime(), Info(), Color(), EchoCommand())
+    val client = CommandClient(prefix, 388742599483064321L, jda)
+    client.addCommands(HelpCommand(client), Ping(), Emote(), EvalCommand(), Translate(), Google(), Uptime(), Info(), Color(), EchoCommand())
             //Tag(jda, config.getProperty(Config.DB_LINK), config.getProperty(Config.DB_DRIVER)))
-    builder.addCommands(PutinWalk(), AlwaysHasBeen(), ThisIsWhyIsHateVideoGames(), EW(), Distract(), HandWithGun(), Bonk(), HeartBeat())
+    client.addCommands(PutinWalk(), AlwaysHasBeen(), ThisIsWhyIsHateVideoGames(), EW(), Distract(), HandWithGun(), Bonk(), HeartBeat())
 
     jda.addEventListener(BinaryToText(), Counting(), SimpleStuff())
-    jda.addEventListener(builder)
+    jda.addEventListener(client)
 
     jda.openPrivateChannelById(388742599483064321L).flatMap { it.sendMessage("The bot has been started") }.queue()
 }

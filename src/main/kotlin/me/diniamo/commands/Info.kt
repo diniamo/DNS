@@ -3,14 +3,14 @@ package me.diniamo.commands
 import me.diniamo.Utils
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandContext
-import me.diniamo.commands.system.MyCommand
+import me.diniamo.commands.system.Command
 import net.dv8tion.jda.api.JDAInfo
 import net.dv8tion.jda.api.entities.MessageEmbed
 import java.lang.management.ManagementFactory
 
-class Info : MyCommand(
+class Info : Command(
     "information", arrayOf("info"), Category.INFO,
-    "Shows information about the bot."
+    "Shows information about the bot"
 ) {
     override fun run(ctx: CommandContext) {
         val runtime = Runtime.getRuntime()
