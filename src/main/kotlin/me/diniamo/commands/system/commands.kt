@@ -20,6 +20,8 @@ abstract class Command(
     val guildOnly: Boolean = false,
     val ownerCommand: Boolean = false
 ) {
+    protected fun templateBuilder(ctx: CommandContext) = EmbedBuilder().setFooter(ctx.member?.effectiveName ?: ctx.user.name, ctx.user.effectiveAvatarUrl).setTimestamp(Instant.now())
+
     protected fun reply(ctx: CommandContext, message: Message) {
         ctx.channel.sendMessage(message).queue {
                 msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong
