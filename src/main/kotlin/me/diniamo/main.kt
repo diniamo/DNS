@@ -39,5 +39,5 @@ fun main() {
     jda.addEventListener(BinaryToText(), Counting(), SimpleStuff())
     jda.addEventListener(client)
 
-    //jda.openPrivateChannelById(388742599483064321L).flatMap { it.sendMessage("The bot has been started") }.queue()
+    jda.openPrivateChannelById(388742599483064321L).flatMap { it.sendMessage("The bot has been started") }.queue()
 }
