@@ -40,13 +40,4 @@ class AlwaysHasBeen : Command(
             }
         }
     }
-
-    /*private fun estimateWidth(s: String): Int {
-        var toReturn = 0
-        s.forEach { c ->
-            toReturn += charMap!![c]!!
-        }
-        println(toReturn)
-        return toReturn
-    }*/
 }

@@ -3,6 +3,7 @@ package me.diniamo
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.Message
+import okhttp3.OkHttpClient
 import java.awt.Color
 import java.awt.Font
 import java.awt.Graphics2D
@@ -23,18 +24,18 @@ import kotlin.properties.Delegates
 const val GREEN_TICK = ":green_tick:772867601901813800"
 const val RED_TICK = ":red_tick:772867524995186749"
 
-class Values {
-    companion object {
-        lateinit var ffmpeg: String
-        var answerCacheSizePerGuild = 5
-        val avaragePfpColor = Color.decode("#2591cc")
+object Values {
+    val httpClient = OkHttpClient()
 
-        val arial: Font = Font.createFont(Font.TRUETYPE_FONT, File("./arial.ttf")).also {
-            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(it)
-        }
-        val impact: Font = Font.createFont(Font.TRUETYPE_FONT, File("./impact.ttf")).also {
-            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(it)
-        }
+    lateinit var ffmpeg: String
+    var answerCacheSizePerGuild = 5
+    val avaragePfpColor = Color.decode("#2591cc")
+
+    val arial: Font = Font.createFont(Font.TRUETYPE_FONT, File("./arial.ttf")).also {
+        GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(it)
+    }
+    val impact: Font = Font.createFont(Font.TRUETYPE_FONT, File("./impact.ttf")).also {
+        GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(it)
     }
 }
 
@@ -46,14 +47,19 @@ class Utils {
             Runtime.getRuntime().availableProcessors()
         )
 
-        fun toCenterAlignmentX(graphics: Graphics2D, center: Int, text: String): Float = center - graphics.fontMetrics.getStringBounds(text, graphics).width.toFloat() / 2
+        fun toCenterAlignmentX(graphics: Graphics2D, center: Int, text: String): Float =
+            center - graphics.fontMetrics.getStringBounds(text, graphics).width.toFloat() / 2
 
         fun getUserCount(jda: JDA): Int = jda.guildCache.sumOf { it.memberCount }
 
         fun formatDurationDHMS(millis: Long): String {
             val duration = Duration.ofMillis(millis)
             return String.format(
-                "%sd %s:%s:%s", duration.toDays(),fTime(duration.toHoursPart()), fTime(duration.toMinutesPart()), fTime(duration.toSecondsPart())
+                "%sd %s:%s:%s",
+                duration.toDays(),
+                fTime(duration.toHoursPart()),
+                fTime(duration.toMinutesPart()),
+                fTime(duration.toSecondsPart())
             )
         }
 
