@@ -12,7 +12,7 @@ import javax.imageio.ImageIO
 
 class AlwaysHasBeen : Command(
     "alwayshasbeen", arrayOf("ahb"), Category.MEME,
-    "Create the always has been meme with an image and next",
+    "Create the always has been meme with an image and text",
     "<something that always has been> (you have to provide an image as an attachment)"
 ) {
     override fun run(ctx: CommandContext) {

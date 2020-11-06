@@ -2,8 +2,6 @@
 
 package me.diniamo
 
-import ch.jalu.configme.SettingsHolder;
-import ch.jalu.configme.properties.PropertyInitializer.newProperty;
 import ch.jalu.configme.SettingsManager
 import ch.jalu.configme.SettingsManagerBuilder
 import me.diniamo.commands.*
@@ -14,7 +12,6 @@ import me.diniamo.events.Counting
 import me.diniamo.events.SimpleStuff
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.Activity
-import net.dv8tion.jda.api.requests.GatewayIntent
 import java.io.File
 
 val config: SettingsManager = SettingsManagerBuilder
