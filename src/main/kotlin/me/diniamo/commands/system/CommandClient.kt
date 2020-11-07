@@ -12,7 +12,7 @@ import java.time.Instant
 import java.util.*
 import kotlin.collections.HashMap
 
-class CommandClient(val prefix: String, private val ownerId: Long, jda: JDA) : ListenerAdapter() {
+class CommandClient(prefix: String, private val ownerId: Long, jda: JDA) : ListenerAdapter() {
     val commandMap = HashMap<String, Command>()
 
     fun addCommands(vararg toAdd: Command) {
@@ -60,15 +60,6 @@ class CommandClient(val prefix: String, private val ownerId: Long, jda: JDA) : L
                 event.channel.sendMessage(errorBuilder.build()).queue { msg -> answerCache[event.message.idLong] = msg.idLong }
                 return
             }
-
-            /*if((expectedCommand.guildOnly && event.isFromGuild && hasPermission(event.member, expectedCommand.permission))
-                && (expectedCommand.ownerCommand && event.author.idLong == ownerId))
-                expectedCommand.execute(CommandContext(event, removeFirst(args)))
-            else event.channel.sendMessage(EmbedBuilder()
-                .appendDescription("You can't do that!")
-                .setColor(Color.RED)
-                .setFooter(event.member?.effectiveName ?: event.author.name, event.author.effectiveAvatarUrl)
-                .setTimestamp(Instant.now()).build()).queue { msg -> answerCache[event.messageIdLong] = msg.idLong }*/
         }
     }
 
@@ -90,10 +81,12 @@ class CommandClient(val prefix: String, private val ownerId: Long, jda: JDA) : L
     }
 
     init {
+        Companion.prefix = prefix
         answerCache = AnswerCache(jda)
     }
 
     companion object {
+        lateinit var prefix: String
         lateinit var answerCache: AnswerCache<Long, Long>
     }
 }

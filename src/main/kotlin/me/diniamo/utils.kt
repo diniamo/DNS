@@ -21,6 +21,8 @@ import kotlin.properties.Delegates
 
 const val GREEN_TICK = ":green_tick:772867601901813800"
 const val RED_TICK = ":red_tick:772867524995186749"
+const val THUMBS_UP = "\uD83D\uDC4D"
+const val THUMBS_DOWN = "\uD83D\uDC4E"
 
 object Values {
     val httpClient = OkHttpClient()
