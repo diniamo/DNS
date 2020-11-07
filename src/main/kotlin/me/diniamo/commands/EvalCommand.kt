@@ -30,7 +30,7 @@ class EvalCommand : Command(
             engine.put("bot", ctx.jda.selfUser)
 
             val builder = EmbedBuilder().setTitle("Evaluate")
-            val code = ctx.args.joinToString(" ")
+            val code = ctx.message.contentRaw.substringAfter(" ")
             val startTime = System.currentTimeMillis()
             try {
                 val sb = StringBuilder()
@@ -51,25 +51,6 @@ class EvalCommand : Command(
                 builder.addField("Error:", "```$ex```", true)
             }
             reply(ctx, builder.build())
-            /*eval(engine, event.args)?.let {
-                event.reply(it)
-            }*/
         }
     }
-
-    /*private fun eval(engine: ScriptEngine, code: String): MessageEmbed? {
-        val builder = EmbedBuilder()
-                .setColor(Color.decode("#af131a")).setTitle("Evaluate")
-                .appendDescription("This is the result of your code:")
-
-        try {
-            val out = engine.eval(code)
-            if (out != null) {
-                builder.appendDescription("```$out```")
-            } else return null
-        } catch (ex: Exception) {
-            builder.appendDescription("```${ex}```")
-        }
-        return builder.build()
-    }*/
 }
