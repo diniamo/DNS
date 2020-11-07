@@ -6,6 +6,7 @@ import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandClient
 import me.diniamo.commands.system.CommandContext
 import me.diniamo.commands.system.Command
+import java.awt.Font
 import java.io.File
 import java.net.URL
 import javax.imageio.ImageIO
@@ -49,8 +50,7 @@ class HeartBeat : Command(
             } else {
                 val splittedString = joinedArgs.chunked(15)
 
-                //graphics.font = Font("Arial", Font.PLAIN, 15)
-                graphics.font = Values.arial
+                graphics.font = Font("Arial", Font.BOLD, 15)
                 splittedString.forEachIndexed { i, s ->
                     graphics.drawString(s, 110, 165 + 14 * i)
                 }

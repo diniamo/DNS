@@ -6,6 +6,7 @@ import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandClient
 import me.diniamo.commands.system.CommandContext
 import me.diniamo.commands.system.Command
+import java.awt.Font
 import java.io.File
 import java.net.URL
 import javax.imageio.ImageIO
@@ -23,8 +24,8 @@ class AlwaysHasBeen : Command(
                 val file = File("output.png")
                 val argsJoined = ctx.args.joinToString(" ") + "?"
 
-                //graphics.font = Font("Arial", 0, 30)
-                graphics.font = Values.arial
+                graphics.font = Font("Arial", Font.PLAIN, 30)
+                //graphics.font = Values.arial
 
                 graphics.drawImage(ImageIO.read(URL(ctx.message.attachments[0].url).openStream()), 7, 9, 400, 400, null)
                 graphics.drawString("Wait, it's all", 400, 190)

@@ -12,6 +12,8 @@ import me.diniamo.events.Counting
 import me.diniamo.events.SimpleStuff
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.Activity
+import java.awt.Font
+import java.awt.GraphicsEnvironment
 import java.io.File
 
 val config: SettingsManager = SettingsManagerBuilder
@@ -30,6 +32,14 @@ fun main() {
     System.setProperty("http.agent", "")
     Values.ffmpeg = config.getProperty(Config.FFMPEG)
     Values.answerCacheSizePerGuild = config.getProperty(Config.MAX_CACHE_SIZE_PER_GUILD)
+
+    // Font registration
+    Font.createFont(Font.TRUETYPE_FONT, File("./arial.ttf")).let { arial ->
+        GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(arial).also { println(it) }
+    }
+    Font.createFont(Font.TRUETYPE_FONT, File("./impact.ttf")).let { impact ->
+        GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(impact).also { println(it) }
+    }
 
     val client = CommandClient(prefix, 388742599483064321L, jda)
     client.addCommands(HelpCommand(client), Ping(), Emote(), EvalCommand(), Translate(), Google(), Uptime(), Info(), Color(), EchoCommand())

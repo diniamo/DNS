@@ -5,9 +5,7 @@ import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.Message
 import okhttp3.OkHttpClient
 import java.awt.Color
-import java.awt.Font
 import java.awt.Graphics2D
-import java.awt.GraphicsEnvironment
 import java.awt.image.BufferedImage
 import java.io.File
 import java.net.URL
@@ -30,13 +28,6 @@ object Values {
     lateinit var ffmpeg: String
     var answerCacheSizePerGuild = 5
     val avaragePfpColor = Color.decode("#2591cc")
-
-    val arial: Font = Font.createFont(Font.TRUETYPE_FONT, File("./arial.ttf")).also {
-        GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(it)
-    }
-    val impact: Font = Font.createFont(Font.TRUETYPE_FONT, File("./impact.ttf")).also {
-        GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(it)
-    }
 }
 
 class Utils {
