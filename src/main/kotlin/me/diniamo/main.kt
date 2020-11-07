@@ -35,10 +35,10 @@ fun main() {
 
     // Font registration
     Font.createFont(Font.TRUETYPE_FONT, File("./arial.ttf")).let { arial ->
-        GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(arial).also { println(it) }
+        GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(arial)
     }
     Font.createFont(Font.TRUETYPE_FONT, File("./impact.ttf")).let { impact ->
-        GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(impact).also { println(it) }
+        GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(impact)
     }
 
     val client = CommandClient(prefix, 388742599483064321L, jda)

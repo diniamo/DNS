@@ -7,6 +7,8 @@ import me.diniamo.commands.system.CommandClient
 import me.diniamo.commands.system.CommandContext
 import me.diniamo.commands.system.Command
 import java.awt.Font
+import java.awt.geom.AffineTransform
+import java.awt.image.BufferedImage
 import java.io.File
 import java.net.URL
 import javax.imageio.ImageIO
@@ -48,9 +50,10 @@ class HeartBeat : Command(
                     replyError(ctx, "You have to provide an image or text.", "Heart Beat")
                 }
             } else {
-                val splittedString = joinedArgs.chunked(15)
+                val splittedString = joinedArgs.chunked(13)
 
                 graphics.font = Font("Arial", Font.BOLD, 15)
+
                 splittedString.forEachIndexed { i, s ->
                     graphics.drawString(s, 110, 165 + 14 * i)
                 }
