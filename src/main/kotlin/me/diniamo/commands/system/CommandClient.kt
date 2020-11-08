@@ -30,6 +30,11 @@ class CommandClient(prefix: String, private val ownerId: Long, jda: JDA) : Liste
 
     private val spaces = Regex("\\s+")
     override fun onMessageReceived(event: MessageReceivedEvent) {
+        if(event.message.mentionedUsers.contains(event.jda.selfUser)) {
+            event.channel.sendMessage(EmbedBuilder().appendDescription("My prefix is: **$prefix**").build()).queue()
+            return
+        }
+
         val args = event.message.contentRaw.split(spaces)
         val expectedCommand = commandMap[if(args[0].startsWith(prefix)) args[0].substringAfter(prefix).toLowerCase(Locale.ROOT) else return]
 
