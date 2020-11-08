@@ -7,6 +7,7 @@ import me.diniamo.commands.system.CommandClient
 import me.diniamo.commands.system.CommandContext
 import me.diniamo.commands.system.Command
 import java.awt.Font
+import java.awt.RenderingHints
 import java.awt.geom.AffineTransform
 import java.awt.image.BufferedImage
 import java.io.File
@@ -52,7 +53,16 @@ class HeartBeat : Command(
             } else {
                 val splittedString = joinedArgs.chunked(13)
 
-                graphics.font = Font("Arial", Font.BOLD, 15)
+                graphics.setRenderingHint(
+                    RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON
+                )
+                graphics.setRenderingHint(
+                    RenderingHints.KEY_RENDERING,
+                    RenderingHints.VALUE_RENDER_QUALITY
+                )
+
+                graphics.font = Font("Impact", Font.PLAIN, 15)
 
                 splittedString.forEachIndexed { i, s ->
                     graphics.drawString(s, 110, 165 + 14 * i)
