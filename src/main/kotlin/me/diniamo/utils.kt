@@ -10,7 +10,6 @@ import java.awt.Graphics2D
 import java.awt.image.BufferedImage
 import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.IOException
 import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -20,6 +19,7 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import javax.imageio.ImageIO
+import kotlin.math.roundToInt
 
 
 const val GREEN_TICK = ":green_tick:772867601901813800"
@@ -50,6 +50,9 @@ class Utils {
             return baos.toByteArray()
         }
 
+        fun lerp(a: Float, b: Float, t: Float): Int {
+            return ((1 - t) * a + t * b).roundToInt()
+        }
 
         fun toCenterAlignmentX(graphics: Graphics2D, center: Int, text: String): Float =
             center - graphics.fontMetrics.getStringBounds(text, graphics).width.toFloat() / 2

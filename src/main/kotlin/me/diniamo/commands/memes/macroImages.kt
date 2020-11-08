@@ -11,9 +11,10 @@ import java.awt.image.BufferedImage
 import java.io.File
 import java.net.URL
 import javax.imageio.ImageIO
+import kotlin.math.roundToInt
 
 class MacroImage : Command(
-    "macroimage", arrayOf("macro-image", "mimg"), Category.MEME,
+    "macroimage", arrayOf("macro-image", "macro", "mimg"), Category.MEME,
     "Create a micro image", "(Provide an image) <some text separated by commas>"
 ) {
     override fun run(ctx: CommandContext) {
@@ -44,7 +45,7 @@ class MacroImage : Command(
                 RenderingHints.VALUE_RENDER_QUALITY
             )
 
-            graphics.font = Font("Impact", Font.PLAIN, 30)
+            graphics.font = Font("Impact", Font.PLAIN, (image.height * 0.13761).roundToInt())
 
             val frc = graphics.fontRenderContext
             val xBottom = Utils.toCenterAlignmentX(graphics, image.width / 2, text.second)
@@ -83,11 +84,11 @@ class WideFish : Command(
             val text = ctx.message.contentRaw.substringAfter(' ').split(", ")
 
             if(text.size < 2) {
-                macroImage(ctx, ImageIO.read(File("./templates")),"me when you don't provide" to " enough text splitted by commas")
+                macroImage(ctx, ImageIO.read(File("./templates/widefish.png")),"me when you don't provide" to " enough text splitted by commas")
                 return@execute
             }
 
-            macroImage(ctx, ImageIO.read(File("./templates")), (if(text[0].isEmpty()) null else text[0]) to text[1])
+            macroImage(ctx, ImageIO.read(File("./templates/widefish.png")), (if(text[0].isEmpty()) null else text[0]) to text[1])
         }
     }
 }
