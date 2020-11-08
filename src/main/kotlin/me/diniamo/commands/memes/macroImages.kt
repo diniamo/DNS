@@ -18,7 +18,7 @@ class MacroImage : Command(
 ) {
     override fun run(ctx: CommandContext) {
         Utils.imageExecutor.execute {
-            if(ctx.message.attachments.size > 0 && ctx.message.attachments[0].isImage) {
+            if(ctx.message.attachments.size < 1 || !ctx.message.attachments[0].isImage) {
                 replyError(ctx, "You have to provide an image to use this command!", "Macro Image")
                 return@execute
             }
@@ -47,12 +47,12 @@ class MacroImage : Command(
             graphics.font = Font("Impact", Font.PLAIN, 30)
 
             val frc = graphics.fontRenderContext
-            val xBottom = Utils.toCenterAlignmentX(graphics, 200, text.second)
+            val xBottom = Utils.toCenterAlignmentX(graphics, image.width / 2, text.second)
             val vector2 = graphics.font.createGlyphVector(frc, text.second)
 
             if(text.first != null) {
                 val vector1 = graphics.font.createGlyphVector(frc, text.first)
-                val xTop = Utils.toCenterAlignmentX(graphics, 200, text.first!!)
+                val xTop = Utils.toCenterAlignmentX(graphics, image.width / 2, text.first!!)
 
                 graphics.color = Color.BLACK
                 graphics.draw(vector1.getOutline(xTop, 26f))
@@ -62,10 +62,10 @@ class MacroImage : Command(
 
             graphics.color = Color.BLACK
             graphics.stroke = BasicStroke(1f)
-            graphics.draw(vector2.getOutline(xBottom, 214f))
+            graphics.draw(vector2.getOutline(xBottom, image.height - 4f))
 
             graphics.color = Color.WHITE
-            graphics.drawString(text.second, xBottom, 214f)
+            graphics.drawString(text.second, xBottom, image.height - 4f)
 
             ctx.channel.sendFile(Utils.encodePNG(image), "macro.png").queue { msg ->
                 CommandClient.answerCache[ctx.message.idLong] = msg.idLong

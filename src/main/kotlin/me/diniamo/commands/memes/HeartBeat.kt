@@ -65,7 +65,7 @@ class HeartBeat : Command(
                     graphics.drawString(s, 110, 165 + 14 * i)
                 }
 
-                val msg = ctx.channel.sendFile(Utils.encodePNG(image), "hb.png").queue { msg ->
+                ctx.channel.sendFile(Utils.encodePNG(image), "hb.png").queue { msg ->
                     CommandClient.answerCache[ctx.message.idLong] = msg.idLong
                 }
 

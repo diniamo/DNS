@@ -22,7 +22,6 @@ class AlwaysHasBeen : Command(
             try {
                 val image = ImageIO.read(File("./templates/alwaysHasBeen.png"))
                 val graphics = image.createGraphics()
-                val file = File("output.png")
                 val argsJoined = ctx.args.joinToString(" ") + "?"
 
                 graphics.setRenderingHint(
