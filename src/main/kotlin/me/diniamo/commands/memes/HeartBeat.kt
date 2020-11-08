@@ -34,19 +34,16 @@ class HeartBeat : Command(
 
             val image = ImageIO.read(File("./templates/heartbeat.png"))
             val graphics = image.createGraphics()
-            val file = File("output.png")
 
             if (joinedArgs.trim() == "") {
                 if (ctx.message.attachments.size > 0) {
                     graphics.drawImage(ImageIO.read(URL(ctx.message.attachments[0].url)), 110, 151, 110, 62,null)
-                    ImageIO.write(image, "png", file)
+
+                    ctx.channel.sendFile(Utils.encodePNG(image), "hb.png").queue { msg ->
+                        CommandClient.answerCache[ctx.message.idLong] = msg.idLong
+                    }
 
                     lastText = null
-
-                    val msg = ctx.channel.sendFile(file).complete()
-
-                    lastText = joinedArgs
-                    CommandClient.answerCache[ctx.message.idLong] = msg.idLong
                 } else {
                     replyError(ctx, "You have to provide an image or text.", "Heart Beat")
                 }
@@ -68,11 +65,11 @@ class HeartBeat : Command(
                     graphics.drawString(s, 110, 165 + 14 * i)
                 }
 
-                ImageIO.write(image, "png", file)
-                val msg = ctx.channel.sendFile(file).complete()
+                val msg = ctx.channel.sendFile(Utils.encodePNG(image), "hb.png").queue { msg ->
+                    CommandClient.answerCache[ctx.message.idLong] = msg.idLong
+                }
 
                 lastText = joinedArgs
-                CommandClient.answerCache[ctx.message.idLong] = msg.idLong
             }
         }
     }

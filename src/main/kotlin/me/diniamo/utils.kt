@@ -8,7 +8,9 @@ import okhttp3.OkHttpClient
 import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.image.BufferedImage
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.IOException
 import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -18,7 +20,7 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import javax.imageio.ImageIO
-import kotlin.properties.Delegates
+
 
 const val GREEN_TICK = ":green_tick:772867601901813800"
 const val RED_TICK = ":red_tick:772867524995186749"
@@ -37,10 +39,17 @@ object Values {
 class Utils {
     companion object {
         val videoExecutor: ExecutorService = Executors.newSingleThreadExecutor()
-        val imageExecutor: ExecutorService = Executors.newSingleThreadExecutor()
+        val imageExecutor: ExecutorService = Executors.newCachedThreadPool()
         val scheduler: ScheduledExecutorService = Executors.newScheduledThreadPool(
             Runtime.getRuntime().availableProcessors()
         )
+
+        fun encodePNG(img: BufferedImage): ByteArray {
+            val baos = ByteArrayOutputStream(2048)
+            ImageIO.write(img, "PNG", baos)
+            return baos.toByteArray()
+        }
+
 
         fun toCenterAlignmentX(graphics: Graphics2D, center: Int, text: String): Float =
             center - graphics.fontMetrics.getStringBounds(text, graphics).width.toFloat() / 2

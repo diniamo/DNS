@@ -33,10 +33,7 @@ class Color : Command(
                 graphics.drawRect(-1, -1, 129, 129)
                 graphics.fillRect(-1, -1, 129, 129)
 
-                val file = File("output.png")
-                ImageIO.write(image, "png", file)
-
-                ctx.channel.sendFile(file).queue { msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong }
+                ctx.channel.sendFile(Utils.encodePNG(image), "color.png").queue { msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong }
             } catch (ex: Exception) {
                 replyError(ctx, "You didn't provide the right arguments!", "Color")
             }

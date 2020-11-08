@@ -43,9 +43,9 @@ class AlwaysHasBeen : Command(
                     graphics.drawString(argsJoined, Utils.toCenterAlignmentX(graphics, 475, argsJoined), (200 + metrics.height).toFloat())
                 }
 
-                ImageIO.write(image, "png", file)
-                val msg = ctx.channel.sendFile(file).complete()
-                CommandClient.answerCache[ctx.message.idLong] = msg.idLong
+                ctx.channel.sendFile(Utils.encodePNG(image), "ahb.png").queue { msg ->
+                    CommandClient.answerCache[ctx.message.idLong] = msg.idLong
+                }
             } catch (ex: Exception) {
                 replyError(ctx, "Something went wrong.", "Error")
             }

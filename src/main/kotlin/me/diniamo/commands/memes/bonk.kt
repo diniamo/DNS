@@ -8,7 +8,6 @@ import java.awt.image.Raster
 import kotlin.math.PI
 import kotlin.math.cos
 
-
 class Bonk : Command(
     "bonk", arrayOf(), Category.MEME,
     "(BROKEN!) Create the bonk meme with an image or a profile picture",
