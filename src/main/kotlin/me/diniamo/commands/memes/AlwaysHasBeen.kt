@@ -7,6 +7,7 @@ import me.diniamo.commands.system.CommandClient
 import me.diniamo.commands.system.CommandContext
 import me.diniamo.commands.system.Command
 import java.awt.Font
+import java.awt.RenderingHints
 import java.io.File
 import java.net.URL
 import javax.imageio.ImageIO
@@ -23,6 +24,15 @@ class AlwaysHasBeen : Command(
                 val graphics = image.createGraphics()
                 val file = File("output.png")
                 val argsJoined = ctx.args.joinToString(" ") + "?"
+
+                graphics.setRenderingHint(
+                    RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON
+                )
+                graphics.setRenderingHint(
+                    RenderingHints.KEY_RENDERING,
+                    RenderingHints.VALUE_RENDER_QUALITY
+                )
 
                 graphics.font = Font("Arial", Font.PLAIN, 30)
                 //graphics.font = Values.arial
