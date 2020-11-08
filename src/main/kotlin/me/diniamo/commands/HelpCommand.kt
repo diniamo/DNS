@@ -13,16 +13,16 @@ class HelpCommand(private val client: CommandClient) : Command(
 ) {
     override fun run(ctx: CommandContext) {
         val lowerArg = if(ctx.args.isNotEmpty()) ctx.args[0].toUpperCase(Locale.ROOT) else {
-            reply(ctx, "You have to choose one of these categories: `${Category.values().joinToString { it.name }}`", "DNS Commands")
+            reply(ctx, "You have to choose one of these categories (or a command): `${Category.values().joinToString { it.name }}`", "DNS Help")
             return
         }
 
-        val category = Category.values().firstOrNull { it.name == lowerArg }
+        val category = Category.values().firstOrNull { it.categoryName.toLowerCase(Locale.ROOT) == lowerArg }
 
         if(category == null) {
             val command = client.commandMap[lowerArg]
             if(command == null) {
-                replyError(ctx, "You can only choose from these categories (or a command): `${Category.values().joinToString { it.name }}`", "DNS Commands")
+                reply(ctx, "You can only choose from these categories (or a command): `${Category.values().joinToString { it.name }}`", "DNS Help")
                 return
             }
 
