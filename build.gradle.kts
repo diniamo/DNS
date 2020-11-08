@@ -48,7 +48,6 @@ repositories {
 
 dependencies {
     implementation("net.dv8tion", "JDA", jdaVersion)
-    implementation("com.jagrosh", "jda-utilities", "3.0.4")
 
     implementation("com.squareup.okhttp3", "okhttp", "4.9.0")
     implementation("ch.jalu", "configme", "1.1.0")

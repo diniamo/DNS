@@ -12,17 +12,27 @@ class HelpCommand(private val client: CommandClient) : Command(
     "Shows the commands of the bot"
 ) {
     override fun run(ctx: CommandContext) {
-        val builder = StringBuilder()
         val lowerArg = if(ctx.args.isNotEmpty()) ctx.args[0].toUpperCase(Locale.ROOT) else {
-            replyError(ctx, "You have to choose one of these categories: `${Category.values().joinToString { it.categoryName.toUpperCase(Locale.ROOT) }}`", "Help")
+            reply(ctx, "You have to choose one of these categories: `${Category.values().joinToString { it.name }}`", "DNS Commands")
             return
         }
 
         val category = Category.values().firstOrNull { it.name == lowerArg }
 
         if(category == null) {
-            replyError(ctx, "You can only choose from these categories: `${Category.values().joinToString { it.categoryName.toUpperCase(Locale.ROOT) }}`", "Help")
+            val command = client.commandMap[lowerArg]
+            if(command == null) {
+                replyError(ctx, "You can only choose from these categories (or a command): `${Category.values().joinToString { it.name }}`", "DNS Commands")
+                return
+            }
+
+            reply(ctx, "Help: ${command.help}" +
+                    "Usage: ${CommandClient.prefix}${command.name} ${command.arguments}\n" +
+                    "Aliases: ${command.aliases.joinToString("`, `", "`", "`")}", command.name + " Help")
         } else {
+            val builder = StringBuilder()
+            builder.append("Prefix: **${CommandClient.prefix}**\n\n")
+
             for(command in client.commandMap.values.filter { it.category == category }.toSet()) {
                 builder.append(
                         "**${command.name}** (${command.help}): ${command.arguments}\n"
