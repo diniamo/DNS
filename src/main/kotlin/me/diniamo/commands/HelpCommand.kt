@@ -4,7 +4,6 @@ import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandClient
 import me.diniamo.commands.system.CommandContext
 import me.diniamo.commands.system.Command
-import net.dv8tion.jda.api.EmbedBuilder
 import java.util.*
 
 class HelpCommand(private val client: CommandClient) : Command(
@@ -12,23 +11,23 @@ class HelpCommand(private val client: CommandClient) : Command(
     "Shows the commands of the bot"
 ) {
     override fun run(ctx: CommandContext) {
-        val lowerArg = if(ctx.args.isNotEmpty()) ctx.args[0].toUpperCase(Locale.ROOT) else {
+        val upperArg = if(ctx.args.isNotEmpty()) ctx.args[0].toUpperCase(Locale.ROOT) else {
             reply(ctx, "You have to choose one of these categories (or a command): `${Category.values().joinToString { it.name }}`", "DNS Help")
             return
         }
 
-        val category = Category.values().firstOrNull { it.categoryName.toLowerCase(Locale.ROOT) == lowerArg }
+        val category = Category.values().firstOrNull { it.name == upperArg }
 
         if(category == null) {
-            val command = client.commandMap[lowerArg]
+            val command = client.commandMap[upperArg.toLowerCase(Locale.ROOT)]
             if(command == null) {
                 reply(ctx, "You can only choose from these categories (or a command): `${Category.values().joinToString { it.name }}`", "DNS Help")
                 return
             }
 
-            reply(ctx, "Help: ${command.help}" +
+            reply(ctx, "Help: ${command.help}\n" +
                     "Usage: ${CommandClient.prefix}${command.name} ${command.arguments}\n" +
-                    "Aliases: ${command.aliases.joinToString("`, `", "`", "`")}", command.name + " Help")
+                    if(command.aliases.isEmpty()) "" else "Aliases: ${command.aliases.joinToString("`, `", "`", "`")}", command.name + " Help")
         } else {
             val builder = StringBuilder()
             builder.append("Prefix: **${CommandClient.prefix}**\n\n")
@@ -39,7 +38,7 @@ class HelpCommand(private val client: CommandClient) : Command(
                 )
             }
 
-            reply(ctx, templateBuilder(ctx).setTitle("${category.emoji} ${category.categoryName} Commands").build())
+            reply(ctx, templateBuilder(ctx).setTitle("${category.emoji} ${category.categoryName} Commands").appendDescription(builder.toString()).build())
         }
     }
 }
