@@ -46,27 +46,29 @@ class MacroImage : Command(
             )
 
             graphics.font = Font("Impact", Font.PLAIN, (image.height * 0.13761).roundToInt())
+            graphics.stroke = BasicStroke(graphics.font.size * 0.05f)
 
             val frc = graphics.fontRenderContext
             val xBottom = Utils.toCenterAlignmentX(graphics, image.width / 2, text.second)
+            val yBottom = (image.height - (graphics.font.size / 7.5f))
             val vector2 = graphics.font.createGlyphVector(frc, text.second)
 
             if(text.first != null) {
                 val vector1 = graphics.font.createGlyphVector(frc, text.first)
                 val xTop = Utils.toCenterAlignmentX(graphics, image.width / 2, text.first!!)
+                val yTop = -4f + graphics.font.size.toFloat()
 
                 graphics.color = Color.BLACK
-                graphics.draw(vector1.getOutline(xTop, 26f))
+                graphics.draw(vector1.getOutline(xTop, yTop))
                 graphics.color = Color.WHITE
-                graphics.drawString(text.first, xTop, 26f)
+                graphics.drawString(text.first, xTop, yTop)
             }
 
             graphics.color = Color.BLACK
-            graphics.stroke = BasicStroke(1f)
-            graphics.draw(vector2.getOutline(xBottom, image.height - 4f))
+            graphics.draw(vector2.getOutline(xBottom, yBottom))
 
             graphics.color = Color.WHITE
-            graphics.drawString(text.second, xBottom, image.height - 4f)
+            graphics.drawString(text.second, xBottom, yBottom)
 
             ctx.channel.sendFile(Utils.encodePNG(image), "macro.png").queue { msg ->
                 CommandClient.answerCache[ctx.message.idLong] = msg.idLong
