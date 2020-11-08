@@ -49,6 +49,7 @@ repositories {
 dependencies {
     implementation("net.dv8tion", "JDA", jdaVersion)
 
+    implementation("com.beust", "klaxon", "5.0.1")
     implementation("com.squareup.okhttp3", "okhttp", "4.9.0")
     implementation("ch.jalu", "configme", "1.1.0")
     implementation("ch.qos.logback", "logback-classic", "1.2.3")

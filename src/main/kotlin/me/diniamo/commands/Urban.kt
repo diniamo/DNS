@@ -1,5 +1,8 @@
 package me.diniamo.commands
 
+import com.beust.klaxon.JsonArray
+import com.beust.klaxon.JsonObject
+import com.beust.klaxon.Parser
 import me.diniamo.THUMBS_DOWN
 import me.diniamo.THUMBS_UP
 import me.diniamo.Utils
@@ -10,14 +13,13 @@ import me.diniamo.commands.system.CommandClient
 import me.diniamo.commands.system.CommandContext
 import net.dv8tion.jda.api.EmbedBuilder
 import okhttp3.Request
-import org.json.JSONArray
-import org.json.JSONObject
 import java.net.URLEncoder
 
 class Urban : Command(
     "urban", arrayOf("u"), Category.UTILITY,
     "Searches in Urban Dictionary for a definition", "<search query>"
 ) {
+
     override fun run(ctx: CommandContext) {
         if(ctx.args.isEmpty()) {
             reply(ctx, "Usage: ${CommandClient.prefix}$name $arguments", "Urban")
@@ -30,22 +32,22 @@ class Urban : Command(
                 .get().build()
 
             try {
-                val json = JSONObject(Values.httpClient.newCall(request).execute().body?.string() ?: "{\"list\":[]}")
-                val mostLiked = json.getJSONArray("list").maxByOrNull {
-                    it as JSONObject
-                    it.getInt("thumbs_up") - it.getInt("thumbs_down")
-                } as JSONObject
+                val list = (Values.jsonParser.parse(StringBuilder(Values.httpClient.newCall(request).execute().body?.string() ?: "{\"list\":[]}")) as JsonObject).array<JsonObject>("list")
+                val mostLiked = list?.maxByOrNull {
+                    (it.int("thumbs_up") ?: 0) - (it.int("thumbs_down") ?: 0)
+                }!!
 
                 reply(ctx, EmbedBuilder()
-                    .setTitle("Definition of ${mostLiked.getString("word")}", mostLiked.getString("permalink"))
+                    .setTitle("Definition of ${mostLiked.string("word")}", mostLiked.string("permalink"))
                     .setColor(Values.avaragePfpColor)
                     .setThumbnail("https://i.imgur.com/VFXr0ID.jpg")
-                    .setFooter("Author: ${mostLiked.getString("author")}")
-                    .appendDescription(mostLiked.getString("definition"))
-                    .addField("Example", mostLiked.getString("example"), false)
-                    .addField(THUMBS_UP, mostLiked.getInt("thumbs_up").toString(), true)
-                    .addField(THUMBS_DOWN, mostLiked.getInt("thumbs_down").toString(), true).build())
+                    .setFooter("Author: ${mostLiked.string("author")}")
+                    .appendDescription(mostLiked.string("definition") ?: "No definition.")
+                    .addField("Example", mostLiked.string("example"), false)
+                    .addField(THUMBS_UP, mostLiked.int("thumbs_up").toString(), true)
+                    .addField(THUMBS_DOWN, mostLiked.int("thumbs_down").toString(), true).build())
             } catch(ex: Exception) {
+                ex.printStackTrace()
                 replyError(ctx, "Something went wrong.", "Urban")
             }
         }

@@ -1,5 +1,6 @@
 package me.diniamo
 
+import com.beust.klaxon.Parser
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.Message
@@ -26,6 +27,7 @@ const val THUMBS_DOWN = "\uD83D\uDC4E"
 
 object Values {
     val httpClient = OkHttpClient()
+    val jsonParser: Parser = Parser.default()
 
     lateinit var ffmpeg: String
     var answerCacheSizePerGuild = 5

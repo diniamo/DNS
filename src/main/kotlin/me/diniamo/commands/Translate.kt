@@ -1,13 +1,12 @@
 package me.diniamo.commands
 
+import com.beust.klaxon.JsonArray
 import me.diniamo.Utils
 import me.diniamo.Values
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandContext
 import me.diniamo.commands.system.Command
 import okhttp3.Request
-import org.json.JSONArray
-import java.net.URL
 import java.net.URLEncoder
 
 class Translate : Command(
@@ -26,14 +25,15 @@ class Translate : Command(
                 val response = Values.httpClient.newCall(request).execute()
 
                 val builder = StringBuilder()
-                val array = JSONArray(response.body?.string() ?: "{}").getJSONArray(0)
-                for (i in 0 until array.length()) {
-                    builder.append(array.getJSONArray(i).get(0))
+                val array = (Values.jsonParser.parse(StringBuilder(response.body?.string() ?: "[]")) as JsonArray<*>)[0] as JsonArray<*>
+                for (i in 0 until array.size) {
+                    builder.append((array[0] as JsonArray<*>)[0])
                 }
 
                 reply(ctx, builder.toString(), "Translate")
                 //event.reply(text.substring(4, text.indexOf("\",")))
             } catch (ex: Exception) {
+                ex.printStackTrace()
                 replyError(ctx, "Something went wrong.", "Translate")
             }
         }
