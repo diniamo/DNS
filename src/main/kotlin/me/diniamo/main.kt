@@ -44,7 +44,7 @@ fun main() {
     val client = CommandClient(prefix, 388742599483064321L, jda)
     client.addCommands(HelpCommand(client), Ping(), Emote(), EvalCommand(), Translate(), Google(), Uptime(), Info(), Color(), EchoCommand(), Urban())
             //Tag(jda, config.getProperty(Config.DB_LINK), config.getProperty(Config.DB_DRIVER)))
-    client.addCommands(PutinWalk(), AlwaysHasBeen(), ThisIsWhyIsHateVideoGames(), EW(), Distract(), HandWithGun(), Bonk(), HeartBeat(), MacroImage(), WideFish())
+    client.addCommands(PutinWalk(), AlwaysHasBeen(), ThisIsWhyIsHateVideoGames(), EW(), Distract(), HandWithGun(), HeartBeat(), MacroImage(), WideFish())
 
     jda.addEventListener(BinaryToText(), Counting(), SimpleStuff())
     jda.addEventListener(client)

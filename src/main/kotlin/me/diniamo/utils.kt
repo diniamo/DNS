@@ -21,7 +21,6 @@ import java.util.concurrent.ScheduledExecutorService
 import javax.imageio.ImageIO
 import kotlin.math.roundToInt
 
-
 const val GREEN_TICK = ":green_tick:772867601901813800"
 const val RED_TICK = ":red_tick:772867524995186749"
 const val THUMBS_UP = "\uD83D\uDC4D"
@@ -56,6 +55,8 @@ class Utils {
 
         fun toCenterAlignmentX(graphics: Graphics2D, center: Int, text: String): Float =
             center - graphics.fontMetrics.getStringBounds(text, graphics).width.toFloat() / 2
+        fun toCenterAlignmentY(graphics: Graphics2D, center: Int, text: String): Float =
+            center - graphics.fontMetrics.getStringBounds(text, graphics).height.toFloat() / 2
 
         fun getUserCount(jda: JDA): Int = jda.guildCache.sumOf { it.memberCount }
 

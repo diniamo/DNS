@@ -8,6 +8,7 @@ import me.diniamo.commands.system.CommandClient
 import me.diniamo.commands.system.CommandContext
 import me.diniamo.commands.system.Command
 import java.io.File
+import java.util.*
 
 class PutinWalk : Command(
     "putinwalk", arrayOf("pw", "putin-walk"), Category.MEME,
@@ -18,18 +19,18 @@ class PutinWalk : Command(
 
     override fun run(ctx: CommandContext) {
         videoExecutor.execute {
-            val file = File("output.mp4")
+            val isGif = ctx.message.attachments[0].fileExtension?.toLowerCase(Locale.ROOT) == "gif"
             downloadImageOrProfilePicture(ctx.message)
             ProcessBuilder()
                     .redirectOutput(ProcessBuilder.Redirect.DISCARD)
                     .redirectError(ProcessBuilder.Redirect.to(File("error.txt")))
                     .redirectInput(ProcessBuilder.Redirect.PIPE)
-                    .command(Values.ffmpeg, "-y", "-i", "./templates/PutinWalk.mp4", "-ignore_loop", "0", "-i", "picture.png", "-filter_complex",
+                    .command(Values.ffmpeg, "-y", "-i", "./templates/PutinWalk.mp4", if(isGif) "-ignore_loop" else "", if(isGif) "0" else "", "-i", "picture.png", "-filter_complex",
                         "[1]scale=240:80[b];[0][b] overlay=(W-w)/2:(H-h)/2-50:enable='between(t,0,20)':shortest=1", "-pix_fmt", "yuv420p",
                         "-c:a", "copy", "output.mp4")
                     .start().waitFor()
 
-            val msg = ctx.channel.sendFile(file).complete()
+            val msg = ctx.channel.sendFile(File("output.mp4")).complete()
             CommandClient.answerCache[ctx.message.idLong] = msg.idLong
         }
     }
