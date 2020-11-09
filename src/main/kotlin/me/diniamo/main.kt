@@ -7,6 +7,7 @@ import ch.jalu.configme.SettingsManagerBuilder
 import me.diniamo.commands.*
 import me.diniamo.commands.memes.*
 import me.diniamo.commands.system.CommandClient
+import me.diniamo.commands.system.TestCommand
 import me.diniamo.events.BinaryToText
 import me.diniamo.events.Counting
 import me.diniamo.events.SimpleStuff
@@ -42,7 +43,7 @@ fun main() {
     }
 
     val client = CommandClient(prefix, 388742599483064321L, jda)
-    client.addCommands(HelpCommand(client), Ping(), Emote(), EvalCommand(), Translate(), Google(), Uptime(), Info(), Color(), EchoCommand(), Urban())
+    client.addCommands(HelpCommand(client), Ping(), Emote(), EvalCommand(), Translate(), Google(), Uptime(), Info(), Color(), EchoCommand(), Urban(), TestCommand())
             //Tag(jda, config.getProperty(Config.DB_LINK), config.getProperty(Config.DB_DRIVER)))
     client.addCommands(PutinWalk(), AlwaysHasBeen(), ThisIsWhyIsHateVideoGames(), EW(), Distract(), HandWithGun(), HeartBeat(), MacroImage(), WideFish())
 

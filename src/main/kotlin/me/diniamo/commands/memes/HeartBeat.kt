@@ -1,15 +1,12 @@
 package me.diniamo.commands.memes
 
 import me.diniamo.Utils
-import me.diniamo.Values
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandClient
 import me.diniamo.commands.system.CommandContext
 import me.diniamo.commands.system.Command
 import java.awt.Font
 import java.awt.RenderingHints
-import java.awt.geom.AffineTransform
-import java.awt.image.BufferedImage
 import java.io.File
 import java.net.URL
 import javax.imageio.ImageIO
@@ -61,8 +58,10 @@ class HeartBeat : Command(
 
                 graphics.font = Font("Impact", Font.PLAIN, 15)
 
+                val initY = (180 - (splittedString.size - 1) * (graphics.font.size / 2)) + (graphics.font.size / 2)
                 splittedString.forEachIndexed { i, s ->
-                    graphics.drawString(s, 110, 165 + 14 * i)
+                    graphics.drawString(s, Utils.toCenterAlignmentX(graphics, 160, s), (initY + i * graphics.font.size).toFloat())
+                    //graphics.drawString(s, Utils.toCenterAlignmentX(graphics, 110, s), (165 + 14 * i).toFloat())
                 }
 
                 ctx.channel.sendFile(Utils.encodePNG(image), "hb.png").queue { msg ->
