@@ -13,45 +13,29 @@ import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
 
 class EchoCommand : Command(
-    "echo", arrayOf(), Category.FUN,
-    "Voice echo", "<name or id of the voice channel you want it in (optional it will use the one you are currently in)>",
-    ownerCommand = true, guildOnly = true
+    "echo",
+    arrayOf(),
+    Category.AUDIO,
+    "Voice echo",
+    "<name or id of the voice channel you want it in (optional it will use the one you are currently in)>",
+    ownerCommand = true,
+    guildOnly = true
 ) {
     val numberRegex = Regex("\\d+")
 
     override fun run(ctx: CommandContext) {
         val args = ctx.args
 
-        when(args[0]) {
+        when (args[0]) {
             "join" -> {
-                if(args.size == 1) {
-                    val voiceState = ctx.member!!.voiceState
-                    val channel = voiceState?.channel
+                val voiceState = ctx.member!!.voiceState
+                val channel = voiceState?.channel ?: ctx.guild.getVoiceChannelsByName(args[1], true)[0] ?: ctx.guild.getVoiceChannelById(args[1].toLong())
 
-                    if(channel != null) {
-                        connectTo(channel)
-                        ctx.message.addReaction(GREEN_TICK).queue()
-                    } else {
-                        replyError(ctx, "You must be in a channel to use this command!", "Echo")
-                    }
-                } else {
-                    var channel: VoiceChannel? = null
-
-                    if(args[1].matches(numberRegex)) {
-                        channel = ctx.guild.getVoiceChannelById(args[1].toLong())
-                    }
-                    if(channel == null) {
-                        val channels = ctx.guild.getVoiceChannelsByName(args[1], true)
-                        if(channels.isNotEmpty()) channel = channels[0]
-                    }
-
-                    if(channel == null) {
-                        replyError(ctx, "No channel found.", "Echo")
-                        return
-                    }
-
+                if (channel != null) {
                     connectTo(channel)
                     ctx.message.addReaction(GREEN_TICK).queue()
+                } else {
+                    replyError(ctx, "Join a channel or provide an ID or a name!", "Echo")
                 }
             }
             "leave" -> {
@@ -64,8 +48,6 @@ class EchoCommand : Command(
             }
             else -> replyError(ctx, "Available subcommands: `join`, `leave`", "Echo")
         }
-
-
     }
 
     private fun connectTo(channel: VoiceChannel) {
