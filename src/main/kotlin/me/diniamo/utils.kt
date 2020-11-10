@@ -79,17 +79,18 @@ class Utils {
         }
 
         fun downloadImageOrProfilePicture(msg: Message): File {
+            val parsed = parseImageOrProfilePictureUrl(msg)
             Files.copy(
-                URL(parseImageOrProfilePictureUrl(msg)).openStream(),
-                Paths.get("picture.png"),
+                URL(parsed.first).openStream(),
+                Paths.get("image.${parsed.second}"),
                 StandardCopyOption.REPLACE_EXISTING
             )
-            return File("picture.png")
+            return File("image.${parsed.second}")
         }
 
         fun downloadImage(att: Message.Attachment): File {
-            Files.copy(URL(att.url).openStream(), Paths.get("picture.png"), StandardCopyOption.REPLACE_EXISTING)
-            return File("picture.png")
+            Files.copy(URL(att.url).openStream(), Paths.get("image.${att.fileExtension ?: ""}"), StandardCopyOption.REPLACE_EXISTING)
+            return File("image.${att.fileExtension ?: ""}")
         }
 
         fun downloadVideo(att: Message.Attachment): File {
@@ -115,13 +116,17 @@ class Utils {
             )
         }
 
-        fun parseImageOrProfilePictureUrl(msg: Message): String {
+        /*
+        first - link
+        second - extension
+         */
+        fun parseImageOrProfilePictureUrl(msg: Message): Pair<String, String> {
             return if (msg.attachments.size > 0 && msg.attachments[0].isImage)
-                msg.attachments[0].url
+                msg.attachments[0].url to (msg.attachments[0].fileExtension ?: "")
             else if (msg.mentionedUsers.size > 0)
-                msg.mentionedUsers[0].effectiveAvatarUrl
+                msg.mentionedUsers[0].effectiveAvatarUrl to msg.mentionedUsers[0].effectiveAvatarUrl.substringAfterLast('.')
             else
-                msg.author.effectiveAvatarUrl
+                msg.author.effectiveAvatarUrl to msg.author.effectiveAvatarUrl.substringAfterLast('.')
         }
     }
 }

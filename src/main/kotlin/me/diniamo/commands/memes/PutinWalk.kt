@@ -19,15 +19,24 @@ class PutinWalk : Command(
 
     override fun run(ctx: CommandContext) {
         videoExecutor.execute {
-            val isGif = ctx.message.attachments[0].fileExtension?.toLowerCase(Locale.ROOT) == "gif"
-            downloadImageOrProfilePicture(ctx.message)
+            val image = downloadImageOrProfilePicture(ctx.message)
+            val isGif = image.extension == "gif"
+            val command = mutableListOf(Values.ffmpeg, "-y", "-i", "./templates/PutinWalk.mp4").apply {
+                if(isGif) {
+                    add("-ignore_loop")
+                    add("0")
+                }
+                addAll(arrayOf(
+                    "-i", image.name, "-filter_complex",
+                    "[1]scale=240:80[b];[0][b] overlay=(W-w)/2:(H-h)/2-50:enable='between(t,0,20)'${if(isGif) ":shortest=1" else ""}", "-pix_fmt", "yuv420p",
+                    "-c:a", "copy", "output.mp4"
+                ))
+            }
             ProcessBuilder()
                     .redirectOutput(ProcessBuilder.Redirect.DISCARD)
                     .redirectError(ProcessBuilder.Redirect.to(File("error.txt")))
                     .redirectInput(ProcessBuilder.Redirect.PIPE)
-                    .command(Values.ffmpeg, "-y", "-i", "./templates/PutinWalk.mp4", if(isGif) "-ignore_loop" else "", if(isGif) "0" else "", "-i", "picture.png", "-filter_complex",
-                        "[1]scale=240:80[b];[0][b] overlay=(W-w)/2:(H-h)/2-50:enable='between(t,0,20)':shortest=1", "-pix_fmt", "yuv420p",
-                        "-c:a", "copy", "output.mp4")
+                    .command(command)
                     .start().waitFor()
 
             val msg = ctx.channel.sendFile(File("output.mp4")).complete()
