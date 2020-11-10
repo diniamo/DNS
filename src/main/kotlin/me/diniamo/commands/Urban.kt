@@ -32,7 +32,12 @@ class Urban : Command(
                 .get().build()
 
             try {
-                val list = (Values.jsonParser.parse(StringBuilder(Values.httpClient.newCall(request).execute().body?.string() ?: "{\"list\":[]}")) as JsonObject).array<JsonObject>("list")
+                val result = Values.httpClient.newCall(request).execute().body?.string()
+                if(result == null) {
+                    reply(ctx, "No result.", "Urban")
+                    return@execute
+                }
+                val list = (Values.jsonParser.parse(StringBuilder(result)) as JsonObject).array<JsonObject>("list")
                 val mostLiked = list?.maxByOrNull {
                     (it.int("thumbs_up") ?: 0) - (it.int("thumbs_down") ?: 0)
                 }!!
@@ -47,7 +52,6 @@ class Urban : Command(
                     .addField(THUMBS_UP, mostLiked.int("thumbs_up").toString(), true)
                     .addField(THUMBS_DOWN, mostLiked.int("thumbs_down").toString(), true).build())
             } catch(ex: Exception) {
-                ex.printStackTrace()
                 replyError(ctx, "Something went wrong.", "Urban")
             }
         }

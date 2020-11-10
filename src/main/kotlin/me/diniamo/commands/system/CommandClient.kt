@@ -47,7 +47,7 @@ class CommandClient(prefix: String, private val ownerId: Long, jda: JDA) : Liste
                 if (ownerId == event.author.idLong) {
                     expectedCommand.run(CommandContext(event, removeFirst(args)))
                 } else {
-                    errorBuilder.appendDescription("Missing permission `BOT_OWNER`")
+                    errorBuilder.appendDescription("Only the owner of the bot can execute this command.")
                     event.channel.sendMessage(errorBuilder.build()).queue()
                 }
                 return
