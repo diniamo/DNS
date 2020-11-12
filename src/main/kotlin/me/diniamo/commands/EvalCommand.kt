@@ -10,7 +10,7 @@ import javax.script.ScriptEngineManager
 
 
 class EvalCommand : Command(
-    "eval", arrayOf("e"), Category.ADMIN, "Evaluates Groovy code", "<code (without Discord formatting)>", ownerCommand = true
+    "eval", arrayOf(), Category.ADMIN, "Evaluates Groovy code", "<code (without Discord formatting)>", ownerCommand = true
 ) {
     private val engine: ScriptEngine = ScriptEngineManager().getEngineByName("groovy")
 
@@ -30,7 +30,7 @@ class EvalCommand : Command(
             engine.put("bot", ctx.jda.selfUser)
 
             val builder = EmbedBuilder().setTitle("Evaluate")
-            val code = ctx.message.contentRaw.substringAfter(" ")
+            val code = ctx.message.contentRaw.substringAfter("|eval")
             val startTime = System.currentTimeMillis()
             try {
                 val sb = StringBuilder()
