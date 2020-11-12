@@ -58,18 +58,14 @@ class CommandClient(prefix: String, private val ownerId: Long, jda: JDA) : Liste
                 event.channel.sendMessage(errorBuilder.build()).queue { msg -> answerCache[event.message.idLong] = msg.idLong }
             }
 
-            if (hasPermission(event.member, expectedCommand.permission)) {
+            if (event.member?.hasPermission(expectedCommand.permissions) == true) {
                 expectedCommand.run(CommandContext(event, removeFirst(args)))
             } else {
-                errorBuilder.appendDescription("Missing permission `${expectedCommand.permission?.name}`")
+                errorBuilder.appendDescription("Missing permissions `${expectedCommand.permissions.joinToString(", ")}`")
                 event.channel.sendMessage(errorBuilder.build()).queue { msg -> answerCache[event.message.idLong] = msg.idLong }
                 return
             }
         }
-    }
-
-    private fun hasPermission(member: Member?, permission: Permission?): Boolean {
-        return member != null && (permission == null || member.hasPermission(permission))
     }
 
     override fun onGuildMessageDelete(event: GuildMessageDeleteEvent) {

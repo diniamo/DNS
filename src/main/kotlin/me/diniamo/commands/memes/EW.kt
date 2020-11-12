@@ -23,8 +23,6 @@ class EW : Command(
                 return@execute
             }
 
-            //println("drawtext=\"Impact:text='${event.args}':fontsize=70:fontcolor=white:x=(w-text_w)/2:y=575\"")
-            //println(event.args.count { it == ' ' })
             ProcessBuilder()
                     /*.redirectOutput(ProcessBuilder.Redirect.DISCARD)
                     .redirectError(ProcessBuilder.Redirect.DISCARD)

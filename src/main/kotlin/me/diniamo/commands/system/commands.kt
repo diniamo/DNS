@@ -16,7 +16,7 @@ abstract class Command(
     val category: Category,
     val help: String? = null,
     val arguments: String? = null,
-    val permission: Permission? = null,
+    val permissions: Set<Permission> = setOf(),
     val guildOnly: Boolean = false,
     val ownerCommand: Boolean = false
 ) {
