@@ -86,7 +86,7 @@ class WideFish : Command(
             val text = ctx.message.contentRaw.substringAfter(' ').split(", ")
 
             if(text.size < 2) {
-                macroImage(ctx, ImageIO.read(File("./templates/widefish.png")),"me when you don't provide" to " enough text splitted by commas")
+                macroImage(ctx, ImageIO.read(File("./templates/widefish.png")),"me when you don't provide" to " enough text split by commas")
                 return@execute
             }
 

@@ -3,6 +3,7 @@ package me.diniamo.commands
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandContext
 import me.diniamo.commands.system.Command
+import me.diniamo.commands.system.CommandClient
 import net.dv8tion.jda.api.EmbedBuilder
 import java.awt.Color
 import javax.script.ScriptEngine
@@ -30,7 +31,7 @@ class EvalCommand : Command(
             engine.put("bot", ctx.jda.selfUser)
 
             val builder = EmbedBuilder().setTitle("Evaluate")
-            val code = ctx.message.contentRaw.substringAfter("|eval")
+            val code = ctx.message.contentRaw.substringAfter("${CommandClient.prefix}eval")
             val startTime = System.currentTimeMillis()
             try {
                 val sb = StringBuilder()
