@@ -10,7 +10,7 @@ import javax.script.ScriptEngine
 import javax.script.ScriptEngineManager
 
 
-class EvalCommand : Command(
+class EvalCommand(private val client: CommandClient) : Command(
     "eval", arrayOf(), Category.ADMIN, "Evaluates Groovy code", "<code (without Discord formatting)>", ownerCommand = true
 ) {
     private val engine: ScriptEngine = ScriptEngineManager().getEngineByName("groovy")
@@ -29,6 +29,7 @@ class EvalCommand : Command(
             engine.put("member", ctx.member)
             engine.put("user", ctx.user)
             engine.put("bot", ctx.jda.selfUser)
+            engine.put("client", client)
 
             val builder = EmbedBuilder().setTitle("Evaluate")
             val code = ctx.message.contentRaw.substringAfter("${CommandClient.prefix}eval")
