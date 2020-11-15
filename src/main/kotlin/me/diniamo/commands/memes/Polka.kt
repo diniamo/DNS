@@ -16,7 +16,7 @@ class Polka : Command(
 ) {
     override fun run(ctx: CommandContext) {
         Utils.videoExecutor.execute {
-            val args = ctx.message.contentRaw.substringAfter("${CommandClient.prefix}polka").split(", ")
+            val args = ctx.message.contentRaw.substringAfter("${CommandClient.prefix}polka ").split(", ")
             if(ctx.message.attachments.isNotEmpty() && ctx.message.attachments.first().isImage) {
                 val image = Utils.downloadImage(ctx.message.attachments.first())
                 val isGif = image.extension == "gif"
@@ -36,7 +36,7 @@ class Polka : Command(
             } else {
                 executeCommand(listOf(
                     Values.ffmpeg, "-y", "-i", "./templates/polkka.mp4", "-vf",
-                    "drawtext=fontfile=arial.ttf:fontcolor=black:fontsize=30:text='${args[0]}':x=60:y=300, drawtext=fontfile=arial.ttf:fontcolor=white:fontsize=26:text='${args[1]}':x=(1100-text_w)/2:y=190, drawtext=fontfile=arial.ttf:fontsize=20:fontcolor=white:x=510:y=380:text='${args[2]}\\: %{frame_num}${args[3]}':start_number=${args[3]}",
+                    "drawtext=fontfile=arial.ttf:fontcolor=black:fontsize=30:text='${args[0]}':x=60:y=300, drawtext=fontfile=arial.ttf:fontcolor=white:fontsize=26:text='${args[1]}':x=(1100-text_w)/2:y=190, drawtext=fontfile=arial.ttf:fontsize=20:fontcolor=white:x=510:y=380:text='${args[2]}\\: %{frame_num}${args[4]}':start_number=${args[3]}",
                     "-codec:a", "copy", "output.mp4"
                 ), ctx.channel, ctx.message.idLong)
             }
