@@ -11,14 +11,14 @@ import java.net.URLEncoder
 
 class Translate : Command(
     "translate", arrayOf(), Category.UTILITY,
-    "Uses the google translate API to translate text", "<language from (2 letter form)> <language to (2 letter form)> <text>"
+    "Uses the google translate API to translate text", "<language to (2 letter form)> <text>"
 ) {
     override fun run(ctx: CommandContext) {
         Utils.scheduler.execute {
             val args = ctx.args
             val request = Request.Builder()
-                .url("https://translate.googleapis.com/translate_a/single?client=gtx&sl=" + args[0] + "&tl=" + args[1] + "&dt=t&q=" +
-                        URLEncoder.encode(args.filterIndexed { index, _ -> (index != 0 && index != 1) }.joinToString(separator = " "), Charsets.UTF_8.name()))
+                .url("https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=" + args[0] + "&dt=t&q=" +
+                        URLEncoder.encode(args.filterIndexed { index, _ -> (index != 0) }.joinToString(separator = " "), Charsets.UTF_8.name()))
                 .build()
 
             try {
