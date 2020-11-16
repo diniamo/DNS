@@ -32,7 +32,7 @@ class EvalCommand(private val client: CommandClient) : Command(
             engine.put("client", client)
 
             val builder = EmbedBuilder().setTitle("Evaluate")
-            val code = ctx.message.contentRaw.substringAfter("${CommandClient.prefix}eval ")
+            val code = ctx.message.contentRaw.substringAfter("${CommandClient.prefix}eval")
             val startTime = System.currentTimeMillis()
             try {
                 val sb = StringBuilder()
