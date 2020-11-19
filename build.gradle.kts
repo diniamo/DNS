@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 group = "me.diniamo"
 version = "1.0"
 
-val jdaVersion = "4.2.0_214"
+val jdaVersion = "4.2.0_218"
 
 plugins {
     kotlin("jvm") version "1.4.10"
@@ -51,7 +51,6 @@ dependencies {
 
     implementation("com.beust", "klaxon", "5.0.1")
     implementation("com.squareup.okhttp3", "okhttp", "4.9.0")
-    implementation("ch.jalu", "configme", "1.1.0")
     implementation("ch.qos.logback", "logback-classic", "1.2.3")
     implementation("org.jsoup", "jsoup", "1.13.1")
     implementation("org.codehaus.groovy", "groovy-jsr223", "3.0.6")
