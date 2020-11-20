@@ -1,29 +1,32 @@
-/*package me.diniamo.commands
-
-import com.jagrosh.jdautilities.command.Command
-import com.jagrosh.jdautilities.command.CommandEvent
-import net.dv8tion.jda.api.EmbedBuilder
+package me.diniamo.commands
+/*
+import me.diniamo.commands.system.Category
+import me.diniamo.commands.system.Command
+import me.diniamo.commands.system.CommandContext
+import me.diniamo.commands.system.GUILD_NULL
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.OnlineStatus
-import org.h2.jdbcx.JdbcConnectionPool
+import org.ktorm.database.Database
+import org.ktorm.schema.Table
 import java.sql.*
 import kotlin.system.exitProcess
 
-class Tag(jda: JDA, private val link: String, private val driver: String) : Command() {
+const val SUBCOMMAND = "Subcommand of tag (execute the command tag for help)"
+
+object TagTable : Table<Nothing>("tags") {
+    val
+}
+
+class Tag(jda: JDA, private val link: String, private val driver: String) : Command(
+    "tag", arrayOf("t"), Category.UTILITY,
+    "Tag system", "<sucommand> <additional arguments>"
+) {
     private var connection: Connection
     private var statement: Statement
 
-    data class Column(val name: String, val value: String, val creator: Long)
-
     init {
-        name = "tag"
-        aliases = arrayOf("t")
-        help = "Tag system"
-
         try {
-            //connection = DriverManager.getConnection("jdbc:postgresql://$link:$port/", username, password)
-            //Class.forName(driver)
-            val cp = JdbcConnectionPool.create("jdbc:h2:~/tag", "sa", "sa")
+            val cp = Database.connect("")
             connection = cp.connection
             statement = connection.createStatement()
         } catch (ex: SQLException) {
@@ -32,25 +35,24 @@ class Tag(jda: JDA, private val link: String, private val driver: String) : Comm
             jda.shutdown()
             exitProcess(1)
         }
-
-        children = arrayOf(Create(connection, jda), List(connection, jda), Remove(connection))
     }
 
-    override fun execute(event: CommandEvent) {
-        if (event.args.isEmpty()) {
-            val builder = EmbedBuilder()
-                    .setTitle("Tag command")
-                    .appendDescription("With this command you can create tags (global), with a text value. Later on on you can get the text value by their name. Usage:")
-                    .addField("Create", "With this subcommand, you can create tags.", false)
-                    .addField("Remove", "With this subcommand, you can remove tags (only if they were created by you).", false)
-                    .addField("List", "With this subcommand, you can get the list of all the tags.", false)
-            event.reply(builder.build())
+    override fun run(ctx: CommandContext) {
+        require(ctx.guild != null) { GUILD_NULL }
+
+        if (ctx.args.isEmpty()) {
+            reply(ctx, templateBuilder(ctx)
+            .setTitle("Tag command")
+                .appendDescription("With this command you can create tags (global), with a text value. Later on on you can get the text value by their name. Usage:")
+                .addField("Create", "With this subcommand, you can create tags.", false)
+                .addField("Remove", "With this subcommand, you can remove tags (only if they were created by you).", false)
+                .addField("List", "With this subcommand, you can get the list of all the tags.", false).build())
         } else {
-            event.reply(getTag(event.guild.id, event.args))
+            reply(ctx, getTag(ctx.guild.id, event.args), "")
         }
     }
 
-    private fun getTag(guild: String, name: String): String {
+    private fun getTag(guildId: String, name: String): String {
         val rs = statement.executeQuery("SELECT value FROM $guild WHERE name='$name'")
 
         return rs.getString("value")

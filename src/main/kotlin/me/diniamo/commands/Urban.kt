@@ -1,8 +1,9 @@
 package me.diniamo.commands
 
-import com.beust.klaxon.JsonArray
 import com.beust.klaxon.JsonObject
-import com.beust.klaxon.Parser
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import me.diniamo.THUMBS_DOWN
 import me.diniamo.THUMBS_UP
 import me.diniamo.Utils
@@ -26,7 +27,7 @@ class Urban : Command(
             return
         }
 
-        Utils.scheduler.execute {
+        GlobalScope.launch(Dispatchers.IO) {
             val request = Request.Builder()
                 .url("http://api.urbandictionary.com/v0/define?term=${URLEncoder.encode(ctx.args.joinToString(" "), Charsets.UTF_8)}")
                 .get().build()
@@ -35,7 +36,7 @@ class Urban : Command(
                 val result = Values.httpClient.newCall(request).execute().body?.string()
                 if(result == null) {
                     reply(ctx, "No result.", "Urban")
-                    return@execute
+                    return@launch
                 }
                 val list = (Values.jsonParser.parse(StringBuilder(result)) as JsonObject).array<JsonObject>("list")
                 val mostLiked = list?.maxByOrNull {
@@ -44,7 +45,7 @@ class Urban : Command(
 
                 reply(ctx, EmbedBuilder()
                     .setTitle("Definition of ${mostLiked.string("word")}", mostLiked.string("permalink"))
-                    .setColor(Values.avaragePfpColor)
+                    .setColor(Values.averagePfpColor)
                     .setThumbnail("https://i.imgur.com/VFXr0ID.jpg")
                     .setFooter("Author: ${mostLiked.string("author")}")
                     .appendDescription(mostLiked.string("definition") ?: "No definition.")

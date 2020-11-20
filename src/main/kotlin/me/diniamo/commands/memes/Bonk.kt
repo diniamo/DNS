@@ -1,5 +1,8 @@
 package me.diniamo.commands.memes
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import me.diniamo.Utils
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandContext
@@ -18,7 +21,7 @@ class Bonk : Command(
     "<ping user or provide an image> (optional: if not used it uses your profile picture)"
 ) {
     override fun run(ctx: CommandContext) {
-        Utils.imageExecutor.execute {
+        GlobalScope.launch(Dispatchers.IO) {
             val overlay = ImageIO.read(File("./templates/bonkOverlay.png"))
             val image = BufferedImage(overlay.width, overlay.height, BufferedImage.TYPE_INT_ARGB)
             val graphics = image.createGraphics()

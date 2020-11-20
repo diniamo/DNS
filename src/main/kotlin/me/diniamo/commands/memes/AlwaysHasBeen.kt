@@ -1,5 +1,8 @@
 package me.diniamo.commands.memes
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import me.diniamo.Utils
 import me.diniamo.Values
 import me.diniamo.commands.system.Category
@@ -18,7 +21,7 @@ class AlwaysHasBeen : Command(
     "<something that always has been> (you have to provide an image as an attachment)"
 ) {
     override fun run(ctx: CommandContext) {
-        Utils.imageExecutor.execute {
+        GlobalScope.launch(Dispatchers.IO) {
             try {
                 val image = ImageIO.read(File("./templates/alwaysHasBeen.png"))
                 val graphics = image.createGraphics()

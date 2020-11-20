@@ -8,15 +8,12 @@ import me.diniamo.commands.system.CommandClient
 import me.diniamo.commands.system.CommandContext
 import me.diniamo.commands.system.Command
 import java.io.File
-import java.util.*
 
 class PutinWalk : Command(
     "putinwalk", arrayOf("pw", "putin-walk"), Category.MEME,
     "Create the putin walk meme with someone's profile picture or an image",
     "<ping (optional, it will use your profile picture) or image>"
 ) {
-    private var lastUser: Long = 0
-
     override fun run(ctx: CommandContext) {
         videoExecutor.execute {
             val image = downloadImageOrProfilePicture(ctx.message)

@@ -1,5 +1,8 @@
 package me.diniamo.commands.memes
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import me.diniamo.Utils
 import me.diniamo.commands.memes.MacroImage.Companion.macroImage
 import me.diniamo.commands.system.Category
@@ -18,11 +21,11 @@ class MacroImage : Command(
     "Create a micro image", "(Provide an image) <some text separated by commas>"
 ) {
     override fun run(ctx: CommandContext) {
-        Utils.imageExecutor.execute {
+        GlobalScope.launch(Dispatchers.IO) {
             val attachments = ctx.message.attachments
             if(attachments.size < 1 || !attachments[0].isImage) {
                 replyError(ctx, "You have to provide an image to use this command!", "Macro Image")
-                return@execute
+                return@launch
             }
 
             val text = ctx.message.contentRaw.substringAfter(' ').split(", ")
@@ -86,12 +89,12 @@ class WideFish : Command(
     "Creates the \"Wide fish\" meme with some text", "<text separated by `, `>"
 ) {
     override fun run(ctx: CommandContext) {
-        Utils.imageExecutor.execute {
+        GlobalScope.launch(Dispatchers.IO) {
             val text = ctx.message.contentRaw.substringAfter(' ').split(", ")
 
             if(text.size < 2) {
                 macroImage(ctx, ImageIO.read(File("./templates/widefish.png")),"me when you don't provide" to " enough text split by commas")
-                return@execute
+                return@launch
             }
 
             macroImage(ctx, ImageIO.read(File("./templates/widefish.png")), (if(text[0].isEmpty()) null else text[0]) to if(text[1].isEmpty()) null else text[1])

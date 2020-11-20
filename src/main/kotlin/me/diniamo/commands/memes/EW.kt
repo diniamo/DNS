@@ -1,5 +1,8 @@
 package me.diniamo.commands.memes
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import me.diniamo.Utils
 import me.diniamo.Utils.Companion.videoExecutor
 import me.diniamo.Values
 import me.diniamo.commands.system.Category
@@ -15,7 +18,7 @@ class EW : Command(
     private var lastText: String? = null
 
     override fun run(ctx: CommandContext) {
-        videoExecutor.execute {
+        Utils.videoExecutor.execute {
             val joinedArgs = ctx.args.joinToString(" ")
             if(lastText == joinedArgs) {
                 ctx.channel.sendFile(File("output.mp4")).queue { msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong }
@@ -24,9 +27,6 @@ class EW : Command(
             }
 
             ProcessBuilder()
-                    /*.redirectOutput(ProcessBuilder.Redirect.DISCARD)
-                    .redirectError(ProcessBuilder.Redirect.DISCARD)
-                    .redirectInput(ProcessBuilder.Redirect.PIPE)*/
                     .redirectOutput(ProcessBuilder.Redirect.DISCARD)
                     .redirectError(ProcessBuilder.Redirect.to(File("error.txt")))
                     .redirectInput(ProcessBuilder.Redirect.PIPE)

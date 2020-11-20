@@ -1,5 +1,8 @@
 package me.diniamo.commands
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import me.diniamo.Utils
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandClient
@@ -15,7 +18,7 @@ class Color : Command(
     "Display a color (Hex/RGB)", "<color code Hex(you have to use Hex) or RGB (separated with a space)>"
 ) {
     override fun run(ctx: CommandContext) {
-        Utils.imageExecutor.execute {
+        GlobalScope.launch(Dispatchers.IO) {
             try {
                 val args = ctx.args
 

@@ -1,6 +1,9 @@
 package me.diniamo
 
 import com.beust.klaxon.Parser
+import kotlinx.coroutines.ExecutorCoroutineDispatcher
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.newSingleThreadContext
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.Message
@@ -22,7 +25,7 @@ import javax.imageio.ImageIO
 import kotlin.math.roundToInt
 
 const val GREEN_TICK = ":green_tick:772867601901813800"
-const val RED_TICK = ":red_tick:772867524995186749"
+const val RED_CROSS = ":red_tick:772867524995186749"
 const val THUMBS_UP = "\uD83D\uDC4D"
 const val THUMBS_DOWN = "\uD83D\uDC4E"
 
@@ -32,13 +35,12 @@ object Values {
 
     lateinit var ffmpeg: String
     var answerCacheSizePerGuild = 5
-    val avaragePfpColor = Color.decode("#2591cc")
+    val averagePfpColor: Color = Color.decode("#2591cc")
 }
 
 class Utils {
     companion object {
         val videoExecutor: ExecutorService = Executors.newSingleThreadExecutor()
-        val imageExecutor: ExecutorService = Executors.newCachedThreadPool()
         val scheduler: ScheduledExecutorService = Executors.newScheduledThreadPool(
             Runtime.getRuntime().availableProcessors()
         )

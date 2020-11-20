@@ -1,5 +1,8 @@
 package me.diniamo.commands.memes
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import me.diniamo.Utils
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandClient
@@ -19,14 +22,14 @@ class HeartBeat : Command(
     private var lastText: String? = null
 
     override fun run(ctx: CommandContext) {
-        Utils.imageExecutor.execute {
+        GlobalScope.launch(Dispatchers.IO) {
             val joinedArgs = ctx.args.joinToString(" ")
 
             if (lastText == joinedArgs) {
                 ctx.channel.sendFile(File("output.mp4"))
                     .queue { msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong }
 
-                return@execute
+                return@launch
             }
 
             val image = ImageIO.read(File("./templates/heartbeat.png"))

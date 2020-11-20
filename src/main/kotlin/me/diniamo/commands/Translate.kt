@@ -1,6 +1,9 @@
 package me.diniamo.commands
 
 import com.beust.klaxon.JsonArray
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import me.diniamo.Utils
 import me.diniamo.Values
 import me.diniamo.commands.system.Category
@@ -14,7 +17,7 @@ class Translate : Command(
     "Uses the google translate API to translate text", "<language to (2 letter form)> <text>"
 ) {
     override fun run(ctx: CommandContext) {
-        Utils.scheduler.execute {
+        GlobalScope.launch(Dispatchers.IO) {
             val args = ctx.args
             val request = Request.Builder()
                 .url("https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=" + args[0] + "&dt=t&q=" +

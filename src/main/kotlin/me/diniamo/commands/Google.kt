@@ -1,5 +1,8 @@
 package me.diniamo.commands
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import me.diniamo.Utils
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandContext
@@ -13,7 +16,7 @@ class Google : Command(
     "Queries the google API with the given query and sends the first result", "<query>"
 ) {
     override fun run(ctx: CommandContext) {
-        Utils.scheduler.execute {
+        GlobalScope.launch(Dispatchers.IO) {
             try {
                 val doc = Jsoup.connect("https://www.google.com/search?q=" + URLEncoder.encode(ctx.args.joinToString(" "), Charsets.UTF_8.name())).get()
 

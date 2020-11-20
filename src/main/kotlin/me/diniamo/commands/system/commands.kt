@@ -6,7 +6,6 @@ import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.*
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
-import net.dv8tion.jda.api.requests.restaction.MessageAction
 import java.awt.Color
 import java.time.Instant
 
@@ -38,7 +37,7 @@ abstract class Command(
     protected fun reply(ctx: CommandContext, text: String, title: String?) {
         ctx.channel.sendMessage(
             EmbedBuilder().appendDescription(text)
-                .setColor(Values.avaragePfpColor)
+                .setColor(Values.averagePfpColor)
                 .setAuthor(title, null, ctx.jda.selfUser.effectiveAvatarUrl)
                 .setFooter(ctx.member?.effectiveName ?: ctx.user.name, ctx.user.effectiveAvatarUrl)
                 .setTimestamp(Instant.now()).build()
@@ -73,7 +72,7 @@ abstract class Command(
     protected fun reply(ctx: CommandContext, content: Array<MessageEmbed.Field>, title: String?) {
         ctx.channel.sendMessage(
             EmbedBuilder().apply { content.forEach { addField(it) } }
-                .setColor(Values.avaragePfpColor)
+                .setColor(Values.averagePfpColor)
                 .setAuthor(title, null, ctx.jda.selfUser.effectiveAvatarUrl)
                 .setFooter(ctx.member?.effectiveName ?: ctx.user.name, ctx.user.effectiveAvatarUrl)
                 .setTimestamp(Instant.now()).build()

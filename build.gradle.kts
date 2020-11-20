@@ -47,6 +47,8 @@ repositories {
 }
 
 dependencies {
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1")
+
     implementation("net.dv8tion", "JDA", jdaVersion)
 
     implementation("com.beust", "klaxon", "5.0.1")
@@ -54,5 +56,5 @@ dependencies {
     implementation("ch.qos.logback", "logback-classic", "1.2.3")
     implementation("org.jsoup", "jsoup", "1.13.1")
     implementation("org.codehaus.groovy", "groovy-jsr223", "3.0.6")
-    //implementation("com.github.ben-manes.caffeine", "caffeine", "2.8.6")
+    //implementation("org.ktorm", "ktorm-core", "3.2.0")
 }
