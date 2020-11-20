@@ -17,6 +17,7 @@ class Polka : Command(
     override fun run(ctx: CommandContext) {
         Utils.videoExecutor.execute {
             val args = ctx.message.contentRaw.substringAfter("${CommandClient.prefix}polka ").split(", ")
+
             if(ctx.message.attachments.isNotEmpty() && ctx.message.attachments.first().isImage) {
                 val image = Utils.downloadImage(ctx.message.attachments.first())
                 val isGif = image.extension == "gif"
@@ -28,7 +29,8 @@ class Polka : Command(
                     }
                     addAll(listOf(
                         "-i", image.name, "-filter_complex",
-                        "[1:v] scale=220:200 [scaled];[0:v][scaled] overlay=40:270, drawtext=fontfile=arial.ttf:fontcolor=white:fontsize=26:text='${args[0]}':x=480:y=190, drawtext=fontfile=arial.ttf:fontsize=20:fontcolor=white:x=510:y=380:text='${args[1]}\\: %{frame_num}${args[3]}':start_number=${args[2]}"
+                        "[1:v] scale=260:200 [scaled];[0:v][scaled] overlay=40:270${if(isGif) ":shortest=1" else ""}, drawtext=fontfile=arial.ttf:fontcolor=white:fontsize=26:text='${args[0]}':x=(1100-text_w)/2:y=190, drawtext=fontfile=arial.ttf:fontsize=22:fontcolor=white:x=(1170-text_w)/2:y=380:text='${args[1]}\\: %{frame_num}${args[3]}':start_number=${args[2]}",
+                        "-codec:a", "copy", "output.mp4"
                     ))
                 }
 
@@ -36,7 +38,7 @@ class Polka : Command(
             } else {
                 executeCommand(listOf(
                     Values.ffmpeg, "-y", "-i", "./templates/polkka.mp4", "-vf",
-                    "drawtext=fontfile=arial.ttf:fontcolor=black:fontsize=30:text='${args[0]}':x=60:y=300, drawtext=fontfile=arial.ttf:fontcolor=white:fontsize=26:text='${args[1]}':x=(1100-text_w)/2:y=190, drawtext=fontfile=arial.ttf:fontsize=20:fontcolor=white:x=510:y=380:text='${args[2]}\\: %{frame_num}${args[4]}':start_number=${args[3]}",
+                    "drawtext=fontfile=arial.ttf:fontcolor=black:fontsize=30:text='${args[0]}':x=60:y=300, drawtext=fontfile=arial.ttf:fontcolor=white:fontsize=26:text='${args[1]}':x=(1100-text_w)/2:y=190, drawtext=fontfile=arial.ttf:fontsize=22:fontcolor=white:x=(1170-text_w)/2:y=380:text='${args[2]}\\: %{frame_num}${args[4]}':start_number=${args[3]}",
                     "-codec:a", "copy", "output.mp4"
                 ), ctx.channel, ctx.message.idLong)
             }

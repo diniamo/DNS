@@ -19,21 +19,22 @@ class MacroImage : Command(
 ) {
     override fun run(ctx: CommandContext) {
         Utils.imageExecutor.execute {
-            if(ctx.message.attachments.size < 1 || !ctx.message.attachments[0].isImage) {
+            val attachments = ctx.message.attachments
+            if(attachments.size < 1 || !attachments[0].isImage) {
                 replyError(ctx, "You have to provide an image to use this command!", "Macro Image")
                 return@execute
             }
 
             val text = ctx.message.contentRaw.substringAfter(' ').split(", ")
 
-            macroImage(
-                ctx, ImageIO.read(URL(ctx.message.attachments[0].url)), (if(text[0].isEmpty()) null else text[0]) to text[1]
-            )
+            //if(attachments[0].url.endsWith(".gif")) macroImageGif(ctx, ImageIO.read(URL(attachments[0].url)), (if(text[0].isEmpty()) null else text[0]) to if(text[1].isEmpty()) null else text[1])
+            //else macroImage(ctx, ImageIO.read(URL(attachments[0].url)), (if(text[0].isEmpty()) null else text[0]) to if(text[1].isEmpty()) null else text[1])
+            macroImage(ctx, ImageIO.read(URL(attachments[0].url)), (if(text[0].isEmpty()) null else text[0]) to if(text[1].isEmpty()) null else text[1])
         }
     }
 
     companion object {
-        fun macroImage(ctx: CommandContext, image: BufferedImage, text: Pair<String?, String>) {
+        fun macroImage(ctx: CommandContext, image: BufferedImage, text: Pair<String?, String?>) {
             val graphics = image.createGraphics()
 
             graphics.setRenderingHint(
@@ -49,9 +50,6 @@ class MacroImage : Command(
             graphics.stroke = BasicStroke(graphics.font.size * 0.05f)
 
             val frc = graphics.fontRenderContext
-            val xBottom = Utils.toCenterAlignmentX(graphics, image.width / 2, text.second)
-            val yBottom = (image.height - (graphics.font.size / 7.5f))
-            val vector2 = graphics.font.createGlyphVector(frc, text.second)
 
             if(text.first != null) {
                 val vector1 = graphics.font.createGlyphVector(frc, text.first)
@@ -64,11 +62,17 @@ class MacroImage : Command(
                 graphics.drawString(text.first, xTop, yTop)
             }
 
-            graphics.color = Color.BLACK
-            graphics.draw(vector2.getOutline(xBottom, yBottom))
+            if(text.second != null) {
+                val xBottom = Utils.toCenterAlignmentX(graphics, image.width / 2, text.second!!)
+                val yBottom = (image.height - (graphics.font.size / 7.5f))
+                val vector2 = graphics.font.createGlyphVector(frc, text.second)
 
-            graphics.color = Color.WHITE
-            graphics.drawString(text.second, xBottom, yBottom)
+                graphics.color = Color.BLACK
+                graphics.draw(vector2.getOutline(xBottom, yBottom))
+
+                graphics.color = Color.WHITE
+                graphics.drawString(text.second, xBottom, yBottom)
+            }
 
             ctx.channel.sendFile(Utils.encodePNG(image), "macro.png").queue { msg ->
                 CommandClient.answerCache[ctx.message.idLong] = msg.idLong
@@ -90,7 +94,7 @@ class WideFish : Command(
                 return@execute
             }
 
-            macroImage(ctx, ImageIO.read(File("./templates/widefish.png")), (if(text[0].isEmpty()) null else text[0]) to text[1])
+            macroImage(ctx, ImageIO.read(File("./templates/widefish.png")), (if(text[0].isEmpty()) null else text[0]) to if(text[1].isEmpty()) null else text[1])
         }
     }
 }
