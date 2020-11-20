@@ -1,5 +1,6 @@
 package me.diniamo.commands.memes
 
+import kotlinx.coroutines.runBlocking
 import me.diniamo.Utils
 import me.diniamo.Values
 import me.diniamo.commands.system.Category
@@ -15,7 +16,7 @@ class Polka : Command(
     "<the thing/someone that's vibin' (or an image)> <the thing/someone drumming> <the thing that's going up> <start number> <postfix for start number>"
 ) {
     override fun run(ctx: CommandContext) {
-        Utils.videoExecutor.execute {
+        runBlocking(Utils.videoContext) {
             val args = ctx.message.contentRaw.substringAfter("${CommandClient.prefix}polka ").split(", ")
 
             if(ctx.message.attachments.isNotEmpty() && ctx.message.attachments.first().isImage) {

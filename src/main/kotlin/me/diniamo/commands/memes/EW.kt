@@ -1,9 +1,7 @@
 package me.diniamo.commands.memes
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import me.diniamo.Utils
-import me.diniamo.Utils.Companion.videoExecutor
+import kotlinx.coroutines.runBlocking
+import me.diniamo.Utils.Companion.videoContext
 import me.diniamo.Values
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandClient
@@ -18,12 +16,12 @@ class EW : Command(
     private var lastText: String? = null
 
     override fun run(ctx: CommandContext) {
-        Utils.videoExecutor.execute {
+        runBlocking(videoContext) {
             val joinedArgs = ctx.args.joinToString(" ")
             if(lastText == joinedArgs) {
                 ctx.channel.sendFile(File("output.mp4")).queue { msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong }
 
-                return@execute
+                return@runBlocking
             }
 
             ProcessBuilder()

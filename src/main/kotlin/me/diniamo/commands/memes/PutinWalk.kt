@@ -1,7 +1,8 @@
 package me.diniamo.commands.memes
 
+import kotlinx.coroutines.runBlocking
+import me.diniamo.Utils
 import me.diniamo.Utils.Companion.downloadImageOrProfilePicture
-import me.diniamo.Utils.Companion.videoExecutor
 import me.diniamo.Values
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandClient
@@ -15,7 +16,7 @@ class PutinWalk : Command(
     "<ping (optional, it will use your profile picture) or image>"
 ) {
     override fun run(ctx: CommandContext) {
-        videoExecutor.execute {
+        runBlocking(Utils.videoContext) {
             val image = downloadImageOrProfilePicture(ctx.message)
             val isGif = image.extension == "gif"
             val command = mutableListOf(Values.ffmpeg, "-y", "-i", "./templates/PutinWalk.mp4").apply {

@@ -40,7 +40,7 @@ object Values {
 
 class Utils {
     companion object {
-        val videoExecutor: ExecutorService = Executors.newSingleThreadExecutor()
+        val videoContext = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
         val scheduler: ScheduledExecutorService = Executors.newScheduledThreadPool(
             Runtime.getRuntime().availableProcessors()
         )

@@ -1,5 +1,6 @@
 package me.diniamo.commands.memes
 
+import kotlinx.coroutines.runBlocking
 import me.diniamo.Utils
 import me.diniamo.Values
 import me.diniamo.commands.system.Category
@@ -13,7 +14,7 @@ class ThisIsWhyIsHateVideoGames : Command(
     "Create the \"This is why I hate video games\" meme", "(provide a video)"
 ) {
     override fun run(ctx: CommandContext) {
-        Utils.videoExecutor.execute {
+        runBlocking(Utils.videoContext) {
             try {
                 val att = ctx.message.attachments[0]
                 val video = att.downloadToFile(File("video.${att.fileExtension}")).get()
