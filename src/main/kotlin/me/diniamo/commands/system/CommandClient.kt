@@ -12,6 +12,8 @@ import java.time.Instant
 import java.util.*
 import kotlin.collections.HashMap
 
+const val GUILD_NULL = "Guild is null in a guildOnly command"
+
 class CommandClient(prefix: String, private val ownerId: Long, jda: JDA) : ListenerAdapter() {
     val commandMap = HashMap<String, Command>()
 
@@ -58,7 +60,7 @@ class CommandClient(prefix: String, private val ownerId: Long, jda: JDA) : Liste
                 event.channel.sendMessage(errorBuilder.build()).queue { msg -> answerCache[event.message.idLong] = msg.idLong }
             }
 
-            if (event.member?.hasPermission(expectedCommand.permissions) == true) {
+            if (event.member?.hasPermission(expectedCommand.permissions) != false) {
                 expectedCommand.run(CommandContext(event, removeFirst(args)))
             } else {
                 errorBuilder.appendDescription("Missing permissions `${expectedCommand.permissions.joinToString(", ")}`")

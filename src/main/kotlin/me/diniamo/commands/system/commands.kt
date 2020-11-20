@@ -111,9 +111,10 @@ data class CommandContext(
     val event: MessageReceivedEvent,
     val args: Array<String>,
     val jda: JDA = event.jda,
-    val guild: Guild = event.guild,
+    val guild: Guild? = if(event.isFromGuild) event.guild else null,
     val channel: MessageChannel = event.channel,
     val message: Message = event.message,
     val user: User = event.author,
     val member: Member? = event.member,
-)
+) {
+}

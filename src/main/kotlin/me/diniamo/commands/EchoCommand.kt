@@ -4,6 +4,7 @@ import me.diniamo.GREEN_TICK
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandContext
 import me.diniamo.commands.system.Command
+import me.diniamo.commands.system.GUILD_NULL
 import net.dv8tion.jda.api.audio.AudioReceiveHandler
 import net.dv8tion.jda.api.audio.AudioSendHandler
 import net.dv8tion.jda.api.audio.CombinedAudio
@@ -24,6 +25,8 @@ class EchoCommand : Command(
     val numberRegex = Regex("\\d+")
 
     override fun run(ctx: CommandContext) {
+        require(ctx.guild != null) { GUILD_NULL }
+
         val args = ctx.args
 
         when (args[0]) {
