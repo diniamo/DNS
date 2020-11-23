@@ -4,3 +4,4 @@ build
 gradle.properties
 local.properties
 src/main/kotlin/me/diniamo/commands/PlaySound.kt
+src/main/kotlin/me/diniamo/events/RepeatingWords.kt

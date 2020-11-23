@@ -95,6 +95,12 @@ class Utils {
             return File("image.${att.fileExtension ?: ""}")
         }
 
+        fun downloadFile(att: Message.Attachment): File {
+            val file = File("file.${att.fileExtension}")
+            Files.copy(att.retrieveInputStream().get(), file.toPath(), StandardCopyOption.REPLACE_EXISTING)
+            return file
+        }
+
         fun downloadVideo(att: Message.Attachment): File {
             val file = File("video" + att.fileExtension)
             Files.copy(URL(att.url).openStream(), Paths.get(file.name), StandardCopyOption.REPLACE_EXISTING)

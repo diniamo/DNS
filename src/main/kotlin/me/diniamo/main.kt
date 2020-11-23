@@ -8,7 +8,6 @@ import me.diniamo.commands.system.CommandClient
 import me.diniamo.commands.system.TestCommand
 import me.diniamo.events.BinaryToText
 import me.diniamo.events.Counting
-import me.diniamo.events.SimpleStuff
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.Activity
 import java.awt.Font
@@ -43,6 +42,6 @@ fun main() {
             //Tag(jda, config.getProperty(Config.DB_LINK), config.getProperty(Config.DB_DRIVER)))
     client.addCommands(PutinWalk(), AlwaysHasBeen(), ThisIsWhyIsHateVideoGames(), EW(), Distract(), HandWithGun(), HeartBeat(), MacroImage(), WideFish(), Bonk(), Polka())
 
-    jda.addEventListener(BinaryToText(), Counting(), SimpleStuff())
+    jda.addEventListener(BinaryToText(), Counting())
     jda.addEventListener(client)
 }
