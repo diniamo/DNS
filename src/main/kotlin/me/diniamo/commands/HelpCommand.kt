@@ -25,6 +25,11 @@ class HelpCommand(private val client: CommandClient) : Command(
                 return
             }
 
+            if(command.ownerCommand) {
+                replyError(ctx, "Only the owner of the bot can use that!", null)
+                return
+            }
+
             reply(ctx, "Help: ${command.help}\n" +
                     "Usage: ${CommandClient.prefix}${command.name} ${command.arguments}\n" +
                     if(command.aliases.isEmpty()) "" else "Aliases: ${command.aliases.joinToString("`, `", "`", "`")}", command.name + " Help")

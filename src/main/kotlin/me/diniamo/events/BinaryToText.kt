@@ -22,10 +22,10 @@ class BinaryToText : ListenerAdapter() {
                     event.channel.sendMessage(toText(Files.readString(Utils.downloadFile(att).toPath()))).queue()
                 }
             }
-        } catch(ex: NumberFormatException) {}
+        } catch(ex: Exception) {}
     }
 
-    @Throws(NumberFormatException::class)
+    @Throws(Exception::class)
     private fun toText(binary: String): String {
         val s = StringBuilder(" ")
         var index = 0

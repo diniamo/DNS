@@ -33,7 +33,6 @@ class Color : Command(
                 val graphics = image.createGraphics()
 
                 graphics.color = color
-                graphics.drawRect(-1, -1, 129, 129)
                 graphics.fillRect(-1, -1, 129, 129)
 
                 ctx.channel.sendFile(Utils.encodePNG(image), "color.png").queue { msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong }
