@@ -10,7 +10,7 @@ import javax.script.ScriptEngine
 import javax.script.ScriptEngineManager
 
 
-class EvalCommand(private val client: CommandClient) : Command(
+class Eval(private val client: CommandClient) : Command(
     "eval", arrayOf(), Category.ADMIN, "Evaluates Groovy code", "<code (without Discord formatting)>", ownerCommand = true
 ) {
     private val engine: ScriptEngine = ScriptEngineManager().getEngineByName("groovy")

@@ -3,9 +3,14 @@
 package me.diniamo
 
 import me.diniamo.commands.*
+import me.diniamo.commands.info.Help
+import me.diniamo.commands.info.Info
+import me.diniamo.commands.info.Ping
+import me.diniamo.commands.info.Uptime
 import me.diniamo.commands.memes.*
 import me.diniamo.commands.system.CommandClient
-import me.diniamo.commands.system.TestCommand
+import me.diniamo.commands.system.Test
+import me.diniamo.commands.utility.*
 import me.diniamo.events.BinaryToText
 import me.diniamo.events.Counting
 import net.dv8tion.jda.api.JDABuilder
@@ -38,7 +43,7 @@ fun main() {
     }
 
     val client = CommandClient(properties.getProperty("bot.prefix"), 388742599483064321L, jda)
-    client.addCommands(HelpCommand(client), Ping(), Emote(), EvalCommand(client), Translate(), Google(), Uptime(), Info(), Color(), EchoCommand(), Urban(), TestCommand())
+    client.addCommands(Help(client), Ping(), Emote(), Eval(client), Translate(), Google(), Uptime(), Info(), Color(), EchoCommand(), Urban(), Test())
             //Tag(jda, config.getProperty(Config.DB_LINK), config.getProperty(Config.DB_DRIVER)))
     client.addCommands(PutinWalk(), AlwaysHasBeen(), ThisIsWhyIsHateVideoGames(), EW(), Distract(), HandWithGun(), HeartBeat(), MacroImage(), WideFish(), Bonk(), Polka())
 

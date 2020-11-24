@@ -1,10 +1,9 @@
-package me.diniamo.commands
+package me.diniamo.commands.utility
 
 import com.beust.klaxon.JsonArray
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import me.diniamo.Utils
 import me.diniamo.Values
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandContext

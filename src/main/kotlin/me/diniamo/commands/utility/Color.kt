@@ -1,4 +1,4 @@
-package me.diniamo.commands
+package me.diniamo.commands.utility
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -10,8 +10,6 @@ import me.diniamo.commands.system.CommandContext
 import me.diniamo.commands.system.Command
 import java.awt.Color
 import java.awt.image.BufferedImage
-import java.io.File
-import javax.imageio.ImageIO
 
 class Color : Command(
     "color", arrayOf(), Category.UTILITY,

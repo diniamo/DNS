@@ -1,4 +1,4 @@
-package me.diniamo.commands
+package me.diniamo.commands.info
 
 import me.diniamo.Utils
 import me.diniamo.commands.system.Category

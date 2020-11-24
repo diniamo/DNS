@@ -1,4 +1,4 @@
-package me.diniamo.commands
+package me.diniamo.commands.info
 
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandClient
@@ -6,7 +6,7 @@ import me.diniamo.commands.system.CommandContext
 import me.diniamo.commands.system.Command
 import java.util.*
 
-class HelpCommand(private val client: CommandClient) : Command(
+class Help(private val client: CommandClient) : Command(
     "commands", arrayOf("c", "help", "h"), Category.INFO,
     "Shows the commands of the bot"
 ) {

@@ -3,7 +3,7 @@ package me.diniamo.commands.system
 import me.diniamo.Utils
 import java.awt.image.BufferedImage
 
-class TestCommand : Command(
+class Test : Command(
     "test", arrayOf(), Category.ADMIN,
     "The command I use to test stuff.", ownerCommand = true
 ) {

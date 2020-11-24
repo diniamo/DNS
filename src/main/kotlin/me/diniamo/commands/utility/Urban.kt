@@ -1,4 +1,4 @@
-package me.diniamo.commands
+package me.diniamo.commands.utility
 
 import com.beust.klaxon.JsonObject
 import kotlinx.coroutines.Dispatchers
@@ -6,7 +6,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.diniamo.THUMBS_DOWN
 import me.diniamo.THUMBS_UP
-import me.diniamo.Utils
 import me.diniamo.Values
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.Command
