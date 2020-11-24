@@ -15,8 +15,9 @@ class Eval(private val client: CommandClient) : Command(
 ) {
     private val engine: ScriptEngine = ScriptEngineManager().getEngineByName("groovy")
 
-    private val DEFAULT_IMPORTS = arrayOf("net.dv8tion.jda.api.entities.impl", "net.dv8tion.jda.api.managers", "net.dv8tion.jda.api.entities", "net.dv8tion.jda.api", "java.lang",
+    private val starImports = arrayOf("net.dv8tion.jda.api.entities.impl", "net.dv8tion.jda.api.managers", "net.dv8tion.jda.api.entities", "net.dv8tion.jda.api", "java.lang",
             "java.io", "java.math", "java.util", "java.util.concurrent", "java.time", "java.util.stream")
+    private val imports = arrayOf("me.diniamo.Utils")
 
     override fun run(ctx: CommandContext) {
         if (ctx.user.idLong == 388742599483064321L) {
@@ -36,7 +37,8 @@ class Eval(private val client: CommandClient) : Command(
             val startTime = System.currentTimeMillis()
             try {
                 val sb = StringBuilder()
-                DEFAULT_IMPORTS.forEach { imp -> sb.append("import ").append(imp).append(".*; ") }
+                starImports.forEach { imp -> sb.append("import ").append(imp).append(".*; ") }
+                imports.forEach { imp -> sb.append("import ").append(imp).append("; ") }
                 sb.append("\n" + code)
                 val out = engine.eval(sb.toString())
 
