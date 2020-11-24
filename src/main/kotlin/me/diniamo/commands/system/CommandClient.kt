@@ -14,7 +14,7 @@ import kotlin.collections.HashMap
 
 const val GUILD_NULL = "Guild is null in a guildOnly command"
 
-class CommandClient(prefix: String, private val ownerId: Long, jda: JDA) : ListenerAdapter() {
+class CommandClient(prefix: String, ownerId: Long, jda: JDA) : ListenerAdapter() {
     val commandMap = HashMap<String, Command>()
 
     fun addCommands(vararg toAdd: Command) {
@@ -86,11 +86,13 @@ class CommandClient(prefix: String, private val ownerId: Long, jda: JDA) : Liste
     init {
         Companion.prefix = prefix
         answerCache = AnswerCache(jda)
+        Companion.ownerId = ownerId
     }
 
     companion object {
         lateinit var prefix: String
         lateinit var answerCache: AnswerCache<Long, Long>
+        var ownerId: Long = 0
     }
 }
 

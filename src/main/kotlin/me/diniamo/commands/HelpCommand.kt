@@ -25,7 +25,7 @@ class HelpCommand(private val client: CommandClient) : Command(
                 return
             }
 
-            if(command.ownerCommand) {
+            if(command.ownerCommand && ctx.user.idLong != CommandClient.ownerId) {
                 replyError(ctx, "Only the owner of the bot can use that!", null)
                 return
             }
@@ -37,7 +37,7 @@ class HelpCommand(private val client: CommandClient) : Command(
             val builder = StringBuilder()
             builder.append("Prefix: **${CommandClient.prefix}**\n\n")
 
-            for(command in client.commandMap.values.filter { it.category == category }.toSet()) {
+            for(command in client.commandMap.values.filter { it.category == category && !it.ownerCommand }.toSet()) {
                 builder.append(
                         "**${command.name}** (${command.help}): ${command.arguments}\n"
                 )
