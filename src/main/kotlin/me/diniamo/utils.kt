@@ -107,14 +107,9 @@ class Utils {
             return file
         }
 
-        fun getImageOrProfilePicture(msg: Message): BufferedImage {
-            return if (msg.attachments.size > 0 && msg.attachments[0].isImage)
-                ImageIO.read(URL(msg.attachments[0].url))
-            else if (msg.mentionedUsers.size > 0)
-                ImageIO.read(URL(msg.mentionedUsers[0].effectiveAvatarUrl))
-            else
-                ImageIO.read(URL(msg.author.effectiveAvatarUrl))
-        }
+        fun getImageOrProfilePicture(msg: Message): BufferedImage =
+            ImageIO.read(URL(parseImageOrProfilePictureUrl(msg).first))
+
 
         fun getProfilePicture(msg: Message): BufferedImage {
             return if (msg.mentionedUsers.size > 0) ImageIO.read(URL(msg.mentionedUsers[0].effectiveAvatarUrl)) else ImageIO.read(
