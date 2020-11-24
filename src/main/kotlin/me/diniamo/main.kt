@@ -3,7 +3,7 @@
 package me.diniamo
 
 import me.diniamo.commands.*
-import me.diniamo.commands.`fun`.ThisPersonDoesNotExist
+import me.diniamo.commands.`fun`.ThisCreatureDoesNotExist
 import me.diniamo.commands.info.Help
 import me.diniamo.commands.info.Info
 import me.diniamo.commands.info.Ping
@@ -44,7 +44,7 @@ fun main() {
     }
 
     val client = CommandClient(properties.getProperty("bot.prefix"), 388742599483064321L, jda)
-    client.addCommands(Help(client), Ping(), Emote(), Eval(client), Translate(), Google(), Uptime(), Info(), Color(), EchoCommand(), Urban(), Test(), ThisPersonDoesNotExist())
+    client.addCommands(Help(client), Ping(), Emote(), Eval(client), Translate(), Google(), Uptime(), Info(), Color(), EchoCommand(), Urban(), Test(), ThisCreatureDoesNotExist())
             //Tag(jda, config.getProperty(Config.DB_LINK), config.getProperty(Config.DB_DRIVER)))
     client.addCommands(PutinWalk(), AlwaysHasBeen(), ThisIsWhyIsHateVideoGames(), EW(), Distract(), HandWithGun(), HeartBeat(), MacroImage(), WideFish(), Bonk(), Polka())
 
