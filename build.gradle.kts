@@ -3,16 +3,16 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 group = "me.diniamo"
 version = "1.0"
 
-val jdaVersion = "4.2.0_221"
+val jdaVersion = "4.2.0_222"
 
 plugins {
-    kotlin("jvm") version "1.4.10"
+    kotlin("jvm") version "1.4.20"
     id("com.github.johnrengelman.shadow") version ("6.1.0")
 }
 
 sourceSets {
     sourceSets.main {
-        java.srcDirs("src/main/java", "src/main/kotlin")
+        java.srcDirs("src/main/kotlin")
     }
 }
 
