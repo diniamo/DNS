@@ -18,7 +18,7 @@ class Google : Command(
     override fun run(ctx: CommandContext) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val doc = Jsoup.connect("https://www.google.com/search?q=" + URLEncoder.encode(ctx.args.joinToString(" "), Charsets.UTF_8.name())).get()
+                val doc = Jsoup.connect("https://www.google.com/search?q=" + URLEncoder.encode(ctx.args.joinToString(" "), Charsets.UTF_8.name()) + "&hl=en").get()
 
                 reply(ctx, doc.getElementsByClass("yuRUbf")[0].child(0).attr("abs:href"), "Google")
             } catch (ex: Exception) {
