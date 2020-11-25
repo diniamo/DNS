@@ -15,8 +15,13 @@ import me.diniamo.commands.system.Test
 import me.diniamo.commands.utility.*
 import me.diniamo.events.BinaryToText
 import me.diniamo.events.Counting
+import net.dv8tion.jda.api.GatewayEncoding
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.Activity
+import net.dv8tion.jda.api.requests.GatewayIntent
+import net.dv8tion.jda.api.requests.RestAction
+import net.dv8tion.jda.api.utils.MemberCachePolicy
+import net.dv8tion.jda.api.utils.cache.CacheFlag
 import java.awt.Font
 import java.awt.GraphicsEnvironment
 import java.io.File
@@ -28,9 +33,19 @@ val properties = Properties().apply {
 }
 
 fun main() {
-    val jda = JDABuilder.createDefault(properties.getProperty("bot.token")).setActivity(Activity.playing("with genetics"))
+    val jda = JDABuilder.create(properties.getProperty("bot.token"),
+        GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.DIRECT_MESSAGES)
+        .setActivity(Activity.playing("with genetics"))
+        .disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.CLIENT_STATUS, CacheFlag.EMOTE, CacheFlag.ROLE_TAGS, CacheFlag.ACTIVITY)
+        .setHttpClient(Values.httpClient)
+        .setGatewayEncoding(GatewayEncoding.ETF)
+        .setMemberCachePolicy(MemberCachePolicy.VOICE)
             .build().awaitReady()
 
+    RestAction.setDefaultFailure {
+        println("RestAction failure:")
+        it.printStackTrace()
+    }
 
     System.setProperty("http.agent", "")
     Values.ffmpeg = properties.getProperty("ffmpeg")
