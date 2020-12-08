@@ -30,6 +30,8 @@ class HandWithGun : Command(
                 ctx.channel.sendFile(Utils.encodePNG(image), "hwg.png").queue { msg ->
                     CommandClient.answerCache[ctx.message.idLong] = msg.idLong
                 }
+
+                graphics.dispose()
             } catch (ex: Exception) {
                 replyError(ctx, "Something went wrong.", "Error")
             }

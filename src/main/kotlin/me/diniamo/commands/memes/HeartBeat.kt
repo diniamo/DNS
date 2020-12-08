@@ -73,6 +73,8 @@ class HeartBeat : Command(
 
                 lastText = joinedArgs
             }
+
+            graphics.dispose()
         }
     }
 }

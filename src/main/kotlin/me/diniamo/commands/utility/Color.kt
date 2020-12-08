@@ -34,6 +34,8 @@ class Color : Command(
                 graphics.fillRect(-1, -1, 129, 129)
 
                 ctx.channel.sendFile(Utils.encodePNG(image), "color.png").queue { msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong }
+
+                graphics.dispose()
             } catch (ex: Exception) {
                 replyError(ctx, "You didn't provide the right arguments!", "Color")
             }

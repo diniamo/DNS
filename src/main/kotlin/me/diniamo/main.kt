@@ -64,6 +64,6 @@ fun main() {
             //Tag(jda, config.getProperty(Config.DB_LINK), config.getProperty(Config.DB_DRIVER)))
     client.addCommands(PutinWalk(), AlwaysHasBeen(), ThisIsWhyIsHateVideoGames(), EW(), Distract(), HandWithGun(), HeartBeat(), MacroImage(), WideFish(), Bonk(), Polka())
 
-    jda.addEventListener(BinaryToText(), Counting())
-    jda.addEventListener(client)
+    jda.addEventListener(BinaryToText(), client)
+    jda.addEventListener()
 }

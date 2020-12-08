@@ -80,6 +80,8 @@ class MacroImage : Command(
             ctx.channel.sendFile(Utils.encodePNG(image), "macro.png").queue { msg ->
                 CommandClient.answerCache[ctx.message.idLong] = msg.idLong
             }
+
+            graphics.dispose()
         }
     }
 }

@@ -31,6 +31,8 @@ class Bonk : Command(
 
             ctx.channel.sendFile(Utils.encodePNG(image), "bonk.png")
                 .queue { msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong }
+
+            graphics.dispose()
         }
     }
 }

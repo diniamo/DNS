@@ -48,6 +48,8 @@ class AlwaysHasBeen : Command(
                 ctx.channel.sendFile(Utils.encodePNG(image), "ahb.png").queue { msg ->
                     CommandClient.answerCache[ctx.message.idLong] = msg.idLong
                 }
+
+                graphics.dispose()
             } catch (ex: Exception) {
                 replyError(ctx, "Something went wrong.", "Error")
             }
