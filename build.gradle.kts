@@ -3,10 +3,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 group = "me.diniamo"
 version = "1.0"
 
-val jdaVersion = "4.2.0_222"
+val jdaVersion = "4.2.0_223"
 
 plugins {
-    kotlin("jvm") version "1.4.20"
+    kotlin("jvm") version "1.4.21"
     id("com.github.johnrengelman.shadow") version ("6.1.0")
 }
 
@@ -56,5 +56,7 @@ dependencies {
     implementation("ch.qos.logback", "logback-classic", "1.2.3")
     implementation("org.jsoup", "jsoup", "1.13.1")
     implementation("org.codehaus.groovy", "groovy-jsr223", "3.0.6")
-    //implementation("org.ktorm", "ktorm-core", "3.2.0")
+
+    implementation("org.ktorm", "ktorm-core", "3.2.0")
+    implementation("org.postgresql", "postgresql", "42.2.18")
 }
