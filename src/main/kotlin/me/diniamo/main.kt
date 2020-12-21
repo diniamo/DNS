@@ -33,8 +33,8 @@ val properties = Properties().apply {
 }
 
 fun main() {
-    val jda = JDABuilder.create(properties.getProperty("bot.token"),
-        GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.DIRECT_MESSAGES)
+    val jda = JDABuilder.create(properties.getProperty("token"),
+        GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.DIRECT_MESSAGE_REACTIONS)
         .setActivity(Activity.playing("with genetics"))
         .disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.CLIENT_STATUS, CacheFlag.EMOTE, CacheFlag.ROLE_TAGS, CacheFlag.ACTIVITY)
         .setHttpClient(Values.httpClient)
@@ -59,11 +59,11 @@ fun main() {
         GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(impact)
     }
 
-    val client = CommandClient(properties.getProperty("bot.prefix"), 388742599483064321L, jda)
-    client.addCommands(Help(client), Ping(), Emote(), Eval(client), Translate(), Google(), Uptime(), Info(), Color(), EchoCommand(), Urban(), Test(), ThisPersonDoesNotExist(), ThisCatDoesNotExist())
+    val client = CommandClient(properties.getProperty("prefix"), 388742599483064321L, jda)
+    client.addCommands(Help(client), Ping(), Emote(), Eval(client), Translate(), Google(), Uptime(), Info(), Color(), EchoCommand(), Urban(), Test(), ThisPersonDoesNotExist(), ThisCatDoesNotExist(),
+        Tag(properties))
             //Tag(jda, config.getProperty(Config.DB_LINK), config.getProperty(Config.DB_DRIVER)))
     client.addCommands(PutinWalk(), AlwaysHasBeen(), ThisIsWhyIsHateVideoGames(), EW(), Distract(), HandWithGun(), HeartBeat(), MacroImage(), WideFish(), Bonk(), Polka())
 
-    jda.addEventListener(BinaryToText(), client)
-    jda.addEventListener()
+    jda.addEventListener(BinaryToText(), client, Paginator)
 }

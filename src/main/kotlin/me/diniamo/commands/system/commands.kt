@@ -116,4 +116,5 @@ data class CommandContext(
     val user: User = event.author,
     val member: Member? = event.member,
 ) {
+    constructor(ctx: CommandContext) : this(ctx.event, ctx.args, ctx.jda, ctx.guild, ctx.channel, ctx.message, ctx.user, ctx.member)
 }

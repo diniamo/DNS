@@ -1,5 +1,6 @@
 package me.diniamo.commands.system
 
+import me.diniamo.Utils.Companion.removeFirst
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.Permission
@@ -79,10 +80,6 @@ class CommandClient(prefix: String, ownerId: Long, jda: JDA) : ListenerAdapter()
             event.channel.deleteMessageById(answer).queue()
             answerCache.remove(event.messageIdLong)
         }
-    }
-
-    private fun removeFirst(original: List<String>) = Array(original.size - 1) { i ->
-        original[i + 1]
     }
 
     init {

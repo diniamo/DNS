@@ -6,5 +6,6 @@ enum class Category(val categoryName: String, val emoji: String) {
     AUDIO("Audio", "<:audio:775282346693230614>"),
     FUN("Fun", "\uD83E\uDD2A"),
     MEME("Meme", "<:trollface:772106035002867712>"),
-    ADMIN("Admin", "<:admin:772379369791946762>")
+    ADMIN("Admin", "<:admin:772379369791946762>"),
+    NONE("", "")
 }

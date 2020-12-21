@@ -5,6 +5,7 @@ import kotlinx.coroutines.ExecutorCoroutineDispatcher
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.newSingleThreadContext
 import net.dv8tion.jda.api.JDA
+import net.dv8tion.jda.api.entities.Emote
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.Message
 import okhttp3.OkHttpClient
@@ -44,6 +45,24 @@ class Utils {
         val scheduler: ScheduledExecutorService = Executors.newScheduledThreadPool(
             Runtime.getRuntime().availableProcessors()
         )
+
+        fun removeFirst(original: List<String>) = Array(original.size - 1) { i ->
+            original[i + 1]
+        }
+        fun removeFirst(original: Array<String>) = Array(original.size - 1) { i ->
+            original[i + 1]
+        }
+
+        fun Message.addReactions(vararg reactions: String) {
+            for(r in reactions) {
+                addReaction(r).queue()
+            }
+        }
+        fun Message.addReactions(vararg reactions: Emote) {
+            for(r in reactions) {
+                addReaction(r).queue()
+            }
+        }
 
         fun encodePNG(img: BufferedImage): ByteArray {
             val baos = ByteArrayOutputStream(2048)
