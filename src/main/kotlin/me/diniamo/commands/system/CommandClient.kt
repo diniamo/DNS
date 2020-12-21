@@ -32,6 +32,8 @@ class CommandClient(prefix: String, ownerId: Long, jda: JDA) : ListenerAdapter()
 
     private val spaces = Regex("\\s+")
     override fun onMessageReceived(event: MessageReceivedEvent) {
+        if(event.author.isBot) return
+
         if(event.message.mentionedUsers.contains(event.jda.selfUser)) {
             event.channel.sendMessage(EmbedBuilder().appendDescription("My prefix is: **$prefix**").build()).queue()
             return
