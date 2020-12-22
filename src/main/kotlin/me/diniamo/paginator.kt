@@ -8,6 +8,7 @@ import me.diniamo.Utils.Companion.addReactions
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import java.lang.Integer.max
 import java.lang.Integer.min
@@ -44,7 +45,7 @@ object Paginator : ListenerAdapter() {
         val menu = menus.firstOrNull { it.messageId == event.messageIdLong } ?: return
 
         if (event.channel.idLong == menu.channelId) {
-            event.reaction.removeReaction(event.user!!).queue()
+            try { event.reaction.removeReaction(event.user!!).queue() } catch(ex: InsufficientPermissionException) {} // Ignore if we cant remove the reaction
 
             val channel: MessageChannel? =
                 if (event.isFromGuild) event.jda.getTextChannelById(event.channel.idLong) else event.jda.getPrivateChannelById(
