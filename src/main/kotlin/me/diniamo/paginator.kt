@@ -20,11 +20,11 @@ const val ARROW_RIGHT = "\u27A1\uFE0F"
 object Paginator : ListenerAdapter() {
     private val menus = mutableListOf<Menu>()
 
-    fun createMenu(title: String, pages: List<Page>, channel: MessageChannel, requester: User) {
-        menus.removeAll { it.requesterId == requester.idLong }
+    fun createMenu(title: String, pages: List<Page>, channel: MessageChannel, requester: Long) {
+        menus.removeAll { it.requesterId == requester }
 
         menus.add(Menu(
-            pages, channel.idLong, requester.idLong
+            pages, channel.idLong, requester
         ).also { menu ->
             channel.sendMessage(
                 EmbedBuilder().setTitle(title).setColor(Values.averagePfpColor)
@@ -49,6 +49,8 @@ object Paginator : ListenerAdapter() {
 
         if (event.channel.idLong == menu.channelId) {
             try { event.reaction.removeReaction(event.user!!).queue() } catch(ex: InsufficientPermissionException) {} // Ignore if we cant remove the reaction
+
+            if(event.userIdLong != menu.requesterId) return
 
             val channel: MessageChannel? =
                 if (event.isFromGuild) event.jda.getTextChannelById(event.channel.idLong) else event.jda.getPrivateChannelById(
