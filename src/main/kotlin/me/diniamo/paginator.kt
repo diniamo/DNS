@@ -31,7 +31,7 @@ object Paginator : ListenerAdapter() {
                     .build()
             ).queue { m -> menu.messageId = m.idLong; m.addReactions(ARROW_LEFT, ARROW_RIGHT);
                 GlobalScope.launch(Dispatchers.Default) {
-                    delay(300_000)
+                    delay(60_000)
 
                     menus.remove(menu)
                 }
@@ -69,7 +69,6 @@ object Paginator : ListenerAdapter() {
                     .setFooter("Page: ${menu.pageNum + 1}/${menu.pages.size}").build().let { built ->
                         m.editMessage(built).queue()
                     }
-
             }
         }
     }
