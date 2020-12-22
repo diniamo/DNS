@@ -67,7 +67,7 @@ object Paginator : ListenerAdapter() {
                     .setImage(menu.pages[menu.pageNum].image)
                     .setDescription(menu.pages[menu.pageNum].text)
                     .setFooter("Page: ${menu.pageNum + 1}/${menu.pages.size}").build().let { built ->
-                        if(!built.toString().equals(m.embeds[0].toString())) m.editMessage(built).queue()
+                        m.editMessage(built).queue()
                     }
 
             }
