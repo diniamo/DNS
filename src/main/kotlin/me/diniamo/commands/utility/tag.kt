@@ -186,10 +186,25 @@ private class List(private val database: Database) : Command(
     "Lists all the tags in a guild", ""
 ) {
     override fun run(ctx: CommandContext) {
-        val tags = database.from(TagTable).select(TagTable.name).map { it[TagTable.name] }
-        val chunked = tags.joinToString("\n", "**Tags:**\n\n").chunked(10)
+        val tags = database.from(TagTable).select(TagTable.name).where { TagTable.guildId eq ctx.guild!!.idLong }.map { it[TagTable.name]!! }
+        val builder = StringBuilder()
+        builder.append("**Tags:**\n")
 
-        Paginator.createMenu("Tags", chunked.map { Page(it) }, ctx.channel)
+        Paginator.createMenu("Tags", mutableListOf<Page>().apply {
+                 tags.forEachIndexed { i, s ->
+                     if (i % 10 == 0 && i != 0) {
+                         add(Page(builder.toString()))
+                         builder.clear()
+                     } else if(i == tags.size - 1) {
+                         builder.append(s)
+                         add(Page(builder.toString()))
+
+                         return@forEachIndexed
+                     }
+
+                     builder.append(s).append("\n")
+                 }
+        }, ctx.channel, ctx.user.idLong)
     }
 }
 

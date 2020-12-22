@@ -21,6 +21,8 @@ object Paginator : ListenerAdapter() {
     private val menus = mutableListOf<Menu>()
 
     fun createMenu(title: String, pages: List<Page>, channel: MessageChannel, requester: Long) {
+        if(pages.isEmpty()) return
+
         menus.removeAll { it.requesterId == requester }
 
         menus.add(Menu(
