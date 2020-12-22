@@ -63,12 +63,13 @@ object Paginator : ListenerAdapter() {
                     else -> return@queue
                 }
 
-                m.editMessage(
-                    EmbedBuilder(m.embeds.first())
-                        .setImage(menu.pages[menu.pageNum].image)
-                        .setDescription(menu.pages[menu.pageNum].text)
-                        .setFooter("Page: ${menu.pageNum + 1}/${menu.pages.size}").build()
-                ).queue()
+                EmbedBuilder(m.embeds.first())
+                    .setImage(menu.pages[menu.pageNum].image)
+                    .setDescription(menu.pages[menu.pageNum].text)
+                    .setFooter("Page: ${menu.pageNum + 1}/${menu.pages.size}").build().let { built ->
+                        if(!built.toString().equals(m.embeds[0].toString())) m.editMessage(built).queue()
+                    }
+
             }
         }
     }
