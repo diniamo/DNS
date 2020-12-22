@@ -41,34 +41,33 @@ object Paginator : ListenerAdapter() {
     override fun onMessageReactionAdd(event: MessageReactionAddEvent) {
         if (event.user?.isBot ?: return) return
 
-        if (menus.map { it.messageId }.contains(event.messageIdLong)) {
-            val menu = menus.first { it.messageId == event.messageIdLong }
-            if (event.channel.idLong == menu.channelId) {
-                event.reaction.removeReaction(event.user!!).queue()
+        val menu = menus.firstOrNull { it.messageId == event.messageIdLong } ?: return
 
-                val channel: MessageChannel? =
-                    if (event.isFromGuild) event.jda.getTextChannelById(event.channel.idLong) else event.jda.getPrivateChannelById(
-                        event.channel.idLong
-                    )
+        if (event.channel.idLong == menu.channelId) {
+            event.reaction.removeReaction(event.user!!).queue()
 
-                channel?.retrieveMessageById(menu.messageId)!!.queue { m ->
-                    menu.pageNum = when (event.reactionEmote.emoji) {
-                        ARROW_LEFT -> {
-                            max(0, menu.pageNum-1)
-                        }
-                        ARROW_RIGHT -> {
-                            min(menu.pages.size - 1, menu.pageNum+1)
-                        }
-                        else -> return@queue
+            val channel: MessageChannel? =
+                if (event.isFromGuild) event.jda.getTextChannelById(event.channel.idLong) else event.jda.getPrivateChannelById(
+                    event.channel.idLong
+                )
+
+            channel?.retrieveMessageById(menu.messageId)!!.queue { m ->
+                menu.pageNum = when (event.reactionEmote.emoji) {
+                    ARROW_LEFT -> {
+                        max(0, menu.pageNum-1)
                     }
-
-                    m.editMessage(
-                        EmbedBuilder(m.embeds.first())
-                            .setImage(menu.pages[menu.pageNum].image)
-                            .setDescription(menu.pages[menu.pageNum].text)
-                            .setFooter("Page: ${menu.pageNum + 1}/${menu.pages.size}").build()
-                    ).queue()
+                    ARROW_RIGHT -> {
+                        min(menu.pages.size - 1, menu.pageNum+1)
+                    }
+                    else -> return@queue
                 }
+
+                m.editMessage(
+                    EmbedBuilder(m.embeds.first())
+                        .setImage(menu.pages[menu.pageNum].image)
+                        .setDescription(menu.pages[menu.pageNum].text)
+                        .setFooter("Page: ${menu.pageNum + 1}/${menu.pages.size}").build()
+                ).queue()
             }
         }
     }

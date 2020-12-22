@@ -90,7 +90,7 @@ class Tag(config: Properties, jda: JDA) : Command(
                 reply(
                     ctx, templateBuilder(ctx)
                         .setTitle("Tag")
-                        .appendDescription("With this command you can create tags (global), with a text value. Later on on you can get the text value by their name. Usage:")
+                        .appendDescription("With this command you can create tags (local), with a text value. Later on on you can get the text value by their name.")
                         .apply {
                             appendDescription("Subcommands:\n")
                             subCommands.forEach { (_, v) ->
