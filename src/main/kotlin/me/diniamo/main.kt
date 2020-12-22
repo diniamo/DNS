@@ -5,6 +5,7 @@ package me.diniamo
 import me.diniamo.commands.*
 import me.diniamo.commands.`fun`.ThisCatDoesNotExist
 import me.diniamo.commands.`fun`.ThisPersonDoesNotExist
+import me.diniamo.commands.audio.EchoCommand
 import me.diniamo.commands.info.Help
 import me.diniamo.commands.info.Info
 import me.diniamo.commands.info.Ping

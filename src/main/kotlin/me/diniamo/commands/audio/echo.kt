@@ -1,4 +1,4 @@
-package me.diniamo.commands
+package me.diniamo.commands.audio
 
 import me.diniamo.GREEN_TICK
 import me.diniamo.commands.system.Category
@@ -19,7 +19,6 @@ class EchoCommand : Command(
     Category.AUDIO,
     "Voice echo",
     "<name or id of the voice channel you want it in (optional it will use the one you are currently in)>",
-    ownerCommand = true,
     guildOnly = true
 ) {
     val numberRegex = Regex("\\d+")
