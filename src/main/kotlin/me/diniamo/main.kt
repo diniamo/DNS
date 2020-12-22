@@ -15,7 +15,6 @@ import me.diniamo.commands.system.CommandClient
 import me.diniamo.commands.system.Test
 import me.diniamo.commands.utility.*
 import me.diniamo.events.BinaryToText
-import me.diniamo.events.Counting
 import net.dv8tion.jda.api.GatewayEncoding
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.Activity
