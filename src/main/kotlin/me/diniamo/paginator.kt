@@ -7,6 +7,7 @@ import kotlinx.coroutines.launch
 import me.diniamo.Utils.Companion.addReactions
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.MessageChannel
+import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.dv8tion.jda.api.hooks.ListenerAdapter
@@ -19,9 +20,11 @@ const val ARROW_RIGHT = "\u27A1\uFE0F"
 object Paginator : ListenerAdapter() {
     private val menus = mutableListOf<Menu>()
 
-    fun createMenu(title: String, pages: List<Page>, channel: MessageChannel) {
+    fun createMenu(title: String, pages: List<Page>, channel: MessageChannel, requester: User) {
+        menus.removeAll { it.requesterId == requester.idLong }
+
         menus.add(Menu(
-            pages, channel.idLong
+            pages, channel.idLong, requester.idLong
         ).also { menu ->
             channel.sendMessage(
                 EmbedBuilder().setTitle(title).setColor(Values.averagePfpColor)
@@ -75,7 +78,7 @@ object Paginator : ListenerAdapter() {
 }
 
 class Menu(
-    val pages: List<Page>, val channelId: Long,
+    val pages: List<Page>, val channelId: Long, val requesterId: Long
 ) {
     var messageId: Long = -1;
     var pageNum: Int = 0
