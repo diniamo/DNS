@@ -92,7 +92,7 @@ class Tag(config: Properties, jda: JDA) : Command(
                         .setTitle("Tag")
                         .appendDescription("With this command you can create tags (global), with a text value. Later on on you can get the text value by their name. Usage:")
                         .apply {
-                            appendDescription("Subcommands:")
+                            appendDescription("Subcommands:\n")
                             subCommands.forEach { (_, v) ->
                                 appendDescription("- **${v.name}** (${v.help}): ${v.arguments}\n")
                             }
