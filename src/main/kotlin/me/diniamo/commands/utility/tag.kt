@@ -135,6 +135,7 @@ private class Create(private val database: Database, private val parent: Tag) : 
                     MessageEmbed.Field("Command usage:", "$name $arguments", true)
                 ), "Tag"
             )
+            return
         }
 
         if (parent.subCommands.keys.contains(ctx.args[0]) || database.from(TagTable).select(TagTable.name)
@@ -231,6 +232,7 @@ private class Edit(private val database: Database) : Command(
                     MessageEmbed.Field("Command usage:", "$name $arguments", true)
                 ), "Tag"
             )
+            return
         }
 
         database.update(TagTable) {
