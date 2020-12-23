@@ -74,7 +74,7 @@ class Tag(private val database: Database, config: Properties, jda: JDA) : Comman
                         .appendDescription("With this command you can create tags (local), with a text value. Later on on you can get the text value by their name.")
                         .apply {
                             appendDescription("\n\nSubcommands:\n")
-                            subCommands.forEach { (_, v) ->
+                            subCommands.values.toSet().forEach { v ->
                                 appendDescription("- **${v.name}** (${v.help}): ${v.arguments}\n")
                             }
                         }.build()
