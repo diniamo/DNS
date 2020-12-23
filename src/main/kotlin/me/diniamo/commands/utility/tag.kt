@@ -25,8 +25,8 @@ import kotlin.system.exitProcess
 
 object TagTable : Table<Nothing>("tags") {
     val name = varchar("name")
-    val guildId = long("guildid")
-    val authorId = long("authorid")
+    val guildId = long("guild_id")
+    val authorId = long("author_id")
     val content = varchar("content")
 }
 
@@ -41,32 +41,13 @@ private class TagListener(private val database: Database) : ListenerAdapter() {
     }
 }
 
-class Tag(config: Properties, jda: JDA) : Command(
+class Tag(private val database: Database, config: Properties, jda: JDA) : Command(
     "tag", arrayOf("t"), Category.UTILITY,
     "Tag system", "<sucommand> <additional arguments>",
     guildOnly = true
 ) {
-    private val database = Database.connect(
-        url = (config.getProperty("db-driver", "jdbc:postgresql") + "://" + config.getProperty("db-host") + ":" +config.getProperty("db-port") + "/" + config.getProperty("db-name")
-            + "?user=" + config.getProperty("db-user") + "&password=" + config.getProperty("db-password")).also { println(it) }
-
-        //url = config.getProperty("db-host"),
-        //driver = config.getProperty("db-driver", "jdbc:postgresql"),
-        //user = config.getProperty("db-user"),
-        //password = config.getProperty("db-password")
-    ).also { db ->
-        db.useConnection {
-            it.prepareCall("""
-                CREATE TABLE IF NOT EXISTS tags (
-                    name varchar,
-                    guildid bigint,
-                    authorid bigint,
-                    content varchar 
-                );
-            """).execute()
-        }
-
-        jda.addEventListener(TagListener(db))
+    init {
+        jda.addEventListener(TagListener(database))
     }
 
     val subCommands = mutableMapOf<String, Command>(

@@ -22,18 +22,33 @@ import net.dv8tion.jda.api.requests.GatewayIntent
 import net.dv8tion.jda.api.requests.RestAction
 import net.dv8tion.jda.api.utils.MemberCachePolicy
 import net.dv8tion.jda.api.utils.cache.CacheFlag
+import org.ktorm.database.Database
 import java.awt.Font
 import java.awt.GraphicsEnvironment
 import java.io.File
 import java.io.FileInputStream
 import java.util.*
 
-val properties = Properties().apply {
+val config = Properties().apply {
     load(FileInputStream("./config.properties"))
 }
 
 fun main() {
-    val jda = JDABuilder.create(properties.getProperty("token"),
+    val db = Database.connect(
+        url = (config.getProperty("db-driver", "jdbc:postgresql") + "://" + config.getProperty("db-host") + ":" +config.getProperty("db-port") + "/" + config.getProperty("db-name")
+                + "?user=" + config.getProperty("db-user") + "&password=" + config.getProperty("db-password")).also { println("Connecting to database via: $it") })
+    db.useConnection {
+        it.prepareCall("""
+                CREATE TABLE IF NOT EXISTS tags (
+                    name varchar,
+                    guildid bigint,
+                    authorid bigint,
+                    content varchar 
+                );
+            """).execute()
+    }
+
+    val jda = JDABuilder.create(config.getProperty("token"),
         GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.DIRECT_MESSAGE_REACTIONS)
         .setActivity(Activity.playing("with genetics"))
         .disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.CLIENT_STATUS, CacheFlag.EMOTE, CacheFlag.ROLE_TAGS, CacheFlag.ACTIVITY)
@@ -48,8 +63,8 @@ fun main() {
     }
 
     System.setProperty("http.agent", "")
-    Values.ffmpeg = properties.getProperty("ffmpeg")
-    Values.answerCacheSizePerGuild = properties.getProperty("max-cache-size-per-guild").toInt()
+    Values.ffmpeg = config.getProperty("ffmpeg")
+    Values.answerCacheSizePerGuild = config.getProperty("max-cache-size-per-guild").toInt()
 
     // Font registration
     Font.createFont(Font.TRUETYPE_FONT, File("./arial.ttf")).let { arial ->
@@ -59,9 +74,9 @@ fun main() {
         GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(impact)
     }
 
-    val client = CommandClient(properties.getProperty("prefix"), 388742599483064321L, jda)
+    val client = CommandClient(config.getProperty("prefix"), 388742599483064321L, jda)
     client.addCommands(Help(client), Ping(), Emote(), Eval(client), Translate(), Google(), Uptime(), Info(), Color(), EchoCommand(), Urban(), Test(), ThisPersonDoesNotExist(), ThisCatDoesNotExist(),
-        Tag(properties, jda))
+        Tag(db, config, jda))
             //Tag(jda, config.getProperty(Config.DB_LINK), config.getProperty(Config.DB_DRIVER)))
     client.addCommands(PutinWalk(), AlwaysHasBeen(), ThisIsWhyIsHateVideoGames(), EW(), Distract(), HandWithGun(), HeartBeat(), MacroImage(), WideFish(), Bonk(), Polka())
 
