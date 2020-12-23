@@ -73,7 +73,7 @@ class Tag(private val database: Database, config: Properties, jda: JDA) : Comman
                         .setTitle("Tag")
                         .appendDescription("With this command you can create tags (local), with a text value. Later on on you can get the text value by their name.")
                         .apply {
-                            appendDescription("Subcommands:\n")
+                            appendDescription("\n\nSubcommands:\n")
                             subCommands.forEach { (_, v) ->
                                 appendDescription("- **${v.name}** (${v.help}): ${v.arguments}\n")
                             }
@@ -205,7 +205,7 @@ private class Owner(private val database: Database) : Command(
 
         val authorId = database.from(TagTable)
             .select(TagTable.authorId)
-            .where { (TagTable.guildId eq ctx.guild!!.idLong) and (TagTable.name eq name) }
+            .where { (TagTable.guildId eq ctx.guild!!.idLong) and (TagTable.name eq ctx.args[0]) }
             .map { it[TagTable.authorId] }.singleOrNull()
 
         if (authorId == null) {
