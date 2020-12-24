@@ -41,7 +41,7 @@ private class TagListener(private val database: Database) : ListenerAdapter() {
     }
 }
 
-class Tag(private val database: Database, config: Properties, jda: JDA) : Command(
+class Tag(private val database: Database, jda: JDA) : Command(
     "tag", arrayOf("t"), Category.UTILITY,
     "Tag system", "<sucommand> <additional arguments>",
     guildOnly = true

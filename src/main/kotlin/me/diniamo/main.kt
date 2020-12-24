@@ -76,7 +76,7 @@ fun main() {
 
     val client = CommandClient(config.getProperty("prefix"), 388742599483064321L, jda)
     client.addCommands(Help(client), Ping(), Emote(), Eval(client), Translate(), Google(), Uptime(), Info(), Color(), EchoCommand(), Urban(), Test(), ThisPersonDoesNotExist(), ThisCatDoesNotExist(),
-        Tag(db, config, jda))
+        Tag(db, jda))
             //Tag(jda, config.getProperty(Config.DB_LINK), config.getProperty(Config.DB_DRIVER)))
     client.addCommands(PutinWalk(), AlwaysHasBeen(), ThisIsWhyIsHateVideoGames(), EW(), Distract(), HandWithGun(), HeartBeat(), MacroImage(), WideFish(), Bonk(), Polka())
 
