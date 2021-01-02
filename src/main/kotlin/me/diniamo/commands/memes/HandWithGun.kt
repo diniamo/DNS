@@ -8,6 +8,7 @@ import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandClient
 import me.diniamo.commands.system.CommandContext
 import me.diniamo.commands.system.Command
+import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
 import kotlin.math.roundToInt
@@ -19,8 +20,9 @@ class HandWithGun : Command(
     override fun run(ctx: CommandContext) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val image = Utils.getImageOrProfilePicture(ctx.message)
-                val graphics = image.createGraphics()
+                val img = Utils.getImageOrProfilePicture(ctx.message)
+                val image = BufferedImage(img.width, img.height, BufferedImage.TYPE_INT_ARGB)
+                val graphics = image.createGraphics().apply { drawImage(img, 0, 0, null) }
 
                 //graphics.drawImage(ImageIO.read(File("templates/gun.png")), 0, 50,
                 //        (image.width.toFloat() / (32f / 15f)).roundToInt(), (image.height.toFloat() / (64f / 45f)).roundToInt(), null)
