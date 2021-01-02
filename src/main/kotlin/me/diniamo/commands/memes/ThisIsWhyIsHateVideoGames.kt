@@ -7,7 +7,12 @@ import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandClient
 import me.diniamo.commands.system.CommandContext
 import me.diniamo.commands.system.Command
+import net.dv8tion.jda.api.entities.EmbedType
 import java.io.File
+import java.net.URL
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.nio.file.StandardCopyOption
 
 class ThisIsWhyIsHateVideoGames : Command(
     "hatevideogames", arrayOf("hatevg"), Category.MEME,
@@ -16,8 +21,9 @@ class ThisIsWhyIsHateVideoGames : Command(
     override fun run(ctx: CommandContext) {
         runBlocking(Utils.videoContext) {
             try {
-                val att = ctx.message.attachments[0]
-                val video = att.downloadToFile(File("video.${att.fileExtension}")).get()
+                val video: File = ctx.message.attachments[0].downloadToFile("video.mp4").get()
+                    ?: Files.copy(URL(ctx.message.embeds.firstOrNull { it.type == EmbedType.VIDEO }?.url).openStream(), Paths.get("video.mp4"), StandardCopyOption.REPLACE_EXISTING)
+                        .let { File("video.mp4") }
 
                 ProcessBuilder()
                     .redirectOutput(ProcessBuilder.Redirect.DISCARD)
