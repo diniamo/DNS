@@ -5,6 +5,7 @@ import kotlinx.coroutines.ExecutorCoroutineDispatcher
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.newSingleThreadContext
 import net.dv8tion.jda.api.JDA
+import net.dv8tion.jda.api.entities.EmbedType
 import net.dv8tion.jda.api.entities.Emote
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.Message
@@ -143,12 +144,18 @@ class Utils {
         second - extension
          */
         fun parseImageOrProfilePictureUrl(msg: Message): Pair<String, String> {
-            return if (msg.attachments.size > 0 && msg.attachments[0].isImage)
-                msg.attachments[0].url to (msg.attachments[0].fileExtension ?: "")
-            else if (msg.mentionedUsers.size > 0)
-                msg.mentionedUsers[0].effectiveAvatarUrl to msg.mentionedUsers[0].effectiveAvatarUrl.substringAfterLast('.')
-            else
-                msg.author.effectiveAvatarUrl to msg.author.effectiveAvatarUrl.substringAfterLast('.')
+            msg.embeds.firstOrNull { it.type == EmbedType.IMAGE }.let {
+                return if (msg.attachments.size > 0 && msg.attachments[0].isImage)
+                    msg.attachments[0].url to (msg.attachments[0].fileExtension ?: "")
+                else if (it != null)
+                    return it.url!! to it.url!!.substringAfterLast('.')
+                else if (msg.mentionedUsers.size > 0)
+                    msg.mentionedUsers[0].effectiveAvatarUrl to msg.mentionedUsers[0].effectiveAvatarUrl.substringAfterLast(
+                        '.'
+                    )
+                else
+                    msg.author.effectiveAvatarUrl to msg.author.effectiveAvatarUrl.substringAfterLast('.')
+            }
         }
     }
 }
