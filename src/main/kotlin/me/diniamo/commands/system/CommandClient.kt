@@ -1,6 +1,6 @@
 package me.diniamo.commands.system
 
-import me.diniamo.Utils.Companion.removeFirst
+import me.diniamo.Utils.removeFirst
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.Permission

@@ -3,6 +3,7 @@
 package me.diniamo
 
 import me.diniamo.commands.*
+import me.diniamo.commands.`fun`.ReverseText
 import me.diniamo.commands.`fun`.ThisCatDoesNotExist
 import me.diniamo.commands.`fun`.ThisPersonDoesNotExist
 import me.diniamo.commands.audio.EchoCommand
@@ -76,7 +77,7 @@ fun main() {
 
     val client = CommandClient(config.getProperty("prefix"), 388742599483064321L, jda)
     client.addCommands(Help(client), Ping(), Emote(), Eval(client), Translate(), Google(), Uptime(), Info(), Color(), EchoCommand(), Urban(), Test(), ThisPersonDoesNotExist(), ThisCatDoesNotExist(),
-        Tag(db, jda))
+        Tag(db, jda), ReverseText())
             //Tag(jda, config.getProperty(Config.DB_LINK), config.getProperty(Config.DB_DRIVER)))
     client.addCommands(PutinWalk(), AlwaysHasBeen(), ThisIsWhyIsHateVideoGames(), EW(), Distract(), HandWithGun(), HeartBeat(), MacroImage(), WideFish(), Bonk(), Polka())
 

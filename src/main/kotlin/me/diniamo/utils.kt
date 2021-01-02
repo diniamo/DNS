@@ -40,122 +40,120 @@ object Values {
     val averagePfpColor: Color = Color.decode("#2591cc")
 }
 
-class Utils {
-    companion object {
-        val videoContext = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
-        val scheduler: ScheduledExecutorService = Executors.newScheduledThreadPool(
-            Runtime.getRuntime().availableProcessors()
+object Utils {
+    val videoContext = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+    val scheduler: ScheduledExecutorService = Executors.newScheduledThreadPool(
+        Runtime.getRuntime().availableProcessors()
+    )
+
+    fun removeFirst(original: List<String>) = Array(original.size - 1) { i ->
+        original[i + 1]
+    }
+    fun removeFirst(original: Array<String>) = Array(original.size - 1) { i ->
+        original[i + 1]
+    }
+
+    fun Message.addReactions(vararg reactions: String) {
+        for(r in reactions) {
+            addReaction(r).queue()
+        }
+    }
+    fun Message.addReactions(vararg reactions: Emote) {
+        for(r in reactions) {
+            addReaction(r).queue()
+        }
+    }
+
+    fun encodePNG(img: BufferedImage): ByteArray {
+        val baos = ByteArrayOutputStream(2048)
+        ImageIO.write(img, "PNG", baos)
+        return baos.toByteArray()
+    }
+
+    fun lerp(a: Float, b: Float, t: Float): Int {
+        return ((1 - t) * a + t * b).roundToInt()
+    }
+
+    fun toCenterAlignmentX(graphics: Graphics2D, center: Int, text: String): Float =
+        center - graphics.fontMetrics.getStringBounds(text, graphics).width.toFloat() / 2
+    fun toCenterAlignmentY(graphics: Graphics2D, center: Int, text: String): Float =
+        center - graphics.fontMetrics.getStringBounds(text, graphics).height.toFloat() / 2
+
+    fun getUserCount(jda: JDA): Int = jda.guildCache.sumOf { it.memberCount }
+
+    fun formatDurationDHMS(millis: Long): String {
+        val duration = Duration.ofMillis(millis)
+        return String.format(
+            "%sd %s:%s:%s",
+            duration.toDays(),
+            fTime(duration.toHoursPart()),
+            fTime(duration.toMinutesPart()),
+            fTime(duration.toSecondsPart())
         )
+    }
 
-        fun removeFirst(original: List<String>) = Array(original.size - 1) { i ->
-            original[i + 1]
-        }
-        fun removeFirst(original: Array<String>) = Array(original.size - 1) { i ->
-            original[i + 1]
-        }
+    fun fTime(time: Int): String = if (time > 9) time.toString() else "0$time"
 
-        fun Message.addReactions(vararg reactions: String) {
-            for(r in reactions) {
-                addReaction(r).queue()
-            }
-        }
-        fun Message.addReactions(vararg reactions: Emote) {
-            for(r in reactions) {
-                addReaction(r).queue()
-            }
-        }
+    fun getMentionedUserOrAuthor(msg: Message): Member {
+        return if (msg.mentionedMembers.size > 0) return msg.mentionedMembers[0]
+        else msg.member ?: throw IllegalStateException("Message did not have an author")
+    }
 
-        fun encodePNG(img: BufferedImage): ByteArray {
-            val baos = ByteArrayOutputStream(2048)
-            ImageIO.write(img, "PNG", baos)
-            return baos.toByteArray()
-        }
+    fun downloadImageOrProfilePicture(msg: Message): File {
+        val parsed = parseImageOrProfilePictureUrl(msg)
+        Files.copy(
+            URL(parsed.first).openStream(),
+            Paths.get("image.${parsed.second}"),
+            StandardCopyOption.REPLACE_EXISTING
+        )
+        return File("image.${parsed.second}")
+    }
 
-        fun lerp(a: Float, b: Float, t: Float): Int {
-            return ((1 - t) * a + t * b).roundToInt()
-        }
+    fun downloadImage(att: Message.Attachment): File {
+        Files.copy(URL(att.url).openStream(), Paths.get("image.${att.fileExtension ?: ""}"), StandardCopyOption.REPLACE_EXISTING)
+        return File("image.${att.fileExtension ?: ""}")
+    }
 
-        fun toCenterAlignmentX(graphics: Graphics2D, center: Int, text: String): Float =
-            center - graphics.fontMetrics.getStringBounds(text, graphics).width.toFloat() / 2
-        fun toCenterAlignmentY(graphics: Graphics2D, center: Int, text: String): Float =
-            center - graphics.fontMetrics.getStringBounds(text, graphics).height.toFloat() / 2
+    fun downloadFile(att: Message.Attachment): File {
+        val file = File("file.${att.fileExtension}")
+        Files.copy(att.retrieveInputStream().get(), file.toPath(), StandardCopyOption.REPLACE_EXISTING)
+        return file
+    }
 
-        fun getUserCount(jda: JDA): Int = jda.guildCache.sumOf { it.memberCount }
+    fun downloadVideo(att: Message.Attachment): File {
+        val file = File("video" + att.fileExtension)
+        Files.copy(URL(att.url).openStream(), Paths.get(file.name), StandardCopyOption.REPLACE_EXISTING)
+        return file
+    }
 
-        fun formatDurationDHMS(millis: Long): String {
-            val duration = Duration.ofMillis(millis)
-            return String.format(
-                "%sd %s:%s:%s",
-                duration.toDays(),
-                fTime(duration.toHoursPart()),
-                fTime(duration.toMinutesPart()),
-                fTime(duration.toSecondsPart())
+    fun getImageOrProfilePicture(msg: Message): BufferedImage =
+        ImageIO.read(URL(parseImageOrProfilePictureUrl(msg).first))
+
+
+    fun getProfilePicture(msg: Message): BufferedImage {
+        return if (msg.mentionedUsers.size > 0) ImageIO.read(URL(msg.mentionedUsers[0].effectiveAvatarUrl)) else ImageIO.read(
+            URL(
+                msg.author.effectiveAvatarUrl
             )
-        }
+        )
+    }
 
-        fun fTime(time: Int): String = if (time > 9) time.toString() else "0$time"
-
-        fun getMentionedUserOrAuthor(msg: Message): Member {
-            return if (msg.mentionedMembers.size > 0) return msg.mentionedMembers[0]
-            else msg.member ?: throw IllegalStateException("Message did not have an author")
-        }
-
-        fun downloadImageOrProfilePicture(msg: Message): File {
-            val parsed = parseImageOrProfilePictureUrl(msg)
-            Files.copy(
-                URL(parsed.first).openStream(),
-                Paths.get("image.${parsed.second}"),
-                StandardCopyOption.REPLACE_EXISTING
-            )
-            return File("image.${parsed.second}")
-        }
-
-        fun downloadImage(att: Message.Attachment): File {
-            Files.copy(URL(att.url).openStream(), Paths.get("image.${att.fileExtension ?: ""}"), StandardCopyOption.REPLACE_EXISTING)
-            return File("image.${att.fileExtension ?: ""}")
-        }
-
-        fun downloadFile(att: Message.Attachment): File {
-            val file = File("file.${att.fileExtension}")
-            Files.copy(att.retrieveInputStream().get(), file.toPath(), StandardCopyOption.REPLACE_EXISTING)
-            return file
-        }
-
-        fun downloadVideo(att: Message.Attachment): File {
-            val file = File("video" + att.fileExtension)
-            Files.copy(URL(att.url).openStream(), Paths.get(file.name), StandardCopyOption.REPLACE_EXISTING)
-            return file
-        }
-
-        fun getImageOrProfilePicture(msg: Message): BufferedImage =
-            ImageIO.read(URL(parseImageOrProfilePictureUrl(msg).first))
-
-
-        fun getProfilePicture(msg: Message): BufferedImage {
-            return if (msg.mentionedUsers.size > 0) ImageIO.read(URL(msg.mentionedUsers[0].effectiveAvatarUrl)) else ImageIO.read(
-                URL(
-                    msg.author.effectiveAvatarUrl
+    /*
+    first - link
+    second - extension
+     */
+    fun parseImageOrProfilePictureUrl(msg: Message): Pair<String, String> {
+        msg.embeds.firstOrNull { it.type == EmbedType.IMAGE }.let {
+            return if (msg.attachments.size > 0 && msg.attachments[0].isImage)
+                msg.attachments[0].url to (msg.attachments[0].fileExtension ?: "")
+            else if (it != null)
+                return it.url!! to it.url!!.substringAfterLast('.')
+            else if (msg.mentionedUsers.size > 0)
+                msg.mentionedUsers[0].effectiveAvatarUrl to msg.mentionedUsers[0].effectiveAvatarUrl.substringAfterLast(
+                    '.'
                 )
-            )
-        }
-
-        /*
-        first - link
-        second - extension
-         */
-        fun parseImageOrProfilePictureUrl(msg: Message): Pair<String, String> {
-            msg.embeds.firstOrNull { it.type == EmbedType.IMAGE }.let {
-                return if (msg.attachments.size > 0 && msg.attachments[0].isImage)
-                    msg.attachments[0].url to (msg.attachments[0].fileExtension ?: "")
-                else if (it != null)
-                    return it.url!! to it.url!!.substringAfterLast('.')
-                else if (msg.mentionedUsers.size > 0)
-                    msg.mentionedUsers[0].effectiveAvatarUrl to msg.mentionedUsers[0].effectiveAvatarUrl.substringAfterLast(
-                        '.'
-                    )
-                else
-                    msg.author.effectiveAvatarUrl to msg.author.effectiveAvatarUrl.substringAfterLast('.')
-            }
+            else
+                msg.author.effectiveAvatarUrl to msg.author.effectiveAvatarUrl.substringAfterLast('.')
         }
     }
 }

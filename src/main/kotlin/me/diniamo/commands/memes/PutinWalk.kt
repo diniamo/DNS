@@ -2,7 +2,7 @@ package me.diniamo.commands.memes
 
 import kotlinx.coroutines.runBlocking
 import me.diniamo.Utils
-import me.diniamo.Utils.Companion.downloadImageOrProfilePicture
+import me.diniamo.Utils.downloadImageOrProfilePicture
 import me.diniamo.Values
 import me.diniamo.commands.system.Category
 import me.diniamo.commands.system.CommandClient
