@@ -144,10 +144,10 @@ object Utils {
      */
     fun parseImageOrProfilePictureUrl(msg: Message): Pair<String, String> {
         msg.embeds.firstOrNull { it.type == EmbedType.IMAGE }.let {
-            return if (msg.attachments.size > 0 && msg.attachments[0].isImage)
+            return@parseImageOrProfilePictureUrl if (msg.attachments.size > 0 && msg.attachments[0].isImage)
                 msg.attachments[0].url to (msg.attachments[0].fileExtension ?: "")
             else if (it != null)
-                return it.url!! to it.url!!.substringAfterLast('.')
+                it.url!! to it.url!!.substringAfterLast('.')
             else if (msg.mentionedUsers.size > 0)
                 msg.mentionedUsers[0].effectiveAvatarUrl to msg.mentionedUsers[0].effectiveAvatarUrl.substringAfterLast(
                     '.'

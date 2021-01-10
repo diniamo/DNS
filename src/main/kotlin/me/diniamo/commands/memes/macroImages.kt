@@ -22,17 +22,11 @@ class MacroImage : Command(
 ) {
     override fun run(ctx: CommandContext) {
         GlobalScope.launch(Dispatchers.IO) {
-            val attachments = ctx.message.attachments
-            if(attachments.size < 1 || !attachments[0].isImage) {
-                replyError(ctx, "You have to provide an image to use this command!", "Macro Image")
-                return@launch
-            }
-
             val text = ctx.message.contentRaw.substringAfter(' ').split(", ")
 
             //if(attachments[0].url.endsWith(".gif")) macroImageGif(ctx, ImageIO.read(URL(attachments[0].url)), (if(text[0].isEmpty()) null else text[0]) to if(text[1].isEmpty()) null else text[1])
             //else macroImage(ctx, ImageIO.read(URL(attachments[0].url)), (if(text[0].isEmpty()) null else text[0]) to if(text[1].isEmpty()) null else text[1])
-            macroImage(ctx, ImageIO.read(URL(attachments[0].url)), (if(text[0].isEmpty()) null else text[0]) to if(text[1].isEmpty()) null else text[1])
+            macroImage(ctx, Utils.getImageOrProfilePicture(ctx.message), (if(text[0].isEmpty()) null else text[0]) to if(text[1].isEmpty()) null else text[1])
         }
     }
 
