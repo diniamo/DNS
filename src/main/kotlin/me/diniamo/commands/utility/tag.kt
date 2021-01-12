@@ -55,7 +55,8 @@ class Tag(private val database: Database, jda: JDA) : Command(
         "remove" to Remove(database),
         "list" to List(database),
         "owner" to Owner(database),
-        "edit" to Edit(database)
+        "edit" to Edit(database),
+        "search" to Search(database)
     )
 
     init {
@@ -242,5 +243,32 @@ private class Edit(private val database: Database) : Command(
         }
 
         reply(ctx, "Tag edited (if it's yours).", "Tag")
+    }
+}
+
+private class Search(private val database: Database) : Command(
+    "search", arrayOf("s", "find"), Category.NONE,
+    "Searches for tags", "<search query>"
+) {
+    override fun run(ctx: CommandContext) {
+        if (ctx.args.isEmpty()) {
+            reply(
+                ctx, arrayOf(
+                    MessageEmbed.Field("Command usage:", "$name $arguments", true)
+                ), "Tag"
+            )
+            return
+        }
+
+        val matched = database.from(TagTable)
+            .select(TagTable.name)
+            .where { (TagTable.guildId eq ctx.guild!!.idLong) and (TagTable.name like "%${ctx.args[0].toLowerCase(Locale.ROOT)}%") }
+            .map { it[TagTable.name] }
+
+        if(matched.isEmpty()) {
+            replyError(ctx, "Nothing found!", "Tag")
+        } else {
+            reply(ctx, matched.joinToString(", ", prefix = "**Matches:** "), "Tag")
+        }
     }
 }
