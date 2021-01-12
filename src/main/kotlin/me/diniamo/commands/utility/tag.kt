@@ -31,8 +31,8 @@ object TagTable : Table<Nothing>("tags") {
 }
 
 private class TagListener(private val database: Database) : ListenerAdapter() {
-    override fun onGuildLeave(event: GuildLeaveEvent) = deleteTagsFromGuild(event.guild.idLong)
-    override fun onUnavailableGuildLeave(event: UnavailableGuildLeaveEvent) = deleteTagsFromGuild(event.guildIdLong)
+    override fun onGuildLeave(event: GuildLeaveEvent) { GlobalScope.launch(Dispatchers.IO) { deleteTagsFromGuild(event.guild.idLong) } }
+    override fun onUnavailableGuildLeave(event: UnavailableGuildLeaveEvent) { GlobalScope.launch(Dispatchers.IO) { deleteTagsFromGuild(event.guildIdLong) } }
 
     private fun deleteTagsFromGuild(guildId: Long) {
         database.delete(TagTable) {
@@ -101,7 +101,7 @@ class Tag(private val database: Database, jda: JDA) : Command(
     private fun getTag(guildId: Long, name: String): String? = database
         .from(TagTable)
         .select(TagTable.content)
-        .where { (TagTable.guildId eq guildId) and (TagTable.name eq name) }
+        .where { (TagTable.guildId eq guildId) and (TagTable.name eq name.toLowerCase(Locale.ROOT)) }
         .map { it[TagTable.content] }.singleOrNull()
 }
 
@@ -119,8 +119,10 @@ private class Create(private val database: Database, private val parent: Tag) : 
             return
         }
 
+        val name = ctx.args[0].toLowerCase(Locale.ROOT)
+
         if (parent.subCommands.keys.contains(ctx.args[0]) || database.from(TagTable).select(TagTable.name)
-                .where { TagTable.name eq ctx.args[0] }
+                .where { TagTable.name eq name }
                 .map { it[TagTable.name] }.isNotEmpty()
         ) {
             replyError(ctx, "That name is unavailable.", "Tag")
@@ -128,12 +130,12 @@ private class Create(private val database: Database, private val parent: Tag) : 
         }
 
         database.insert(TagTable) {
-            set(it.name, ctx.args[0])
+            set(it.name, name)
             set(it.guildId, ctx.guild!!.idLong)
             set(it.authorId, ctx.user.idLong)
             set(
                 it.content,
-                ctx.args.let { args -> Array<String>(args.size - 1) { i -> args[i + 1] } }.joinToString(" ")
+                Utils.removeFirst(ctx.args).joinToString(" ")
             )
         }
         reply(ctx, "Tag created.", "Tag")
@@ -155,10 +157,10 @@ private class Remove(private val database: Database) : Command(
         }
 
         database.delete(TagTable) {
-            (TagTable.authorId eq ctx.user.idLong) and (TagTable.guildId eq ctx.guild!!.idLong) and (TagTable.name eq ctx.args[0])
+            (TagTable.authorId eq ctx.user.idLong) and (TagTable.guildId eq ctx.guild!!.idLong) and (TagTable.name eq ctx.args[0].toLowerCase(Locale.ROOT))
         }
 
-        reply(ctx, "Tag deleted (if it was yours/existed).", "Tag")
+        reply(ctx, "Tag deleted (if it existed and was yours).", "Tag")
     }
 }
 
@@ -167,7 +169,7 @@ private class List(private val database: Database) : Command(
     "Lists all the tags in a guild", ""
 ) {
     override fun run(ctx: CommandContext) {
-        val tags = database.from(TagTable).select(TagTable.name).where { TagTable.guildId eq ctx.guild!!.idLong }.map { it[TagTable.name]!! }
+        val tags = database.from(TagTable).select(TagTable.name).where { TagTable.guildId eq ctx.guild!!.idLong }.map { it[TagTable.name]!!.toLowerCase(Locale.ROOT) }
         val builder = StringBuilder()
         builder.append("**Tags:**\n")
 
@@ -205,7 +207,7 @@ private class Owner(private val database: Database) : Command(
 
         val authorId = database.from(TagTable)
             .select(TagTable.authorId)
-            .where { (TagTable.guildId eq ctx.guild!!.idLong) and (TagTable.name eq ctx.args[0]) }
+            .where { (TagTable.guildId eq ctx.guild!!.idLong) and (TagTable.name eq ctx.args[0].toLowerCase(Locale.ROOT)) }
             .map { it[TagTable.authorId] }.singleOrNull()
 
         if (authorId == null) {
@@ -233,10 +235,12 @@ private class Edit(private val database: Database) : Command(
 
         database.update(TagTable) {
             where {
-                (TagTable.authorId eq ctx.user.idLong) and (TagTable.guildId eq ctx.guild!!.idLong) and (TagTable.name eq ctx.args[0])
+                (TagTable.authorId eq ctx.user.idLong) and (TagTable.guildId eq ctx.guild!!.idLong) and (TagTable.name eq ctx.args[0].toLowerCase(Locale.ROOT))
             }
 
             set(TagTable.content, Utils.removeFirst(ctx.args).joinToString(" "))
         }
+
+        reply(ctx, "Tag edited (if it's yours).", "Tag")
     }
 }

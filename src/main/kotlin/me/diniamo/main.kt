@@ -41,10 +41,11 @@ fun main() {
     db.useConnection {
         it.prepareCall("""
                 CREATE TABLE IF NOT EXISTS tags (
-                    name varchar,
-                    guildid bigint,
-                    authorid bigint,
-                    content varchar 
+                    name varchar(64) NOT NULL,
+                    guild_id bigint NOT NULL,
+                    author_id bigint NOT NULL,
+                    content text NOT NULL,
+                    UNIQUE(name, guild_id)
                 );
             """).execute()
     }
