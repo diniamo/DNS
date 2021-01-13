@@ -172,7 +172,6 @@ private class List(private val database: Database) : Command(
     override fun run(ctx: CommandContext) {
         val tags = database.from(TagTable).select(TagTable.name).where { TagTable.guildId eq ctx.guild!!.idLong }.map { it[TagTable.name]!!.toLowerCase(Locale.ROOT) }
         val builder = StringBuilder()
-        builder.append("**Tags:**\n")
 
         Paginator.createMenu("Tags", mutableListOf<Page>().apply {
                  tags.forEachIndexed { i, s ->
