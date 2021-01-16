@@ -4,12 +4,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.diniamo.Utils
-import me.diniamo.commands.system.Category
-import me.diniamo.commands.system.CommandClient
-import me.diniamo.commands.system.CommandContext
-import me.diniamo.commands.system.Command
+import me.diniamo.commands.system.*
 import java.awt.image.BufferedImage
 import java.io.File
+import java.time.OffsetDateTime
 import javax.imageio.ImageIO
 import kotlin.math.roundToInt
 
@@ -30,7 +28,7 @@ class HandWithGun : Command(
                         (image.width.toFloat() / (128f / 45f)).roundToInt(), (image.height.toFloat() / (128f / 75f)).roundToInt(), null)
 
                 ctx.channel.sendFile(Utils.encodePNG(image), "hwg.png").queue { msg ->
-                    CommandClient.answerCache[ctx.message.idLong] = msg.idLong
+                    CommandClient.answerCache[ctx.message.idLong] = MessageData(msg.idLong, OffsetDateTime.now())
                 }
 
                 graphics.dispose()

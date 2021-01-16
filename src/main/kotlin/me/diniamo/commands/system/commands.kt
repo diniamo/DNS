@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.*
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import java.awt.Color
 import java.time.Instant
+import java.time.OffsetDateTime
 
 abstract class Command(
     val name: String,
@@ -23,13 +24,13 @@ abstract class Command(
 
     protected fun reply(ctx: CommandContext, message: Message) {
         ctx.channel.sendMessage(message).queue {
-                msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong
+                msg -> CommandClient.answerCache[ctx.message.idLong] = MessageData(msg.idLong, OffsetDateTime.now())
         }
     }
 
     protected fun reply(ctx: CommandContext, embed: MessageEmbed) {
         ctx.channel.sendMessage(embed).queue {
-                msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong
+                msg -> CommandClient.answerCache[ctx.message.idLong] = MessageData(msg.idLong, OffsetDateTime.now())
         }
     }
 
@@ -42,7 +43,7 @@ abstract class Command(
                 .setFooter(ctx.member?.effectiveName ?: ctx.user.name, ctx.user.effectiveAvatarUrl)
                 .setTimestamp(Instant.now()).build()
         ).queue {
-                msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong
+                msg -> CommandClient.answerCache[ctx.message.idLong] = MessageData(msg.idLong, OffsetDateTime.now())
         }
     }
     protected fun replySuccess(ctx: CommandContext, text: String, title: String?) {
@@ -53,7 +54,7 @@ abstract class Command(
                 .setFooter(ctx.member?.effectiveName ?: ctx.user.name, ctx.user.effectiveAvatarUrl)
                 .setTimestamp(Instant.now()).build()
         ).queue {
-                msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong
+                msg -> CommandClient.answerCache[ctx.message.idLong] = MessageData(msg.idLong, OffsetDateTime.now())
         }
     }
     protected fun replyError(ctx: CommandContext, text: String, title: String?) {
@@ -64,7 +65,7 @@ abstract class Command(
                 .setFooter(ctx.member?.effectiveName ?: ctx.user.name, ctx.user.effectiveAvatarUrl)
                 .setTimestamp(Instant.now()).build()
         ).queue {
-                msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong
+                msg -> CommandClient.answerCache[ctx.message.idLong] = MessageData(msg.idLong, OffsetDateTime.now())
         }
     }
 
@@ -77,7 +78,7 @@ abstract class Command(
                 .setFooter(ctx.member?.effectiveName ?: ctx.user.name, ctx.user.effectiveAvatarUrl)
                 .setTimestamp(Instant.now()).build()
         ).queue {
-                msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong
+                msg -> CommandClient.answerCache[ctx.message.idLong] = MessageData(msg.idLong, OffsetDateTime.now())
         }
     }
     protected fun replySuccess(ctx: CommandContext, content: Array<MessageEmbed.Field>, title: String?) {
@@ -88,7 +89,7 @@ abstract class Command(
                 .setFooter(ctx.member?.effectiveName ?: ctx.user.name, ctx.user.effectiveAvatarUrl)
                 .setTimestamp(Instant.now()).build()
         ).queue {
-                msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong
+                msg -> CommandClient.answerCache[ctx.message.idLong] = MessageData(msg.idLong, OffsetDateTime.now())
         }
     }
     protected fun replyError(ctx: CommandContext, content: Array<MessageEmbed.Field>, title: String?) {
@@ -99,7 +100,7 @@ abstract class Command(
                 .setFooter(ctx.member?.effectiveName ?: ctx.user.name, ctx.user.effectiveAvatarUrl)
                 .setTimestamp(Instant.now()).build()
         ).queue {
-                msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong
+                msg -> CommandClient.answerCache[ctx.message.idLong] = MessageData(msg.idLong, OffsetDateTime.now())
         }
     }
 

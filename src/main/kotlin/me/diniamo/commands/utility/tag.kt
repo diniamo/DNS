@@ -20,6 +20,7 @@ import org.ktorm.schema.Table
 import org.ktorm.schema.long
 import org.ktorm.schema.varchar
 import java.sql.*
+import java.time.OffsetDateTime
 import java.util.*
 import kotlin.system.exitProcess
 
@@ -86,7 +87,7 @@ class Tag(private val database: Database, jda: JDA) : Command(
                 if (expectedCommand == null) {
                     getTag(ctx.guild.idLong, ctx.args[0])?.let {
                         ctx.channel.sendMessage(it).queue { msg ->
-                            CommandClient.answerCache[ctx.message.idLong] = msg.idLong
+                            CommandClient.answerCache[ctx.message.idLong] = MessageData(msg.idLong, OffsetDateTime.now())
                         }
                     } ?: replyError(ctx, "There is no such tag in this guild.", "Tag")
                 } else {

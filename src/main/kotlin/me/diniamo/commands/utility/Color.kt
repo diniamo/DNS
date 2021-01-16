@@ -4,12 +4,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.diniamo.Utils
-import me.diniamo.commands.system.Category
-import me.diniamo.commands.system.CommandClient
-import me.diniamo.commands.system.CommandContext
-import me.diniamo.commands.system.Command
+import me.diniamo.commands.system.*
 import java.awt.Color
 import java.awt.image.BufferedImage
+import java.time.OffsetDateTime
 
 class Color : Command(
     "color", arrayOf(), Category.UTILITY,
@@ -33,7 +31,7 @@ class Color : Command(
                 graphics.color = color
                 graphics.fillRect(-1, -1, 129, 129)
 
-                ctx.channel.sendFile(Utils.encodePNG(image), "color.png").queue { msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong }
+                ctx.channel.sendFile(Utils.encodePNG(image), "color.png").queue { msg -> CommandClient.answerCache[ctx.message.idLong] = MessageData(msg.idLong, OffsetDateTime.now()) }
 
                 graphics.dispose()
             } catch (ex: Exception) {

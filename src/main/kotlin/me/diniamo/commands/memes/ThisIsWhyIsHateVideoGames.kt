@@ -3,16 +3,14 @@ package me.diniamo.commands.memes
 import kotlinx.coroutines.runBlocking
 import me.diniamo.Utils
 import me.diniamo.Values
-import me.diniamo.commands.system.Category
-import me.diniamo.commands.system.CommandClient
-import me.diniamo.commands.system.CommandContext
-import me.diniamo.commands.system.Command
+import me.diniamo.commands.system.*
 import net.dv8tion.jda.api.entities.EmbedType
 import java.io.File
 import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
+import java.time.OffsetDateTime
 
 class ThisIsWhyIsHateVideoGames : Command(
     "hatevideogames", arrayOf("hatevg"), Category.MEME,
@@ -34,7 +32,7 @@ class ThisIsWhyIsHateVideoGames : Command(
                     .start().waitFor()
 
                 val msg = ctx.channel.sendFile(File("output.mp4")).complete()
-                CommandClient.answerCache[ctx.message.idLong] = msg.idLong
+                CommandClient.answerCache[ctx.message.idLong] = MessageData(msg.idLong, OffsetDateTime.now())
             } catch (ex: Exception) {
                 replyError(ctx, "Something went wrong.", "Error")
             }

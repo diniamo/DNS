@@ -3,12 +3,10 @@ package me.diniamo.commands.memes
 import kotlinx.coroutines.runBlocking
 import me.diniamo.Utils
 import me.diniamo.Values
-import me.diniamo.commands.system.Category
-import me.diniamo.commands.system.Command
-import me.diniamo.commands.system.CommandClient
-import me.diniamo.commands.system.CommandContext
+import me.diniamo.commands.system.*
 import net.dv8tion.jda.api.entities.MessageChannel
 import java.io.File
+import java.time.OffsetDateTime
 
 class Polka : Command(
     "polka", arrayOf(), Category.MEME,
@@ -55,6 +53,6 @@ class Polka : Command(
             .start().waitFor()
 
         val msg = channel.sendFile(File("output.mp4")).complete()
-        CommandClient.answerCache[commandId] = msg.idLong
+        CommandClient.answerCache[commandId] = MessageData(msg.idLong, OffsetDateTime.now())
     }
 }

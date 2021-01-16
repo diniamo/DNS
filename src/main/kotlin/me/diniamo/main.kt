@@ -29,6 +29,7 @@ import java.awt.GraphicsEnvironment
 import java.io.File
 import java.io.FileInputStream
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 val config = Properties().apply {
     load(FileInputStream("./config.properties"))
@@ -76,7 +77,8 @@ fun main() {
         GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(impact)
     }
 
-    val client = CommandClient(config.getProperty("prefix"), 388742599483064321L, jda)
+    val client = CommandClient(config.getProperty("prefix"), 388742599483064321L)
+    Utils.scheduler.scheduleAtFixedRate(CommandClient::pruneCache, 30, 30, TimeUnit.MINUTES)
     client.addCommands(Help(client), Ping(), Emote(), Eval(client), Translate(), Google(), Uptime(), Info(), Color(), EchoCommand(), Urban(), Test(), ThisPersonDoesNotExist(), ThisCatDoesNotExist(),
         Tag(db, jda), ReverseText())
             //Tag(jda, config.getProperty(Config.DB_LINK), config.getProperty(Config.DB_DRIVER)))

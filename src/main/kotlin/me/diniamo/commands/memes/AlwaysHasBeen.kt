@@ -5,14 +5,12 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.diniamo.Utils
 import me.diniamo.Values
-import me.diniamo.commands.system.Category
-import me.diniamo.commands.system.CommandClient
-import me.diniamo.commands.system.CommandContext
-import me.diniamo.commands.system.Command
+import me.diniamo.commands.system.*
 import java.awt.Font
 import java.awt.RenderingHints
 import java.io.File
 import java.net.URL
+import java.time.OffsetDateTime
 import javax.imageio.ImageIO
 
 class AlwaysHasBeen : Command(
@@ -46,7 +44,7 @@ class AlwaysHasBeen : Command(
                 }
 
                 ctx.channel.sendFile(Utils.encodePNG(image), "ahb.png").queue { msg ->
-                    CommandClient.answerCache[ctx.message.idLong] = msg.idLong
+                    CommandClient.answerCache[ctx.message.idLong] = MessageData(msg.idLong, OffsetDateTime.now())
                 }
 
                 graphics.dispose()

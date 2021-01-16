@@ -3,19 +3,18 @@ package me.diniamo.commands.system
 import me.diniamo.Utils.removeFirst
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.JDA
-import net.dv8tion.jda.api.Permission
-import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import java.awt.Color
 import java.time.Instant
+import java.time.OffsetDateTime
 import java.util.*
 import kotlin.collections.HashMap
 
 const val GUILD_NULL = "Guild is null in a guildOnly command"
 
-class CommandClient(prefix: String, ownerId: Long, jda: JDA) : ListenerAdapter() {
+class CommandClient(prefix: String, ownerId: Long) : ListenerAdapter() {
     val commandMap = HashMap<String, Command>()
 
     fun addCommands(vararg toAdd: Command) {
@@ -60,14 +59,14 @@ class CommandClient(prefix: String, ownerId: Long, jda: JDA) : ListenerAdapter()
 
             if(expectedCommand.guildOnly && !event.isFromGuild) {
                 errorBuilder.appendDescription("This command cannot be used here.")
-                event.channel.sendMessage(errorBuilder.build()).queue { msg -> answerCache[event.message.idLong] = msg.idLong }
+                event.channel.sendMessage(errorBuilder.build()).queue { msg -> answerCache[event.message.idLong] = MessageData(msg.idLong, OffsetDateTime.now()) }
             }
 
             if (event.member?.hasPermission(expectedCommand.permissions) != false) {
                 expectedCommand.run(CommandContext(event, removeFirst(args)))
             } else {
                 errorBuilder.appendDescription("Missing permissions `${expectedCommand.permissions.joinToString(", ")}`")
-                event.channel.sendMessage(errorBuilder.build()).queue { msg -> answerCache[event.message.idLong] = msg.idLong }
+                event.channel.sendMessage(errorBuilder.build()).queue { msg -> answerCache[event.message.idLong] = MessageData(msg.idLong, OffsetDateTime.now()) }
                 return
             }
         }
@@ -77,21 +76,29 @@ class CommandClient(prefix: String, ownerId: Long, jda: JDA) : ListenerAdapter()
         val answer = answerCache[event.messageIdLong]
 
         if (answer != null) {
-            event.channel.deleteMessageById(answer).queue()
+            event.channel.deleteMessageById(answer.messageId).queue()
             answerCache.remove(event.messageIdLong)
         }
     }
 
     init {
         Companion.prefix = prefix
-        answerCache = AnswerCache(jda)
         Companion.ownerId = ownerId
     }
 
     companion object {
         lateinit var prefix: String
-        lateinit var answerCache: AnswerCache<Long, Long>
+
+        val answerCache: HashMap<Long, MessageData> = HashMap()
+        fun pruneCache() {
+            answerCache.entries.removeIf { entry ->
+                entry.value.timeCreated.isBefore(OffsetDateTime.now().minusMinutes(10))
+            }
+        }
+
         var ownerId: Long = 0
     }
 }
+
+data class MessageData(var messageId: Long, val timeCreated: OffsetDateTime)
 

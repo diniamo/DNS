@@ -4,11 +4,9 @@ import kotlinx.coroutines.runBlocking
 import me.diniamo.Utils
 import me.diniamo.Utils.downloadImageOrProfilePicture
 import me.diniamo.Values
-import me.diniamo.commands.system.Category
-import me.diniamo.commands.system.CommandClient
-import me.diniamo.commands.system.CommandContext
-import me.diniamo.commands.system.Command
+import me.diniamo.commands.system.*
 import java.io.File
+import java.time.OffsetDateTime
 
 class PutinWalk : Command(
     "putinwalk", arrayOf("pw", "putin-walk"), Category.MEME,
@@ -38,7 +36,7 @@ class PutinWalk : Command(
                     .start().waitFor()
 
             val msg = ctx.channel.sendFile(File("output.mp4")).complete()
-            CommandClient.answerCache[ctx.message.idLong] = msg.idLong
+            CommandClient.answerCache[ctx.message.idLong] = MessageData(msg.idLong, OffsetDateTime.now())
         }
     }
 }

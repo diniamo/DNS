@@ -3,11 +3,9 @@ package me.diniamo.commands.memes
 import kotlinx.coroutines.runBlocking
 import me.diniamo.Utils.videoContext
 import me.diniamo.Values
-import me.diniamo.commands.system.Category
-import me.diniamo.commands.system.CommandClient
-import me.diniamo.commands.system.CommandContext
-import me.diniamo.commands.system.Command
+import me.diniamo.commands.system.*
 import java.io.File
+import java.time.OffsetDateTime
 
 class EW : Command(
     "ew", arrayOf(), Category.MEME,
@@ -19,7 +17,7 @@ class EW : Command(
         runBlocking(videoContext) {
             val joinedArgs = ctx.args.joinToString(" ")
             if(lastText == joinedArgs) {
-                ctx.channel.sendFile(File("output.mp4")).queue { msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong }
+                ctx.channel.sendFile(File("output.mp4")).queue { msg -> CommandClient.answerCache[ctx.message.idLong] = MessageData(msg.idLong, OffsetDateTime.now()) }
 
                 return@runBlocking
             }
@@ -34,7 +32,7 @@ class EW : Command(
                     .start().waitFor()
 
             val msg = ctx.channel.sendFile(File("output.mp4")).complete()
-            CommandClient.answerCache[ctx.message.idLong] = msg.idLong
+            CommandClient.answerCache[ctx.message.idLong] = MessageData(msg.idLong, OffsetDateTime.now())
         }
     }
 }

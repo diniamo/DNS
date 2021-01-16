@@ -4,14 +4,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.diniamo.Utils
-import me.diniamo.commands.system.Category
-import me.diniamo.commands.system.CommandClient
-import me.diniamo.commands.system.CommandContext
-import me.diniamo.commands.system.Command
+import me.diniamo.commands.system.*
 import java.awt.Font
 import java.awt.RenderingHints
 import java.io.File
 import java.net.URL
+import java.time.OffsetDateTime
 import javax.imageio.ImageIO
 
 class HeartBeat : Command(
@@ -27,7 +25,7 @@ class HeartBeat : Command(
 
             if (lastText == joinedArgs) {
                 ctx.channel.sendFile(File("output.mp4"))
-                    .queue { msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong }
+                    .queue { msg -> CommandClient.answerCache[ctx.message.idLong] = MessageData(msg.idLong, OffsetDateTime.now()) }
 
                 return@launch
             }
@@ -40,7 +38,7 @@ class HeartBeat : Command(
                     graphics.drawImage(ImageIO.read(URL(ctx.message.attachments[0].url)), 110, 151, 110, 62,null)
 
                     ctx.channel.sendFile(Utils.encodePNG(image), "hb.png").queue { msg ->
-                        CommandClient.answerCache[ctx.message.idLong] = msg.idLong
+                        CommandClient.answerCache[ctx.message.idLong] = MessageData(msg.idLong, OffsetDateTime.now())
                     }
 
                     lastText = null
@@ -68,7 +66,7 @@ class HeartBeat : Command(
                 }
 
                 ctx.channel.sendFile(Utils.encodePNG(image), "hb.png").queue { msg ->
-                    CommandClient.answerCache[ctx.message.idLong] = msg.idLong
+                    CommandClient.answerCache[ctx.message.idLong] = MessageData(msg.idLong, OffsetDateTime.now())
                 }
 
                 lastText = joinedArgs

@@ -5,10 +5,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.diniamo.AnimatedGifEncoder
 import me.diniamo.Utils
-import me.diniamo.commands.system.Category
-import me.diniamo.commands.system.CommandContext
-import me.diniamo.commands.system.Command
-import me.diniamo.commands.system.CommandClient
+import me.diniamo.commands.system.*
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.awt.image.ImageObserver
@@ -16,6 +13,7 @@ import java.awt.image.IndexColorModel
 import java.awt.image.Raster
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.time.OffsetDateTime
 import javax.imageio.ImageIO
 import kotlin.math.PI
 import kotlin.math.cos
@@ -52,7 +50,7 @@ class Bonk : Command(
             encoder.finish()
 
             ctx.channel.sendFile(output.toByteArray(), "bonk.gif")
-                .queue { msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong }
+                .queue { msg -> CommandClient.answerCache[ctx.message.idLong] = MessageData(msg.idLong, OffsetDateTime.now()) }
 
 
             g0.dispose()
@@ -66,7 +64,7 @@ class Bonk : Command(
             graphics.drawImage(overlay, 0, 0, image.width, image.height, null)
 U
             ctx.channel.sendFile(Utils.encodePNG(image), "bonk.png")
-                .queue { msg -> CommandClient.answerCache[ctx.message.idLong] = msg.idLong }
+                .queue { msg -> CommandClient.answerCache[ctx.message.idLong] = MessageData(msg.idLong, OffsetDateTime.now()) }
 
             graphics.dispose()*/
         }
