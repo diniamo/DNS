@@ -64,11 +64,6 @@ fun main() {
         .setMemberCachePolicy(MemberCachePolicy.VOICE)
             .build().awaitReady()
 
-    RestAction.setDefaultFailure {
-        println("RestAction failure:")
-        it.printStackTrace()
-    }
-
     System.setProperty("http.agent", "")
     Values.ffmpeg = config.getProperty("ffmpeg")
     Values.answerCacheSizePerGuild = config.getProperty("max-cache-size-per-guild").toInt()
