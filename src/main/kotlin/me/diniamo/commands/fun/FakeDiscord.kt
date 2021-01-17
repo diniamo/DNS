@@ -1,5 +1,8 @@
 package me.diniamo.commands.`fun`
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import me.diniamo.Utils
 import me.diniamo.commands.system.*
 import java.awt.Color
@@ -22,9 +25,6 @@ class FakeDiscord : Command(
     private val timeStampFont = Font("Whitney-Book", Font.PLAIN, 15)
 
     override fun run(ctx: CommandContext) {
-
-        ctx.channel.sendMessage("").flatMap { m -> m.addReaction(ctx.guild!!.getEmoteById(324L)!!) }
-
         val args = ctx.message.contentRaw.substringAfter(' ').split(", ")
 
         if(args.size < 3) {
@@ -32,45 +32,47 @@ class FakeDiscord : Command(
             return
         }
 
-        val finalImg = BufferedImage(482, 98, BufferedImage.TYPE_INT_ARGB)
-        val finalGraphics = finalImg.createGraphics().apply {
-            println("${getRenderingHint(RenderingHints.KEY_INTERPOLATION)}\n${getRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION)}")
-            setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-            setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY)
-            setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR)
-            setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY)
+        GlobalScope.launch(Dispatchers.IO) {
+            val finalImg = BufferedImage(482, 98, BufferedImage.TYPE_INT_ARGB)
+            val finalGraphics = finalImg.createGraphics().apply {
+                println("${getRenderingHint(RenderingHints.KEY_INTERPOLATION)}\n${getRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION)}")
+                setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+                setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY)
+                setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR)
+                setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY)
 
-            color = discordBG
-            clip = null
+                color = discordBG
+                clip = null
+            }
+
+            val profilePic = getClippedProfilePic(Utils.getImageOrProfilePicture(ctx.message))
+
+            // Image Rendering
+            val pfpYPos = finalImg.height / 2 - 32
+            finalGraphics.fillRect(0, 0, finalImg.width, finalImg.height)
+            finalGraphics.drawImage(profilePic, 20, pfpYPos, 52, 52,null, null)
+
+            // Text rendering
+            finalGraphics.renderingHints.remove(RenderingHints.KEY_INTERPOLATION)
+            finalGraphics.renderingHints.remove(RenderingHints.KEY_ALPHA_INTERPOLATION)
+
+            finalGraphics.color = Color.WHITE
+            finalGraphics.font = nameFont
+            finalGraphics.drawString(args[0], 100, pfpYPos + 20)
+
+            finalGraphics.color = timeStampColor
+            finalGraphics.drawString(args[1], 100 + (finalGraphics.fontMetrics.getStringBounds(args[0], finalGraphics).width.roundToInt() + 10)
+                .also { finalGraphics.font = timeStampFont }, pfpYPos + 20)
+
+            finalGraphics.color = Color.WHITE
+            finalGraphics.font = textFont
+            finalGraphics.drawString(args[2], 100, pfpYPos + 50)
+
+            ctx.channel.sendFile(Utils.encodePNG(finalImg), "message.png").queue { msg ->
+                CommandClient.answerCache[ctx.message.idLong] = MessageData(msg.idLong, OffsetDateTime.now())
+            }
+            finalGraphics.dispose()
         }
-
-        val profilePic = getClippedProfilePic(Utils.getImageOrProfilePicture(ctx.message))
-
-        // Image Rendering
-        val pfpYPos = finalImg.height / 2 - 32
-        finalGraphics.fillRect(0, 0, finalImg.width, finalImg.height)
-        finalGraphics.drawImage(profilePic, 20, pfpYPos, 52, 52,null, null)
-
-        // Text rendering
-        finalGraphics.renderingHints.remove(RenderingHints.KEY_INTERPOLATION)
-        finalGraphics.renderingHints.remove(RenderingHints.KEY_ALPHA_INTERPOLATION)
-
-        finalGraphics.color = Color.WHITE
-        finalGraphics.font = nameFont
-        finalGraphics.drawString(args[0], 100, pfpYPos + 20)
-
-        finalGraphics.color = timeStampColor
-        finalGraphics.drawString(args[1], 100 + (finalGraphics.fontMetrics.getStringBounds(args[0], finalGraphics).width.roundToInt() + 10)
-            .also { finalGraphics.font = timeStampFont }, pfpYPos + 20)
-
-        finalGraphics.color = Color.WHITE
-        finalGraphics.font = textFont
-        finalGraphics.drawString(args[2], 100, pfpYPos + 50)
-
-        ctx.channel.sendFile(Utils.encodePNG(finalImg), "message.png").queue { msg ->
-            CommandClient.answerCache[ctx.message.idLong] = MessageData(msg.idLong, OffsetDateTime.now())
-        }
-        finalGraphics.dispose()
     }
 
     private fun getClippedProfilePic(img: BufferedImage): BufferedImage = BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB).apply {
