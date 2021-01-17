@@ -3,6 +3,7 @@
 package me.diniamo
 
 import me.diniamo.commands.*
+import me.diniamo.commands.`fun`.FakeDiscord
 import me.diniamo.commands.`fun`.ReverseText
 import me.diniamo.commands.`fun`.ThisCatDoesNotExist
 import me.diniamo.commands.`fun`.ThisPersonDoesNotExist
@@ -81,7 +82,7 @@ fun main() {
     client.addCommands(Help(client), Ping(), Emote(), Eval(client), Translate(), Google(), Uptime(), Info(), Color(), EchoCommand(), Urban(), Test(), ThisPersonDoesNotExist(), ThisCatDoesNotExist(),
         Tag(db, jda), ReverseText())
             //Tag(jda, config.getProperty(Config.DB_LINK), config.getProperty(Config.DB_DRIVER)))
-    client.addCommands(PutinWalk(), AlwaysHasBeen(), ThisIsWhyIsHateVideoGames(), EW(), Distract(), HandWithGun(), HeartBeat(), MacroImage(), WideFish(), Bonk(), Polka())
+    client.addCommands(PutinWalk(), AlwaysHasBeen(), ThisIsWhyIsHateVideoGames(), EW(), Distract(), HandWithGun(), HeartBeat(), MacroImage(), WideFish(), Bonk(), Polka(), FakeDiscord())
 
     jda.addEventListener(BinaryToText(), client, Paginator)
 }
