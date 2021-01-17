@@ -33,8 +33,13 @@ object TagTable : Table<Nothing>("tags") {
 }
 
 private class TagListener(private val database: Database) : ListenerAdapter() {
-    override fun onGuildLeave(event: GuildLeaveEvent) { GlobalScope.launch(Dispatchers.IO) { deleteTagsFromGuild(event.guild.idLong) } }
-    override fun onUnavailableGuildLeave(event: UnavailableGuildLeaveEvent) { GlobalScope.launch(Dispatchers.IO) { deleteTagsFromGuild(event.guildIdLong) } }
+    override fun onGuildLeave(event: GuildLeaveEvent) {
+        GlobalScope.launch(Dispatchers.IO) { deleteTagsFromGuild(event.guild.idLong) }
+    }
+
+    override fun onUnavailableGuildLeave(event: UnavailableGuildLeaveEvent) {
+        GlobalScope.launch(Dispatchers.IO) { deleteTagsFromGuild(event.guildIdLong) }
+    }
 
     private fun deleteTagsFromGuild(guildId: Long) {
         database.delete(TagTable) {
@@ -69,33 +74,36 @@ class Tag(private val database: Database, jda: JDA) : Command(
     override fun run(ctx: CommandContext) {
         require(ctx.guild != null) { GUILD_NULL }
 
-        GlobalScope.launch(Dispatchers.IO) {
-            if (ctx.args.isEmpty()) {
-                reply(
-                    ctx, templateBuilder(ctx)
-                        .setTitle("Tag")
-                        .appendDescription("With this command you can create tags (local), with a text value. Later on on you can get the text value by their name.")
-                        .apply {
-                            appendDescription("\n\nSubcommands:\n")
-                            subCommands.values.toSet().forEach { v ->
-                                appendDescription("- **${v.name}** (${v.help}): ${v.arguments}\n")
-                            }
-                        }.build()
-                )
-            } else {
+        if (ctx.args.isEmpty()) {
+            reply(
+                ctx, templateBuilder(ctx)
+                    .setTitle("Tag")
+                    .appendDescription("With this command you can create tags (local), with a text value. Later on on you can get the text value by their name.")
+                    .apply {
+                        appendDescription("\n\nSubcommands:\n")
+                        subCommands.values.toSet().forEach { v ->
+                            appendDescription("- **${v.name}** (${v.help}): ${v.arguments}\n")
+                        }
+                    }.build()
+            )
+        } else {
+            GlobalScope.launch(Dispatchers.IO) {
                 val expectedCommand = subCommands[ctx.args[0]]
 
                 if (expectedCommand == null) {
                     getTag(ctx.guild.idLong, ctx.args[0])?.let {
                         ctx.channel.sendMessage(it.content + "\n\n" + it.attachments.joinToString("\n")).queue { msg ->
-                            CommandClient.answerCache[ctx.message.idLong] = MessageData(msg.idLong, OffsetDateTime.now())
+                            CommandClient.answerCache[ctx.message.idLong] =
+                                MessageData(msg.idLong, OffsetDateTime.now())
                         }
                     } ?: replyError(ctx, "There is no such tag in this guild.", "Tag")
                 } else {
                     // remove first argument
-                    expectedCommand.run(CommandContext(
-                        ctx.event, Utils.removeFirst(ctx.args)
-                    ))
+                    expectedCommand.run(
+                        CommandContext(
+                            ctx.event, Utils.removeFirst(ctx.args)
+                        )
+                    )
                 }
             }
         }
@@ -138,7 +146,10 @@ private class Create(private val database: Database, private val parent: Tag) : 
             set(it.name, name)
             set(it.guildId, ctx.guild!!.idLong)
             set(it.authorId, ctx.user.idLong)
-            if(ctx.message.attachments.isNotEmpty()) set(it.attachments, ctx.message.attachments.map(Message.Attachment::getUrl).toTypedArray())
+            if (ctx.message.attachments.isNotEmpty()) set(
+                it.attachments,
+                ctx.message.attachments.map(Message.Attachment::getUrl).toTypedArray()
+            )
             set(
                 it.content,
                 Utils.removeFirst(ctx.args).joinToString(" ")
@@ -163,7 +174,9 @@ private class Remove(private val database: Database) : Command(
         }
 
         database.delete(TagTable) {
-            (TagTable.authorId eq ctx.user.idLong) and (TagTable.guildId eq ctx.guild!!.idLong) and (TagTable.name eq ctx.args[0].toLowerCase(Locale.ROOT))
+            (TagTable.authorId eq ctx.user.idLong) and (TagTable.guildId eq ctx.guild!!.idLong) and (TagTable.name eq ctx.args[0].toLowerCase(
+                Locale.ROOT
+            ))
         }
 
         reply(ctx, "Tag deleted (if it existed and was yours).", "Tag")
@@ -175,23 +188,24 @@ private class List(private val database: Database) : Command(
     "Lists all the tags in a guild", ""
 ) {
     override fun run(ctx: CommandContext) {
-        val tags = database.from(TagTable).select(TagTable.name).where { TagTable.guildId eq ctx.guild!!.idLong }.map { it[TagTable.name]!!.toLowerCase(Locale.ROOT) }
+        val tags = database.from(TagTable).select(TagTable.name).where { TagTable.guildId eq ctx.guild!!.idLong }
+            .map { it[TagTable.name]!!.toLowerCase(Locale.ROOT) }
         val builder = StringBuilder()
 
         Paginator.createMenu("Tags", mutableListOf<Page>().apply {
-                 tags.forEachIndexed { i, s ->
-                     if (i % 10 == 0 && i != 0) {
-                         add(Page(builder.toString()))
-                         builder.clear()
-                     } else if(i == tags.size - 1) {
-                         builder.append(s)
-                         add(Page(builder.toString()))
+            tags.forEachIndexed { i, s ->
+                if (i % 10 == 0 && i != 0) {
+                    add(Page(builder.toString()))
+                    builder.clear()
+                } else if (i == tags.size - 1) {
+                    builder.append(s)
+                    add(Page(builder.toString()))
 
-                         return@forEachIndexed
-                     }
+                    return@forEachIndexed
+                }
 
-                     builder.append(s).append("\n")
-                 }
+                builder.append(s).append("\n")
+            }
         }, ctx.channel, ctx.user.idLong)
     }
 }
@@ -240,7 +254,9 @@ private class Edit(private val database: Database) : Command(
 
         database.update(TagTable) {
             where {
-                (TagTable.authorId eq ctx.user.idLong) and (TagTable.guildId eq ctx.guild!!.idLong) and (TagTable.name eq ctx.args[0].toLowerCase(Locale.ROOT))
+                (TagTable.authorId eq ctx.user.idLong) and (TagTable.guildId eq ctx.guild!!.idLong) and (TagTable.name eq ctx.args[0].toLowerCase(
+                    Locale.ROOT
+                ))
             }
 
             set(TagTable.content, Utils.removeFirst(ctx.args).joinToString(" "))
@@ -270,7 +286,7 @@ private class Search(private val database: Database) : Command(
             .where { (TagTable.guildId eq ctx.guild!!.idLong) and (TagTable.name like "%${ctx.args[0].toLowerCase(Locale.ROOT)}%") }
             .map { it[TagTable.name] }
 
-        if(matched.isEmpty()) {
+        if (matched.isEmpty()) {
             replyError(ctx, "Nothing found!", "Tag")
         } else {
             reply(ctx, matched.joinToString(", ", prefix = "**Matches:** "), "Tag")
