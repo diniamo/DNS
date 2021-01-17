@@ -8,26 +8,27 @@ import me.diniamo.Paginator
 import me.diniamo.Utils
 import me.diniamo.commands.system.*
 import net.dv8tion.jda.api.JDA
-import net.dv8tion.jda.api.OnlineStatus
+import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent
 import net.dv8tion.jda.api.events.guild.UnavailableGuildLeaveEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import org.ktorm.database.Database
 import org.ktorm.dsl.*
-import org.ktorm.expression.SqlExpression
 import org.ktorm.schema.Table
 import org.ktorm.schema.long
 import org.ktorm.schema.varchar
+import org.ktorm.support.postgresql.TextArray
+import org.ktorm.support.postgresql.textArray
 import java.sql.*
 import java.time.OffsetDateTime
 import java.util.*
-import kotlin.system.exitProcess
 
 object TagTable : Table<Nothing>("tags") {
     val name = varchar("name")
     val guildId = long("guild_id")
     val authorId = long("author_id")
+    val attachments = textArray("attachments")
     val content = varchar("content")
 }
 
@@ -86,7 +87,7 @@ class Tag(private val database: Database, jda: JDA) : Command(
 
                 if (expectedCommand == null) {
                     getTag(ctx.guild.idLong, ctx.args[0])?.let {
-                        ctx.channel.sendMessage(it).queue { msg ->
+                        ctx.channel.sendMessage(it.content + "\n\n" + it.attachments.joinToString("\n")).queue { msg ->
                             CommandClient.answerCache[ctx.message.idLong] = MessageData(msg.idLong, OffsetDateTime.now())
                         }
                     } ?: replyError(ctx, "There is no such tag in this guild.", "Tag")
@@ -100,11 +101,13 @@ class Tag(private val database: Database, jda: JDA) : Command(
         }
     }
 
-    private fun getTag(guildId: Long, name: String): String? = database
+    private fun getTag(guildId: Long, name: String): TagContent? = database
         .from(TagTable)
-        .select(TagTable.content)
+        .select(TagTable.content, TagTable.attachments)
         .where { (TagTable.guildId eq guildId) and (TagTable.name eq name.toLowerCase(Locale.ROOT)) }
-        .map { it[TagTable.content] }.singleOrNull()
+        .map { TagContent(it[TagTable.content]!!, it[TagTable.attachments]!!) }.singleOrNull()
+
+    private inner class TagContent(val content: String, val attachments: TextArray)
 }
 
 private class Create(private val database: Database, private val parent: Tag) : Command(
@@ -112,7 +115,7 @@ private class Create(private val database: Database, private val parent: Tag) : 
     "Create a tag in a guild", "<tag name> <tag content>"
 ) {
     override fun run(ctx: CommandContext) {
-        if (ctx.args.size < 2) {
+        if (ctx.args.isEmpty() && (ctx.message.attachments.isEmpty() || ctx.args.size > 1)) {
             reply(
                 ctx, arrayOf(
                     MessageEmbed.Field("Command usage:", "$name $arguments", true)
@@ -135,6 +138,7 @@ private class Create(private val database: Database, private val parent: Tag) : 
             set(it.name, name)
             set(it.guildId, ctx.guild!!.idLong)
             set(it.authorId, ctx.user.idLong)
+            if(ctx.message.attachments.isNotEmpty()) set(it.attachments, ctx.message.attachments.map(Message.Attachment::getUrl).toTypedArray())
             set(
                 it.content,
                 Utils.removeFirst(ctx.args).joinToString(" ")
@@ -145,7 +149,7 @@ private class Create(private val database: Database, private val parent: Tag) : 
 }
 
 private class Remove(private val database: Database) : Command(
-    "remove", arrayOf("r"), Category.NONE,
+    "remove", arrayOf("r", "delete", "d"), Category.NONE,
     "Removes a tag (only if the tag is yours)", "<tag name>"
 ) {
     override fun run(ctx: CommandContext) {
@@ -225,7 +229,7 @@ private class Edit(private val database: Database) : Command(
     "Edits a tag", "<tag name> <new content>"
 ) {
     override fun run(ctx: CommandContext) {
-        if (ctx.args.size < 2) {
+        if (ctx.args.isEmpty() && (ctx.message.attachments.isNotEmpty() || ctx.args.size > 1)) {
             reply(
                 ctx, arrayOf(
                     MessageEmbed.Field("Command usage:", "$name $arguments", true)
@@ -240,6 +244,7 @@ private class Edit(private val database: Database) : Command(
             }
 
             set(TagTable.content, Utils.removeFirst(ctx.args).joinToString(" "))
+            set(TagTable.attachments, ctx.message.attachments.map(Message.Attachment::getUrl).toTypedArray())
         }
 
         reply(ctx, "Tag edited (if it's yours).", "Tag")

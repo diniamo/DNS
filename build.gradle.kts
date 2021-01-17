@@ -58,5 +58,6 @@ dependencies {
     implementation("org.codehaus.groovy", "groovy-jsr223", "3.0.6")
 
     implementation("org.ktorm", "ktorm-core", "3.2.0")
+    implementation("org.ktorm", "ktorm-support-postgresql", "3.2.0")
     implementation("org.postgresql", "postgresql", "42.2.18")
 }

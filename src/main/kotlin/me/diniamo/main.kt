@@ -24,6 +24,7 @@ import net.dv8tion.jda.api.requests.RestAction
 import net.dv8tion.jda.api.utils.MemberCachePolicy
 import net.dv8tion.jda.api.utils.cache.CacheFlag
 import org.ktorm.database.Database
+import org.ktorm.support.postgresql.PostgreSqlDialect
 import java.awt.Font
 import java.awt.GraphicsEnvironment
 import java.io.File
@@ -38,7 +39,9 @@ val config = Properties().apply {
 fun main() {
     val db = Database.connect(
         url = (config.getProperty("db-driver", "jdbc:postgresql") + "://" + config.getProperty("db-host") + ":" +config.getProperty("db-port") + "/" + config.getProperty("db-name")
-                + "?user=" + config.getProperty("db-user") + "&password=" + config.getProperty("db-password")).also { println("Connecting to database via: $it") })
+                + "?user=" + config.getProperty("db-user") + "&password=" + config.getProperty("db-password")).also { println("Connecting to database via: $it") },
+            dialect = PostgreSqlDialect()
+        )
     db.useConnection {
         it.prepareCall("""
                 CREATE TABLE IF NOT EXISTS tags (
@@ -46,6 +49,7 @@ fun main() {
                     guild_id bigint NOT NULL,
                     author_id bigint NOT NULL,
                     content text NOT NULL,
+                    attachments text[] NOT NULL DEFAULT('{}'),
                     UNIQUE(name, guild_id)
                 );
             """).execute()
