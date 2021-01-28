@@ -35,7 +35,6 @@ class FakeDiscord : Command(
         GlobalScope.launch(Dispatchers.IO) {
             val finalImg = BufferedImage(482, 98, BufferedImage.TYPE_INT_ARGB)
             val finalGraphics = finalImg.createGraphics().apply {
-                println("${getRenderingHint(RenderingHints.KEY_INTERPOLATION)}\n${getRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION)}")
                 setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
                 setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY)
                 setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR)
