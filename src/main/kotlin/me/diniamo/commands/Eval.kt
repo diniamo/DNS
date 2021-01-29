@@ -32,11 +32,9 @@ class Eval(private val client: CommandClient) : Command(
         """.trimIndent())
         }
     }
-    
+
     override fun run(ctx: CommandContext) {
         if (ctx.user.idLong == 388742599483064321L) {
-            println(engine)
-
             engine.put("jda", ctx.jda)
             engine.put("api", ctx.jda)
             engine.put("channel", ctx.channel)
@@ -68,6 +66,7 @@ class Eval(private val client: CommandClient) : Command(
                 builder.addField("Code:", "```kt\n$code```", false)
                 builder.addField("Error:", "```$ex```", true)
             }
+
             reply(ctx, builder.build())
         }
     }
