@@ -54,14 +54,16 @@ class Eval(private val client: CommandClient) : Command(
                 builder.addField("Status:", "Success", true)
                 builder.addField("Duration:", "${System.currentTimeMillis() - startTime}ms", true)
                 builder.setColor(Color.GREEN)
-                builder.addField("Code:", "```groovy\n$code```", false)
+                builder.addField("Code:", "```kt\n$code```", false)
                 builder.addField("Result:", out?.toString() ?: "Executed without error.", true)
             } catch (ex: Exception) {
                 builder.addField("Status:", "Error", true)
                 builder.addField("Duration:", "${System.currentTimeMillis() - startTime}ms", true)
                 builder.setColor(Color.RED)
-                builder.addField("Code:", "```groovy\n$code```", false)
+                builder.addField("Code:", "```kt\n$code```", false)
                 builder.addField("Error:", "```$ex```", true)
+
+                ex.printStackTrace()
             }
             reply(ctx, builder.build())
         }
