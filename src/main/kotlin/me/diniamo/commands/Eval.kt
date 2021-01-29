@@ -13,7 +13,7 @@ import javax.script.ScriptEngineManager
 class Eval(private val client: CommandClient) : Command(
     "eval", arrayOf(), Category.ADMIN, "Evaluates Groovy code", "<code (without Discord formatting)>", ownerCommand = true
 ) {
-    val engine: ScriptEngine by lazy {
+    private val engine: ScriptEngine by lazy {
         ScriptEngineManager().getEngineByExtension("kts")!!.apply {
             this.eval("""
         import net.dv8tion.jda.api.*
@@ -32,8 +32,11 @@ class Eval(private val client: CommandClient) : Command(
         """.trimIndent())
         }
     }
+    
     override fun run(ctx: CommandContext) {
         if (ctx.user.idLong == 388742599483064321L) {
+            println(engine)
+
             engine.put("jda", ctx.jda)
             engine.put("api", ctx.jda)
             engine.put("channel", ctx.channel)
@@ -57,13 +60,13 @@ class Eval(private val client: CommandClient) : Command(
                 builder.addField("Code:", "```kt\n$code```", false)
                 builder.addField("Result:", out?.toString() ?: "Executed without error.", true)
             } catch (ex: Exception) {
+                ex.printStackTrace()
+
                 builder.addField("Status:", "Error", true)
                 builder.addField("Duration:", "${System.currentTimeMillis() - startTime}ms", true)
                 builder.setColor(Color.RED)
                 builder.addField("Code:", "```kt\n$code```", false)
                 builder.addField("Error:", "```$ex```", true)
-
-                ex.printStackTrace()
             }
             reply(ctx, builder.build())
         }
