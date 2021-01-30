@@ -10,7 +10,7 @@ import javax.script.ScriptEngine
 import javax.script.ScriptEngineManager
 
 class Eval(private val client: CommandClient) : Command(
-    "keval", arrayOf(), Category.ADMIN, "Evaluates Kotlin code", "<code (without Discord formatting)>", ownerCommand = true
+    "eval", arrayOf(), Category.ADMIN, "Evaluates Kotlin code", "<code (without Discord formatting)>", ownerCommand = true
 ) {
     private val engine: ScriptEngine by lazy {
         ScriptEngineManager().getEngineByExtension("kts")!!.apply {
