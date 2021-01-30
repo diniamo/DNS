@@ -1,4 +1,4 @@
-FROM openjdk:11-jdk-buster
+FROM openjdk:11
 
 WORKDIR /home/dns
 
