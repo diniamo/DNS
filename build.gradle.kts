@@ -3,10 +3,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 group = "me.diniamo"
 version = "1.0"
 
-val jdaVersion = "4.2.0_225"
+val jdaVersion = "4.2.0_227"
 
 plugins {
-    kotlin("jvm") version "1.4.21"
+    kotlin("jvm") version "1.4.30"
     id("com.github.johnrengelman.shadow") version ("6.1.0")
 }
 
