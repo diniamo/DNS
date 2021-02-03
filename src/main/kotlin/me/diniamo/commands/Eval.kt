@@ -37,10 +37,12 @@ class Eval(private val client: CommandClient) : Command(
             engine.put("jda", ctx.jda)
             engine.put("api", ctx.jda)
             engine.put("channel", ctx.channel)
-            engine.put("guild", ctx.guild)
+            if(ctx.event.isFromGuild) {
+                engine.put("guild", ctx.guild)
+                engine.put("member", ctx.member)
+            }
             engine.put("ctx", ctx)
             engine.put("message", ctx.message)
-            engine.put("member", ctx.member)
             engine.put("user", ctx.user)
             engine.put("bot", ctx.jda.selfUser)
             engine.put("client", client)
